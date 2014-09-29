@@ -1,6 +1,8 @@
 local play = {}
 
 -- an animation extends anim8, see https://github.com/kikito/anim8
+anim8 = require 'lib.anim8'
+
 local rimon_walk = require 'assets.animations.rimon_walk'; 
 
 function play:enter(state)
