@@ -1,14 +1,10 @@
 local play = {}
 
--- Animation example using anim8 instead of AnAL as it looks better documented and more coherent https://github.com/kikito/anim8
-local anim8 = require 'lib.anim8'
-
-local rimon_walk_spritemap, animation
+-- an animation extends anim8, see https://github.com/kikito/anim8
+local rimon_walk = require 'assets.animations.rimon_walk'; 
 
 function play:enter(state)
-	rimon_walk_spritemap = love.graphics.newImage('assets/images/rimon_walk.png')
-	local g = anim8.newGrid(78, 114, rimon_walk_spritemap:getWidth(), rimon_walk_spritemap:getHeight())
-	animation = anim8.newAnimation(g('1-8',1), 0.1)
+	
 end
 
 function play:leave()
@@ -16,7 +12,7 @@ function play:leave()
 end
 
 function play:update(dt)
-	animation:update(dt)
+	rimon_walk.animation:update(dt)
 end
 
 function play:draw()
@@ -28,7 +24,7 @@ function play:draw()
 
 	--draw test anim
 	love.graphics.setColor(255, 255, 255, 255)
-	animation:draw(rimon_walk_spritemap, love.graphics.getWidth()/2-39, love.graphics.getHeight()/2-300)
+	rimon_walk.animation:draw(rimon_walk.rimon_walk_spritemap, love.graphics.getWidth()/2-39, love.graphics.getHeight()/2-300)
 
 	--draw text
 	love.graphics.setColor(255, 156, 255, 255)
