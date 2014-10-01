@@ -77,7 +77,6 @@ function splash:draw()
 	if self.frame/60 >= 3 and self.frame/60 <= 6 then
 		local opacity = ((self.frame/60) - 3) * 85
 		local ypos = 260 - (((self.frame/60) - 3) * 10)
-		print(ypos)
 		love.graphics.setColor(255, 255, 255, opacity)
 		love.graphics.draw(self.data.cube, love.graphics.getWidth()/2-44, love.graphics.getHeight()/2-ypos)
 	elseif self.frame/60 > 6 then
