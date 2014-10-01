@@ -24,7 +24,7 @@ function title:draw()
 	-- push graphics stack
 	love.graphics.push()
 
-	--set background
+	--set background & font
 	love.graphics.setBackgroundColor(33, 33, 33, 255)
 
 	-- draw menu

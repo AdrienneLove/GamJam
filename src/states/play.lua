@@ -3,7 +3,8 @@ local play = {}
 -- an animation extends anim8, see https://github.com/kikito/anim8
 anim8 = require 'lib.anim8'
 
-local rimon_walk = require 'assets.animations.rimon_walk'; 
+local rimon_walk = require 'assets.animations.rimon_walk';
+local swishfont = love.graphics.newFont('assets/fonts/LovedbytheKing.ttf', 30) 
 
 function play:enter(state)
 	
@@ -30,7 +31,7 @@ function play:draw()
 
 	--draw text
 	love.graphics.setColor(255, 156, 255, 255)
-	love.graphics.setNewFont(30)
+	love.graphics.setFont(swishfont)
 	love.graphics.printf("I know they make you fur-ious but my cat puns are su-purr-ior.", love.graphics.getWidth()/2-250, love.graphics.getHeight()/2-25, 500, 'center')
 
 	--pop graphics stack
