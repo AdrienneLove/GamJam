@@ -101,7 +101,6 @@ function play:joystickpressed(joystick, button)
 end
 
 function play:checkWave()
-	print("ch")
 	-- is there a guard in the area
 	-- if yes > check correct wave was used.
 	--    if correct wave was used, flip taht guard status to wavedAt.
@@ -109,6 +108,26 @@ function play:checkWave()
 	-- if no > take life
 end
 
+function play:keypressed(key, unicode)
 
+	print(key)
+	if key == "a" then
+		-- Y = 14
+		hero:saluteY()
+	end
+	if key == "s" then
+		-- X = 13
+		hero:saluteX()
+	end
+	if key == "d" then
+		-- B = 12
+		hero:saluteB()
+	end
+	if key == "f" then
+		-- A = 11
+		hero:saluteA()
+	end 
+
+end
 
 return play
