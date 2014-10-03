@@ -6,7 +6,7 @@ function love.conf(t)
 
     -- identity
     t.title = "48hr Game Challenge 2014"                -- The title of the window the game is in (string)
-    t.author = "Oopa Chalupa!"       -- The author of the game (string)
+    t.author = "Oopa Chaloopa"       -- The author of the game (string)
     t.url = ""                 -- The website of the game (string)
     t.identity = "save/"          -- The name of the save directory (string)
 
@@ -16,8 +16,9 @@ function love.conf(t)
     t.release = false           -- Enable release mode (boolean)
 
     -- window
-    t.window.width = 1024        
-    t.window.height = 768
+    t.window.scale = 5
+    t.window.width = 224 * t.window.scale       
+    t.window.height = 126 * t.window.scale
     t.window.fullscreen = false -- Enable fullscreen (boolean)
     t.window.vsync = true       -- Enable vertical sync (boolean)
     t.window.fsaa = 0           -- The number of FSAA-buffers (number)
