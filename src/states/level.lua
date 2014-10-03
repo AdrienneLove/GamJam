@@ -26,6 +26,9 @@ local foreground_panels = {
 	{ x = 0, image = nil, current = false, furthest = true}
 }
 
+--doors and stuff
+local entry_door = {image = nil, x = nil, y = nil, alive = true}
+
 
 function level:enter(state)
 
@@ -41,25 +44,21 @@ function level:enter(state)
 
 	--create as many image items as needed for background then foreground
 	background_panel_images = { 
-		love.graphics.newImage(background_imagedata_1),
-		love.graphics.newImage(background_imagedata_1),
-		love.graphics.newImage(background_imagedata_1),
 		love.graphics.newImage(background_imagedata_1)
 	}
 
 	foreground_panel_images = {
-		love.graphics.newImage(foreground_imagedata_1),
-		love.graphics.newImage(foreground_imagedata_1),
-		love.graphics.newImage(foreground_imagedata_1),
 		love.graphics.newImage(foreground_imagedata_1)
 	}
+
+
 
 	--build initial background panels
 	for key,value in pairs(background_panels) do 
 		value.x = background_imagedata_1:getWidth() * (key-1)
 
    		if key == 1 then
-   			value.image = love.graphics.newImage(background_imagedata_start)
+   			value.image = love.graphics.newImage(background_imagedata_1)
    			value.current = true
    		else 
    			value.image = background_panel_images[math.random(table.getn(background_panel_images))]
@@ -75,10 +74,14 @@ function level:enter(state)
    		if key == 1 then
    			value.current = true
    		else 
-   			
    			value.current = false
    		end
 	end
+
+	--build entry door
+	entry_door.image = love.graphics.newImage('assets/images/door1.png')
+	entry_door.x = 56
+	entry_door.y = 34
 
 	-- set timer to go from intro to play
 	Timer.add(1, function() status = "play" end)
@@ -95,6 +98,15 @@ function level:update(dt)
 	Timer.update(dt)
 
 	if status == "play" then
+
+		--move door 
+		if entry_door.alive then
+			entry_door.x = entry_door.x - level_speed * dt;
+			if entry_door.x <= -200 then
+				entry_door.alive = false
+				entry_door.image = nil
+			end
+		end
 
 		-- move background panels
 		for key, value in pairs(background_panels) do 
@@ -185,6 +197,10 @@ function level:draw()
 	--draw foreground panels 1, 2 and 3
 	for key, value in pairs(foreground_panels) do 
 		love.graphics.draw(value.image, value.x, 0)
+	end
+
+	if entry_door.alive then
+		love.graphics.draw(entry_door.image, entry_door.x, entry_door.y)
 	end
 	
 	love.graphics.pop()
