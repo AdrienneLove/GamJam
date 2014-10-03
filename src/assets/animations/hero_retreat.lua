@@ -23,7 +23,7 @@ local looper = function()
 	hero_retreat.done = true
 end
 
-animation = anim8.newAnimation(g('1-'..hero_retreat._FRAMES,1), hero_retreat._ANIMATIONSPEED)
+animation = anim8.newAnimation(g('1-'..hero_retreat._FRAMES,1), hero_retreat._ANIMATIONSPEED, looper)
 
 --pass all the stuff that's needed back to game
 hero_retreat.spritemap = spritemap;
