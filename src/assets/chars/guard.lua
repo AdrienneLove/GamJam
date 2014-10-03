@@ -1,11 +1,9 @@
-local guard = {	
-
-}
+local guard = {}
 
 local walk = require 'assets.animations.rimon_walk';
 
 function update(dt)
-	print("boop")
+	-- print("boop")
 	walk.animation:update(dt)
 end
 

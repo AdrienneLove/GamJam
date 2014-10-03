@@ -57,4 +57,14 @@ function play:keypressed(key, unicode)
 
 end
 
+function play:joystickpressed(joystick, button)
+
+
+	-- Y = 14
+	-- X = 13
+	-- B = 12
+	-- A = 11
+
+end
+
 return play
