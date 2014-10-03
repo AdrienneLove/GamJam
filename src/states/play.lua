@@ -74,13 +74,26 @@ function play:keypressed(key, unicode)
 end
 
 function play:joystickpressed(joystick, button)
-	hero:eatLife()
-	print(hero.lives)
-
-	-- Y = 14
-	-- X = 13
-	-- B = 12
-	-- A = 11
+	--hero:eatLife()
+	--print(hero.lives)
+	print(button)
+	if button == 4 then
+		-- Y = 14
+		print("Y")
+		hero:saluteY()
+	end
+	if button == 3 then
+		-- X = 13
+		hero:saluteX()
+	end
+	if button == 2 then
+		-- B = 12
+		hero:saluteB()
+	end
+	if button == 1 then
+		-- A = 11
+		hero:saluteA()
+	end 
 
 end
 
