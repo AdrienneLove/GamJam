@@ -4,6 +4,7 @@ hero = require "assets.chars.hero"
 function title:enter(state)
 	--hero:reset() --reset the player (SO FRESH)
 	self.current = 1; 	-- currently selected menu element
+	print(love._os)
 
 	self.actions = {
 		{ name="play",    screen="play" },
@@ -86,7 +87,63 @@ function title:keypressed(key, unicode)
 			Gamestate.switch(require("states."..action.screen), self.save)
 		end
 	end
+end
 
+function title:joystickhat(joystick, hat, direction)
+-- Xbox configuration for windows binds the d-pad as a 'hat'.
+
+	if love._os == "Windows" then
+		if direction == "u" then
+			self.current = self.current - 1
+			if self.current < 1 then
+				self.current = #self.actions
+			end
+		elseif direction == "d" then
+			self.current = (self.current % #self.actions) + 1
+		end
+	end
+end
+
+function title:joystickpressed(joystick, button)
+
+	if love._os == "Windows" then -- Windows, buttonpress only
+		if (button == 1 or button == 8)  then  -- A button or Start
+
+			local action = self.actions[self.current]
+
+			if action.name == "exit" then 
+				love.event.push("quit")
+			else
+				Gamestate.switch(require("states."..action.screen), self.save)
+			end
+		end
+	end
+
+	if love._os == "OS X" then
+
+		-- OSX, navigation
+
+		if (button == 12 or button == 5)  then  -- A button or Start
+
+			local action = self.actions[self.current]
+
+			if action.name == "exit" then 
+				love.event.push("quit")
+			else
+				Gamestate.switch(require("states."..action.screen), self.save)
+			end
+
+		-- OSX, button press
+
+		elseif button == 1 then
+			self.current = self.current - 1
+			if self.current < 1 then
+				self.current = #self.actions
+			end
+		elseif button == 2 then
+			self.current = (self.current % #self.actions) + 1
+		end
+	end
 end
 
 return title
