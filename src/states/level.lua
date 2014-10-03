@@ -36,6 +36,9 @@ local cube = love.graphics.newImage('assets/animations/splash_cube.png')
 local gameover = false
 local guards = require "assets.chars.guard"
 local swishfont = love.graphics.newFont('assets/fonts/LovedbytheKing.ttf', 30) 
+local focusedGuard --this is being used by the wave checking
+local indicator = false
+local waveCorrect = false
 
 function level:enter(state)
 
@@ -128,7 +131,6 @@ function level:update(dt)
 	--update player/enemys
 	guards:update(dt)
 	hero:update(dt)
-	level:checkWave()
 
 	if status == "play" then
 
@@ -271,6 +273,18 @@ function level:draw()
 		love.graphics.setFont(swishfont)
 		love.graphics.printf("LOL NOPE.", love.graphics.getWidth()/2-250, love.graphics.getHeight()/2-25, 500, 'center')
 	end
+
+	-- wave detect / indicator for the zone that enemies can receive waves in
+	if indicator then
+		if waveCorrect then
+			love.graphics.setColor(0, 220, 50, 255)
+		else
+			love.graphics.setColor(240, 30, 30, 255)
+		end
+	else
+		love.graphics.setColor(45, 45, 45, 255)
+	end
+	love.graphics.rectangle("fill", 50, 120, 40, 5)
 	
 	--draw enemies
 	guards:draw()
@@ -289,42 +303,67 @@ function level:keypressed(key, unicode)
 
 end
 
-function level:checkWave()
-	--printTable(guards.current_guards)
-	-- is there a guard in the area
-	-- if yes > check correct wave was used.
-	--    if correct wave was used, flip taht guard status to wavedAt.
-	--    if wrong wave used, take life.
-	-- if no > take life
+function level:checkWave(wave)
+	-- NOTE: we still need to account for a guard not being waved at... this is also a failure but should be tracked elsewhere... (in guard maybe?)
+	if level:checkArea() then
+		if wave == focusedGuard.expectedWave then
+			--flip this guards wavedAt to true.
+			waveCorrect = true
+			print("CORRECT- guard happy")
+		else
+			waveCorrect = false
+			print("WRONG - et life")
+			hero:eatLife()
+		end
+	else
+		--no guard in area, NOM LYF
+		waveCorrect = false
+		print("nothing in zone. torso bleed. lose one life.")
+		hero:eatLife()
+	end
+	indicator = true
 end
 
--- 
+-- checks the detection area for a guard, returns true / false
 function level:checkArea()
+	for i=1,table.getn(guards.current_guards) do
+		if guards.current_guards[i]["x"] > 50 and guards.current_guards[i]["x"] < 90 then
+			focusedGuard = guards.current_guards[i]
+			return true
+		end
+	end
+	return false
+end
+
+function level:joystickreleased(joystick, button)
+	indicator = false
 end
 
 
 function level:joystickpressed(joystick, button)
-	hero:eatLife()
 	--print(hero.lives)
-	print(button)
 	if button == 4 then
 		-- Y = 14
-		print("Y")
+		wave = "Y"
 		hero:saluteY()
 	end
 	if button == 3 then
 		-- X = 13
+		wave = "X"
 		hero:saluteX()
 	end
 	if button == 2 then
 		-- B = 12
+		wave = "B"
 		hero:saluteB()
 	end
 	if button == 1 then
 		-- A = 11
+		wave = "A"
 		hero:saluteA()
-	end 
+	end
 
+	level:checkWave(wave)
 end
 
 return level

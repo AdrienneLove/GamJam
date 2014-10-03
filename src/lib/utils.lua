@@ -29,7 +29,7 @@ function tableString(t)
 				result = result .. ", "
 			end
 		elseif type(value) == "userdata" then
-			result = result .. "DATATYPE WOOPSIE"
+			result = result .. "DATATYPE image"
 			if valIndex(t, value) ~= len then
 				result = result .. ", "
 			end
@@ -39,6 +39,11 @@ function tableString(t)
 			else
 				result = result .. "false"
 			end
+			if valIndex(t, value) ~= len then
+				result = result .. ", "
+			end
+		elseif type(value) == "function" then
+			result = result .. "DATATYPE function"
 			if valIndex(t, value) ~= len then
 				result = result .. ", "
 			end

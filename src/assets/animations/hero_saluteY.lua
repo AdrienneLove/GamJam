@@ -2,10 +2,10 @@
 -- Rimon, only look at this bit up here!
 
 local hero_salute = {
-	_WIDTH = 78,				-- width of a single frame of animation
-	_HEIGHT = 114,			-- height of a single frame of animation
-	_FRAMES = 8,			-- frames there are in the animation
-	_FILENAME = "hero_saluteY.png", 	-- file name in the animations folder
+	_WIDTH = 32,				-- width of a single frame of animation
+	_HEIGHT = 35,			-- height of a single frame of animation
+	_FRAMES = 12,			-- frames there are in the animation
+	_FILENAME = "sheepRun_YELLOW.png", 	-- file name in the animations folder
 	_ANIMATIONSPEED = 0.12, 		-- speed the animation cycles at
 	done = false
 }
@@ -16,7 +16,7 @@ local hero_salute = {
 local spritemap, animation
 
 --include image, set up width and frames 
-spritemap = love.graphics.newImage("assets/animations/"..hero_salute._FILENAME);
+spritemap = love.graphics.newImage("assets/images/"..hero_salute._FILENAME);
 local g = anim8.newGrid(hero_salute._WIDTH, hero_salute._HEIGHT, spritemap:getWidth(), spritemap:getHeight())
 
 local looper = function()

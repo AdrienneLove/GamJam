@@ -2,12 +2,12 @@
 -- Rimon, only look at this bit up here!
 
 local hero_walk = {
-	_WIDTH = 78,				-- width of a single frame of animation
-	_HEIGHT = 114,			-- height of a single frame of animation
-	_FRAMES = 8,			-- frames there are in the animation
-	_FILENAME = "hero_walk.png", 	-- file name in the animations folder
+	_WIDTH = 32,			-- width of a single frame of animation
+	_HEIGHT = 35,			-- height of a single frame of animation
+	_FRAMES = 12,			-- frames there are in the animation
+	_FILENAME = "sheepRun.png", 	-- file name in the animations folder
 	_ANIMATIONSPEED = 0.12, 		-- speed the animation cycles at
-	done = false
+	done = false -- What is this value for??
 }
 
 -----------------------------
@@ -16,7 +16,7 @@ local hero_walk = {
 local spritemap, animation
 
 --include image, set up width and frames 
-spritemap = love.graphics.newImage("assets/animations/"..hero_walk._FILENAME);
+spritemap = love.graphics.newImage("assets/images/"..hero_walk._FILENAME);
 local g = anim8.newGrid(hero_walk._WIDTH, hero_walk._HEIGHT, spritemap:getWidth(), spritemap:getHeight())
 
 local looper = function()

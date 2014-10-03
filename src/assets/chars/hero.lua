@@ -14,28 +14,29 @@ local active = walk
 --local lives = 4
 
 function hero:update(dt)
-	if active == walk then
-		if walk.done == true then		
-			active = retreat
-			walk.done = false
-		else
-		    walk.animation:update(dt)
-		end		
-	elseif active == retreat then
-		if retreat.done == true then
-			active = walk
-			retreat.done = false
-		else
-			retreat.animation:update(dt)
-		end
-	else
-		if active.done == true then
-			active.done = false
-			active = walk
-		else
-			active.animation:update(dt)
-		end
-	end
+	walk.animation:update(dt)
+	-- if active == walk then
+	-- 	if walk.done == true then		
+	-- 		active = retreat
+	-- 		walk.done = false
+	-- 	else
+	-- 	    walk.animation:update(dt)
+	-- 	end		
+	-- elseif active == retreat then
+	-- 	if retreat.done == true then
+	-- 		active = walk
+	-- 		retreat.done = false
+	-- 	else
+	-- 		retreat.animation:update(dt)
+	-- 	end
+	-- else
+	-- 	if active.done == true then
+	-- 		active.done = false
+	-- 		active = walk
+	-- 	else
+	-- 		active.animation:update(dt)
+	-- 	end
+	-- end
 end
 
 function hero:saluteX()
@@ -55,13 +56,14 @@ end
 function hero:draw()
 	--draw test anim
 	love.graphics.setColor(255, 255, 255, 255)
-	active.animation:draw(active.spritemap, 40, 40)
+	active.animation:draw(active.spritemap, 20, 70)
 end
 
 function hero:eatLife()
 	if hero.lives > 0 then
 		hero.lives = hero.lives - 1
 	end
+	print("ate a life")
 end
 
 return hero

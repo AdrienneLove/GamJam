@@ -3,19 +3,24 @@ local guard_manager = {
 	guard_types = {
 		{ -- 1
 			walk = require 'assets.animations.guard_fox_walk',
-			speed = 2
+			speed = 1,
+			expectedWave = "B"
 		},
 		{ -- 2
 			walk = require 'assets.animations.guard_jaguar_walk',
-			speed = 3
+			speed = 2,
+			expectedWave = "Y"
 		},
 		{ -- 3
 			walk = require 'assets.animations.guard_eagle_walk',
-			speed = 4
+			speed = 3,
+			expectedWave = "X"
 		},
 		{ -- 4
 			walk = require 'assets.animations.guard_snake_walk',
-			speed = 5
+			speed = 4,
+			expectedWave = "A"
+
 		}
 	},
 
@@ -34,18 +39,21 @@ function guard_manager:newGuard(num)
 
 		walk = self.guard_types[num]["walk"],
 		speed = self.guard_types[num]["speed"],
-		x = self.guard_types[num]["speed"] * 100
+		x = 240, --they're all going to start at the same point offscreen
+		expectedWave = self.guard_types[num]["expectedWave"],
+		isWavedAt = false
 	}
 
 	function g:update(dt)
 		-- print("boop")
+		self.x = self.x - self.speed * 0.3
 		self.walk.animation:update(dt)
-		end
+	end
 
 	function g:draw()
 		--draw test anim
 		love.graphics.setColor(255, 255, 255, 255)
-		self.walk.animation:draw(self.walk.rimon_walk_spritemap, self.x, 10)
+		self.walk.animation:draw(self.walk.rimon_walk_spritemap, self.x, 70)
 	end
 
 	table.insert(self.current_guards, g)

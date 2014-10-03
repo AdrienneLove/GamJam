@@ -7,7 +7,7 @@ function title:enter(state)
 	print(love._os)
 
 	self.actions = {
-		{ name="play",    screen="play" },
+		--{ name="play",    screen="play" },
 		{ name="level",    screen="level" },
 		{ name="exit",    screen="exit" }
 	} 
