@@ -53,6 +53,9 @@ function title:draw()
 		love.graphics.printf(v.name, positionToDrawMenu.x, positionToDrawMenu.y + (i*spacing), 100, 'left')
 	end
 
+	--stupid flanders
+	love.graphics.setColor(255,255,255,255);
+
 	--pop graphics stack
 	love.graphics.pop()
 
