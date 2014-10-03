@@ -1,5 +1,7 @@
 -- Game scale
---SCALE = 0.7
+SCALE = 5
+WIN_WIDTH = 224
+WIN_HEIGHT = 126
 
 function love.conf(t)
     io.stdout:setvbuf("no")
@@ -16,9 +18,9 @@ function love.conf(t)
     t.release = false           -- Enable release mode (boolean)
 
     -- window
-    t.window.scale = 5
-    t.window.width = 224 * t.window.scale       
-    t.window.height = 126 * t.window.scale
+    t.window.scale = SCALE
+    t.window.width = WIN_WIDTH * t.window.scale       
+    t.window.height = WIN_HEIGHT * t.window.scale
     t.window.fullscreen = false -- Enable fullscreen (boolean)
     t.window.vsync = true       -- Enable vertical sync (boolean)
     t.window.fsaa = 0           -- The number of FSAA-buffers (number)
