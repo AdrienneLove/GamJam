@@ -4,6 +4,38 @@
 		"selected_items":
 		[
 			[
+				"curre",
+				"current_panel"
+			],
+			[
+				"do",
+				"do"
+			],
+			[
+				"entry",
+				"entry_door"
+			],
+			[
+				"back",
+				"backgrounds_panels"
+			],
+			[
+				"scale",
+				"SCALE"
+			],
+			[
+				"background",
+				"background_panels"
+			],
+			[
+				"set",
+				"setColor"
+			],
+			[
+				"backgrou",
+				"background_panel_1"
+			],
+			[
 				"snd_",
 				"snd_wind"
 			],
@@ -87,6 +119,41 @@
 	},
 	"buffers":
 	[
+		{
+			"file": "states/title.lua",
+			"settings":
+			{
+				"buffer_size": 1862,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "local level = {}\n\nlocal Timer = require \"lib.hump.timer\"\n\n--level vars\nlocal level_speed = 100\nlocal panels_left = 6\nlocal status = \"intro\" -- other states are play, dead and outro\n\n--background stuff\nlocal current_background panel = 1\n\n-- hot swap between panel 1, 2 and 3\nlocal background_panels = {\n	{ x = 0, image = nil, current = false, furthest = false},\n	{ x = 0, image = nil, current = false, furthest = false},\n	{ x = 0, image = nil, current = false, furthest = true}\n}\n\nlocal foreground_panels = {\n	{ x = 0, image = nil, current = false, furthest = false},\n	{ x = 0, image = nil, current = false, furthest = false},\n	{ x = 0, image = nil, current = false, furthest = true}\n}\n\n--doors and stuff\nlocal entry_door = {image = nil, x = nil, y = nil, alive = true}\n\n\nfunction level:enter(state)\n\n	love.graphics.setDefaultFilter('nearest')\n	--panel iterates at half screen\n\n	--load in panel data for foreground and background\n	background_imagedata_start = love.image.newImageData('assets/images/start.gif')\n	background_imagedata_1 = love.image.newImageData('assets/images/wall1sketch.png')\n	foreground_imagedata_1 = love.image.newImageData('assets/images/floor1sketch.png')\n	background_imagedata_end = love.image.newImageData('assets/images/end.gif')\n\n	--create as many image items as needed for background then foreground\n	background_panel_images = { \n		love.graphics.newImage(background_imagedata_1)\n	}\n\n	foreground_panel_images = {\n		love.graphics.newImage(foreground_imagedata_1)\n	}\n\n\n\n	--build initial background panels\n	for key,value in pairs(background_panels) do \n		value.x = background_imagedata_1:getWidth() * (key-1)\n\n   		if key == 1 then\n   			value.image = love.graphics.newImage(background_imagedata_1)\n   			value.current = true\n   		else \n   			value.image = background_panel_images[math.random(table.getn(background_panel_images))]\n   			value.current = false\n   		end\n	end\n\n	--build initial foreground panels\n	for key,value in pairs(foreground_panels) do \n		value.x = foreground_imagedata_1:getWidth() * (key-1)\n		value.image = foreground_panel_images[math.random(table.getn(foreground_panel_images))]\n   		\n   		if key == 1 then\n   			value.current = true\n   		else \n   			value.current = false\n   		end\n	end\n\n	--build entry door\n	entry_door.image = love.graphics.newImage('assets/images/door1.png')\n	entry_door.x = 56\n	entry_door.y = 34\n\n	-- set timer to go from intro to play\n	Timer.add(1, function() status = \"play\" end)\n\n\nend\n\nfunction level:leave()\n	\nend\n\nfunction level:update(dt)\n	--update all timers\n	Timer.update(dt)\n\n	if status == \"play\" then\n\n		--move door \n		if entry_door.alive then\n			entry_door.x = entry_door.x - level_speed * dt;\n			if entry_door.x <= -200 then\n				entry_door.alive = false\n				entry_door.image = nil\n			end\n		end\n\n		-- move background panels\n		for key, value in pairs(background_panels) do \n			-- move panels\n			value.x = value.x - level_speed * dt\n\n			if value.x <  background_imagedata_1:getWidth()*-1 then\n\n				-- set item values and assign a new random image\n				value.image = background_panel_images[math.random(table.getn(background_panel_images))]\n				value.x = background_imagedata_1:getWidth()*2\n				value.current = false\n\n				-- set current panel\n				if key+1 > table.getn(background_panels) then\n					background_panels[1].current = true\n				else \n					background_panels[key+1].current = false\n				end\n\n				--search furthest and replace it, set this x to new furthest location\n				for furthest_ket, furthest_value in pairs(background_panels) do \n					if furthest_value.furthest then \n						-- don't touch this. wizardy ahead. (can't touch this)\n						if key == 1 then\n							value.x = furthest_value.x + furthest_value.image:getWidth()	 - level_speed * dt\n						else\n							value.x = furthest_value.x + furthest_value.image:getWidth()\n						end\n						furthest_value.furthest = false\n						value.furthest = true\n						--done searching so break\n						break\n					end\n				end\n\n				current_background_panel = current_background_panel + 1\n			end\n		end\n\n		-- move foreground panels\n		for key, value in pairs(foreground_panels) do \n			-- move panels\n			value.x = value.x - level_speed * dt\n\n			if value.x <  foreground_imagedata_1:getWidth()*-1 then\n\n				-- set item values and assign a new random image\n				value.image = foreground_panel_images[math.random(table.getn(foreground_panel_images))]\n				value.x = background_imagedata_1:getWidth()*2\n				value.current = false\n\n				-- set current panel\n				if key+1 > table.getn(foreground_panels) then\n					foreground_panels[1].current = true\n				else \n					foreground_panels[key+1].current = false\n				end\n\n				--search furthest and replace it, set this x to new furthest location\n				for furthest_ket, furthest_value in pairs(foreground_panels) do \n					if furthest_value.furthest then \n						-- don't touch this. wizardy ahead. (can't touch this)\n						if key == 1 then\n							value.x = furthest_value.x + furthest_value.image:getWidth()	 - level_speed * dt\n						else\n							value.x = furthest_value.x + furthest_value.image:getWidth()\n						end\n						furthest_value.furthest = false\n						value.furthest = true\n						--done searching so break\n						break\n					end\n				end\n			end\n		end\n	end\nend\n\nfunction level:draw()\n	love.graphics.push()\n\n	love.graphics.scale( SCALE )\n\n	--draw background panels 1, 2 and 3\n	for key, value in pairs(background_panels) do \n		love.graphics.draw(value.image, value.x, 0)\n	end\n\n	--draw foreground panels 1, 2 and 3\n	for key, value in pairs(foreground_panels) do \n		love.graphics.draw(value.image, value.x, 0)\n	end\n\n	if entry_door.alive then\n		love.graphics.draw(entry_door.image, entry_door.x, entry_door.y)\n	end\n	\n	love.graphics.pop()\nend\n\nfunction level:keypressed(key, unicode)\n	-- navigate menu\n	if key == \"q\" then\n		love.event.push(\"quit\")\n	end\n\nend\n\nreturn level",
+			"file": "states/level.lua",
+			"file_size": 5787,
+			"file_write_time": 1412346753000000,
+			"settings":
+			{
+				"buffer_size": 5809,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "states/play.lua",
+			"settings":
+			{
+				"buffer_size": 1641,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "conf.lua",
+			"settings":
+			{
+				"buffer_size": 1785,
+				"line_ending": "Unix"
+			}
+		}
 	],
 	"build_system": "Packages/User/Love.sublime-build",
 	"command_palette":
@@ -99,10 +166,7 @@
 	},
 	"console":
 	{
-		"height": 0.0,
-		"history":
-		[
-		]
+		"height": 0.0
 	},
 	"distraction_free":
 	{
@@ -113,13 +177,8 @@
 		"side_bar_visible": false,
 		"status_bar_visible": false
 	},
-	"expanded_folders":
-	[
-	],
 	"file_history":
 	[
-		"/C/jam/GamJam/src/states/title.lua",
-		"/C/jam/GamJam/src/states/play.lua",
 		"/Users/senpusha/Love2D/GamJam/GamJam/src/conf.lua",
 		"/Users/senpusha/Downloads/Level 1 Kanji Revision.apkg",
 		"/Users/senpusha/Library/Application Support/Sublime Text 2/Packages/User/Preferences.sublime-settings",
@@ -166,7 +225,7 @@
 	],
 	"find":
 	{
-		"height": 23.0
+		"height": 35.0
 	},
 	"find_in_files":
 	{
@@ -183,6 +242,8 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"backgrounds",
+			"scale",
 			"title",
 			"music",
 			"setmask(1",
@@ -301,14 +362,124 @@
 	"groups":
 	[
 		{
+			"selected": 1,
 			"sheets":
 			[
+				{
+					"buffer": 0,
+					"file": "states/title.lua",
+					"settings":
+					{
+						"buffer_size": 1862,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1236,
+								1236
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Lua/Lua.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "states/level.lua",
+					"settings":
+					{
+						"buffer_size": 5809,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								214,
+								214
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Lua/Lua.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "states/play.lua",
+					"settings":
+					{
+						"buffer_size": 1641,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								841,
+								841
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Lua/Lua.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 107.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "conf.lua",
+					"settings":
+					{
+						"buffer_size": 1785,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1136,
+								1136
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Lua/Lua.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				}
 			]
 		}
 	],
 	"incremental_find":
 	{
-		"height": 23.0
+		"height": 0.0
 	},
 	"input":
 	{
@@ -341,14 +512,9 @@
 	{
 		"height": 100.0
 	},
-	"output.find_results":
-	{
-		"height": 0.0
-	},
-	"project": "GamJam.sublime-project",
 	"replace":
 	{
-		"height": 42.0
+		"height": 64.0
 	},
 	"save_all_on_build": true,
 	"select_file":
@@ -367,25 +533,10 @@
 		],
 		"width": 0.0
 	},
-	"select_symbol":
-	{
-		"height": 0.0,
-		"selected_items":
-		[
-		],
-		"width": 0.0
-	},
-	"selected_group": 0,
-	"settings":
-	{
-	},
 	"show_minimap": true,
 	"show_open_files": false,
 	"show_tabs": true,
 	"side_bar_visible": true,
 	"side_bar_width": 150.0,
-	"status_bar_visible": true,
-	"template_settings":
-	{
-	}
+	"status_bar_visible": true
 }
