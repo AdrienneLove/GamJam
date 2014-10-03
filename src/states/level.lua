@@ -3,19 +3,16 @@ local level = {}
 local Timer = require "lib.hump.timer"
 
 --level vars
-<<<<<<< HEAD
 local level_speed = 140
 local backgrounds_left = 4
 local foregrounds_left = backgrounds_left
 local status = "intro" -- other states are play, dead, outro and exit
 
 --background stuff
-=======
 local level_speed = 100
 local panels_left = 6
 local status = "intro" -- other states are play, dead and outro
 
->>>>>>> 18e15c36d8e7627e3a00a7f08a449c85bff9521a
 -- hot swap between panel 1, 2 and 3
 local background_panels = {
 	{ x = 0, image = nil, current = false, furthest = false},
@@ -29,19 +26,16 @@ local foreground_panels = {
 	{ x = 0, image = nil, current = false, furthest = true}
 }
 
-<<<<<<< HEAD
 --doors and stuff
 local entry_door = {image = nil, x = nil, y = nil, alive = true}
 local exit_door = {image = nil, x = nil, y = nil, alive = false, distance = 0}
 
-=======
 -- player / enemy stuff
 hero = require "assets.chars.hero"
 local cube = love.graphics.newImage('assets/animations/splash_cube.png')
 local gameover = false
 local guards = require "assets.chars.guard"
 local swishfont = love.graphics.newFont('assets/fonts/LovedbytheKing.ttf', 30) 
->>>>>>> 18e15c36d8e7627e3a00a7f08a449c85bff9521a
 
 function level:enter(state)
 
@@ -129,6 +123,7 @@ function level:update(dt)
 				entry_door.image = nil
 			end
 		end
+	end
 
 	--update player/enemys
 	guards:update(dt)
