@@ -6,14 +6,23 @@ anim8 = require 'lib.anim8'
 --local rimon_walk = require 'assets.animations.rimon_walk';
 local swishfont = love.graphics.newFont('assets/fonts/LovedbytheKing.ttf', 30) 
 local enemies = {
-	guard = require "assets.chars.guard",
-	citizen = require "assets.chars.guard"
+	guards = require "assets.chars.guard"
 }
 local hero = require "assets.chars.hero"
 local cube = love.graphics.newImage('assets/animations/splash_cube.png')
 
 function play:enter(state)
-	
+
+	enemies.guards:newGuard(2)
+	enemies.guards:newGuard(1)
+	enemies.guards:newGuard(3)
+	enemies.guards:newGuard(4)
+
+	enemies.guards:newGuard(2)
+	enemies.guards:newGuard(1)
+	enemies.guards:newGuard(3)
+	enemies.guards:newGuard(4)
+
 end
 
 function play:leave()
@@ -23,7 +32,7 @@ end
 function play:update(dt)
 	--rimon_walk.animation:update(dt)
 	--update enemies
-	enemies.guard.update(dt)
+	enemies.guards:update(dt)
 	hero:update(dt)
 	if hero.lives == 0 then
 		
@@ -52,8 +61,8 @@ function play:draw()
 	end
 	
 	--draw enemies
-	enemies.guard.draw(dt)
-	--print(hero.lives)
+	enemies.guards:draw()
+
 	--draw hero
 	hero:draw(dt)
 
