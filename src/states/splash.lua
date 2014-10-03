@@ -132,4 +132,18 @@ function splash:keypressed(key, unicode)
 
 end
 
+function splash:joystickpressed(joystick, button)
+	self.current = 2
+
+	local screen = self.actions[self.current].screen
+
+	if self.frame/60 < 10 then
+		self.frame = 60*10
+	elseif self.frame/60 >= 10 then
+		--will remove keypress state change once animating splash is done.
+		Gamestate.switch(require("states."..screen), self.save)
+	end
+
+end
+
 return splash

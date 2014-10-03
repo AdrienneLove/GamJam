@@ -35,7 +35,6 @@ function hero:update(dt)
 		else
 			active.animation:update(dt)
 		end
-		active.animation:update(dt)
 	end
 end
 
