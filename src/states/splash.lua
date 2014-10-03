@@ -86,7 +86,27 @@ function splash:draw()
 	end
 
 	-- TODO: frame 7: enter "oopa"
-	-- TODO: frame 8: enter "chaloopa"
+	if self.frame/60 <= 6 and self.frame/60 >= 4 then
+		local opacity = ((self.frame/60) - 4) * 127.5
+		love.graphics.setColor(255, 255, 255, opacity)
+		love.graphics.draw(self.data.oopa, love.graphics.getWidth()/2-106, love.graphics.getHeight()/2+90)
+	elseif self.frame/60 > 6 then
+		-- entry complete, keep the mans there.
+		love.graphics.setColor(255, 255, 255, 255)
+		love.graphics.draw(self.data.oopa, love.graphics.getWidth()/2-106, love.graphics.getHeight()/2+90)
+	end
+
+	-- TODO: frame 7: enter "oopa"
+	if self.frame/60 <= 7 and self.frame/60 >= 5 then
+		local opacity = ((self.frame/60) - 5) * 127.5
+		love.graphics.setColor(255, 255, 255, opacity)
+		love.graphics.draw(self.data.chaloopa, love.graphics.getWidth()/2-106, love.graphics.getHeight()/2+156)
+	elseif self.frame/60 > 7 then
+		-- entry complete, keep the mans there.
+		love.graphics.setColor(255, 255, 255, 255)
+		love.graphics.draw(self.data.chaloopa, love.graphics.getWidth()/2-106, love.graphics.getHeight()/2+156)
+	end
+
 
 	self.frame = self.frame + 1
 
@@ -103,8 +123,12 @@ function splash:keypressed(key, unicode)
 
 	local screen = self.actions[self.current].screen
 
-	--will remove keypress state change once animating splash is done.
-	Gamestate.switch(require("states."..screen), self.save)
+	if self.frame/60 < 10 then
+		self.frame = 60*10
+	elseif self.frame/60 >= 10 then
+		--will remove keypress state change once animating splash is done.
+		Gamestate.switch(require("states."..screen), self.save)
+	end
 
 end
 
