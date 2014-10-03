@@ -5,6 +5,7 @@ function title:enter(state)
 
 	self.actions = {
 		{ name="play",    screen="play" },
+		{ name="level",    screen="level" },
 		{ name="exit",    screen="exit" }
 	} 
 
