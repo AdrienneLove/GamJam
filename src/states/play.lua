@@ -76,11 +76,18 @@ end
 function play:joystickpressed(joystick, button)
 	hero:eatLife()
 	print(hero.lives)
-
-	-- Y = 14
-	-- X = 13
-	-- B = 12
-	-- A = 11
+	if button == 14 then
+		-- Y = 14
+	end
+	if button == 13 then
+		-- X = 13
+	end
+	if button == 12 then
+		-- B = 12
+	end
+	if button == 11 then
+		-- A = 11
+	end 
 
 end
 
