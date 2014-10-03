@@ -9,6 +9,7 @@ local enemies = {
 	guard = require "assets.chars.guard",
 	citizen = require "assets.chars.guard"
 }
+local hero = require "assets.chars.hero"
 
 function play:enter(state)
 	
@@ -22,6 +23,7 @@ function play:update(dt)
 	--rimon_walk.animation:update(dt)
 	--update enemies
 	enemies.guard.update(dt)
+	hero.update(dt)
 end
 
 function play:draw()
@@ -42,6 +44,9 @@ function play:draw()
 	
 	--draw enemies
 	enemies.guard.draw(dt)
+
+	--draw hero
+	hero.draw(dt)
 
 	--pop graphics stack
 	love.graphics.pop()
