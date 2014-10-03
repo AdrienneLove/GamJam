@@ -1,0 +1,434 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"snd_",
+				"snd_wind"
+			],
+			[
+				"snd",
+				"snd_wind"
+			],
+			[
+				"end",
+				"end"
+			],
+			[
+				"new",
+				"newX"
+			],
+			[
+				"add",
+				"addPeriodic"
+			],
+			[
+				"this",
+				"thisObject"
+			],
+			[
+				"poin",
+				"setPointSize"
+			],
+			[
+				"scanline",
+				"scanlines_overlay"
+			],
+			[
+				"get",
+				"getLinearVelocity"
+			],
+			[
+				"z",
+				"z"
+			],
+			[
+				"traf",
+				"traffic"
+			],
+			[
+				"wi",
+				"getWidth"
+			],
+			[
+				"im",
+				"img_bg"
+			],
+			[
+				"jump",
+				"jump_sine_dt"
+			],
+			[
+				"draw",
+				"drawHUD"
+			],
+			[
+				"is",
+				"isVisible"
+			],
+			[
+				"srip",
+				"scriptPosition"
+			],
+			[
+				"text",
+				"textReading"
+			],
+			[
+				"script",
+				"scriptPosition"
+			],
+			[
+				"key",
+				"keypressed"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "states/title.lua",
+			"settings":
+			{
+				"buffer_size": 1754,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "states/play.lua",
+			"settings":
+			{
+				"buffer_size": 565,
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "Packages/User/Love.sublime-build",
+	"command_palette":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"console":
+	{
+		"height": 0.0
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/Users/senpusha/Love2D/GamJam/GamJam/src/conf.lua",
+		"/Users/senpusha/Downloads/Level 1 Kanji Revision.apkg",
+		"/Users/senpusha/Library/Application Support/Sublime Text 2/Packages/User/Preferences.sublime-settings",
+		"/Users/senpusha/outerunner/project/src/player.lua",
+		"/Users/senpusha/outerunner/project/src/skeleton.lua",
+		"/Users/senpusha/outerunner/project/src/main.lua",
+		"/Users/senpusha/writing/cyber/summary of ideas from:",
+		"/Volumes/dev/esps/Esps.Website/app/views/Index.html",
+		"/Users/senpusha/Downloads/Fun_Sketchin_Brush.tpl",
+		"/Users/senpusha/cyberpunkjam/lib/lurker.lua",
+		"/Users/senpusha/cyberpunkjam/states/titleoptions.lua",
+		"/Users/senpusha/cyberpunkjam/states/title.lua",
+		"/Users/senpusha/cyberpunkjam/main.lua",
+		"/Users/senpusha/cyberpunkjam/assets/images/char.lua",
+		"/Users/senpusha/cyberpunkjam/states/gameplay.lua",
+		"/Users/senpusha/cyberpunkjam/conf.lua",
+		"/Users/senpusha/cyberpunkjam/assets/images/bg_spritebatch.lua",
+		"/Users/senpusha/cyberpunkjam/build/i love u",
+		"/Users/senpusha/zoosmellpooplord/conf.lua",
+		"/Users/senpusha/zoosmellpooplord/states/title.lua",
+		"/Users/senpusha/Library/Application Support/Sublime Text 2/Packages/User/Love.sublime-build",
+		"/Users/senpusha/zoosmellpooplord/main.lua",
+		"/Users/senpusha/zoosmellpooplord/states/gameplay.lua",
+		"/Users/senpusha/zoosmellpooplord/lib/reader.lua",
+		"/Users/senpusha/zoosmellpooplord/lib/HUMP/timer.lua",
+		"/Users/senpusha/zoosmellpooplord/states/scenes/ch1/hello.lua",
+		"/Users/senpusha/zoosmellpooplord/lib/richtext.lua",
+		"/Users/senpusha/zoosmellpooplord/states/titleoptions.lua",
+		"/Users/senpusha/zoosmellpooplord/states/exit.lua",
+		"/Users/senpusha/zdshm/src/libs/HUMP/gamestate.lua",
+		"/Users/senpusha/zdshm/src/main.lua",
+		"/Users/senpusha/zdshm/README.md",
+		"/Users/senpusha/zdshm/src/demo.lua",
+		"/Users/senpusha/zdshm/src/conf.lua",
+		"/Users/senpusha/zdshm/src/bead.lua",
+		"/Users/senpusha/zdshm/src/player.lua",
+		"/Users/senpusha/zdshm/src/skeleton.lua",
+		"/Users/senpusha/zdshm/src/libs/Simple-Tiled-Implementation/sti.lua",
+		"/Users/senpusha/zdshm/src/img/demo_tile_1.png",
+		"/Users/senpusha/Library/Application Support/Sublime Text 2/Packages/User/Lua.sublime-settings",
+		"/Users/senpusha/Downloads/UnTattieboglev2.sh",
+		"/Users/senpusha/Downloads/ControllerListv8-16.plist",
+		"/Users/senpusha/zdshm.sublime-project"
+	],
+	"find":
+	{
+		"height": 35.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+			"",
+			"newPitch",
+			"/Users/senpusha/zdshm/src"
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"title",
+			"music",
+			"setmask(1",
+			"setMask",
+			"setcategory",
+			"jumped",
+			"extra",
+			"extrawall",
+			"keypressed",
+			"destroy",
+			"extrawall",
+			"newPitch",
+			"lurker",
+			"setcolor",
+			"scanlines_o",
+			"win",
+			"combo",
+			"dt",
+			"combo",
+			"action",
+			"extra",
+			"extrwa",
+			"extrawall",
+			"leave",
+			"overlay",
+			"image",
+			"overlay",
+			"newPicth",
+			"newPitch",
+			"tween",
+			"update",
+			"waiting",
+			"tween",
+			"arc_overlay",
+			"player",
+			"player.frame",
+			"waiting",
+			"print",
+			"tween",
+			"stomped",
+			"combo",
+			"SCORE",
+			"print",
+			"waiting",
+			"frame_tween",
+			"player.frame",
+			"char_frame",
+			"08",
+			"print(",
+			"player",
+			"destroy",
+			"jumped",
+			"char_frame",
+			"player_batch",
+			"14",
+			"player.width",
+			"setpointsize",
+			"[1]",
+			".lane",
+			".land",
+			"0.5",
+			"intro",
+			"wall_frame",
+			"cam.z",
+			"drawHUD",
+			"drawhud",
+			"sore",
+			"score = 0",
+			"score",
+			"sine",
+			"in-out",
+			"scpre = 0",
+			"score",
+			"bmp",
+			".bmp",
+			"*-1",
+			"print",
+			"100",
+			"combo",
+			"0.5",
+			"img_bg",
+			"mass",
+			"Body",
+			"*3",
+			"bg",
+			"print",
+			"reset",
+			"default",
+			"setLineHeight",
+			"wrap",
+			"new",
+			"main",
+			"to",
+			"print",
+			"switch",
+			"madcatz",
+			"fighstick",
+			"neo"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"play",
+			"newPitch",
+			""
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 0,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "states/title.lua",
+					"settings":
+					{
+						"buffer_size": 1754,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								152,
+								152
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Lua/Lua.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "states/play.lua",
+					"settings":
+					{
+						"buffer_size": 565,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								178,
+								178
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Lua/Lua.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 0.0
+	},
+	"input":
+	{
+		"height": 31.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.exec":
+	{
+		"height": 100.0
+	},
+	"replace":
+	{
+		"height": 64.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 150.0,
+	"status_bar_visible": true
+}
