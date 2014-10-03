@@ -1,12 +1,13 @@
 local hero = {	
-
+	lives = 4
 }
 
 local walk = require 'assets.animations.hero_walk'
 local retreat = require 'assets.animations.hero_retreat'
 local active = walk
+--local lives = 4
 
-function update(dt)
+function hero:update(dt)
 	if active == walk then
 		if walk.done == true then		
 			active = retreat
@@ -25,13 +26,16 @@ function update(dt)
 	end
 end
 
-function draw()
+function hero:draw()
 	--draw test anim
 	love.graphics.setColor(255, 255, 255, 255)
 	active.animation:draw(active.spritemap, 40, 40)
 end
 
-hero.update = update
-hero.draw = draw
+function hero:eatLife()
+	if hero.lives > 0 then
+		hero.lives = hero.lives - 1
+	end
+end
 
 return hero
