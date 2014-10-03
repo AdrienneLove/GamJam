@@ -10,6 +10,7 @@ function update(dt)
 	if active == walk then
 		if walk.done == true then		
 			active = retreat
+			walk.done = false
 		else
 		    walk.animation:update(dt)
 		end		
@@ -17,6 +18,7 @@ function update(dt)
 	if active == retreat then
 		if retreat.done == true then
 			active = walk
+			retreat.done = false
 		else
 			retreat.animation:update(dt)
 		end
