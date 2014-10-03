@@ -69,28 +69,33 @@ function play:draw()
 	love.graphics.pop()
 end
 
-function play:keypressed(key, unicode)
+function play:gamepadpressed(joystick, button)
+	print("tramp balls")
 
 end
 
 function play:joystickpressed(joystick, button)
 	--hero:eatLife()
 	--print(hero.lives)
+
+	if (love._os == "Windows") then
+		button = button + 10
+	end
+
 	print(button)
-	if button == 4 then
+	if button == 14 then
 		-- Y = 14
-		print("Y")
 		hero:saluteY()
 	end
-	if button == 3 then
+	if button == 13 then
 		-- X = 13
 		hero:saluteX()
 	end
-	if button == 2 then
+	if button == 12 then
 		-- B = 12
 		hero:saluteB()
 	end
-	if button == 1 then
+	if button == 11 then
 		-- A = 11
 		hero:saluteA()
 	end 
