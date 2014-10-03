@@ -10,6 +10,7 @@ local enemies = {
 	citizen = require "assets.chars.guard"
 }
 local hero = require "assets.chars.hero"
+local cube = love.graphics.newImage('assets/animations/splash_cube.png')
 
 function play:enter(state)
 	
@@ -23,7 +24,10 @@ function play:update(dt)
 	--rimon_walk.animation:update(dt)
 	--update enemies
 	enemies.guard.update(dt)
-	hero.update(dt)
+	hero:update(dt)
+	if hero.lives == 0 then
+		
+	end
 end
 
 function play:draw()
@@ -41,16 +45,20 @@ function play:draw()
 	love.graphics.setColor(255, 156, 255, 255)
 	love.graphics.setFont(swishfont)
 	love.graphics.printf("I know they make you fur-ious but my cat puns are su-purr-ior.", love.graphics.getWidth()/2-250, love.graphics.getHeight()/2-25, 500, 'center')
+
+	-- draw life count
+	for i=1,hero.lives do
+		love.graphics.draw(cube, 40*i, 50)
+	end
 	
 	--draw enemies
 	enemies.guard.draw(dt)
-
+	--print(hero.lives)
 	--draw hero
-	hero.draw(dt)
+	hero:draw(dt)
 
 	--pop graphics stack
 	love.graphics.pop()
-
 end
 
 function play:keypressed(key, unicode)
@@ -58,6 +66,8 @@ function play:keypressed(key, unicode)
 end
 
 function play:joystickpressed(joystick, button)
+	hero:eatLife()
+	print(hero.lives)
 
 
 	-- Y = 14
