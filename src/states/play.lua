@@ -1,25 +1,22 @@
 local play = {}
 
---local rimon_walk = require 'assets.animations.rimon_walk';
 local swishfont = love.graphics.newFont('assets/fonts/LovedbytheKing.ttf', 30) 
-local enemies = {
-	guards = require "assets.chars.guard"
-}
+local guards = require "assets.chars.guard"
 hero = require "assets.chars.hero"
 local cube = love.graphics.newImage('assets/animations/splash_cube.png')
 local gameover = false
 
 function play:enter(state)
 
-	enemies.guards:newGuard(2)
-	enemies.guards:newGuard(1)
-	enemies.guards:newGuard(3)
-	enemies.guards:newGuard(4)
+	guards:newGuard(2)
+	guards:newGuard(1)
+	guards:newGuard(3)
+	guards:newGuard(4)
 
-	enemies.guards:newGuard(2)
-	enemies.guards:newGuard(1)
-	enemies.guards:newGuard(3)
-	enemies.guards:newGuard(4)
+	guards:newGuard(2)
+	guards:newGuard(1)
+	guards:newGuard(3)
+	guards:newGuard(4)
 
 end
 
@@ -30,8 +27,9 @@ end
 function play:update(dt)
 	--rimon_walk.animation:update(dt)
 	--update enemies
-	enemies.guards:update(dt)
+	guards:update(dt)
 	hero:update(dt)
+	play:checkWave()
 	if hero.lives == 0 then
 		gameover = true
 	end
@@ -60,7 +58,7 @@ function play:draw()
 	end
 	
 	--draw enemies
-	enemies.guards:draw()
+	guards:draw()
 
 	--draw hero
 	hero:draw(dt)
@@ -96,6 +94,16 @@ function play:joystickpressed(joystick, button)
 	end 
 
 end
+
+function play:checkWave()
+	print("ch")
+	-- is there a guard in the area
+	-- if yes > check correct wave was used.
+	--    if correct wave was used, flip taht guard status to wavedAt.
+	--    if wrong wave used, take life.
+	-- if no > take life
+end
+
 
 
 return play

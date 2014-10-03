@@ -12,7 +12,6 @@ local level_speed = 100
 local panels_left = 6
 local status = "intro" -- other states are play, dead and outro
 
-
 -- hot swap between panel 1, 2 and 3
 local background_panels = {
 	{ x = 0, image = nil, current = false, furthest = false},
@@ -26,6 +25,12 @@ local foreground_panels = {
 	{ x = 0, image = nil, current = false, furthest = true}
 }
 
+-- player / enemy stuff
+hero = require "assets.chars.hero"
+local cube = love.graphics.newImage('assets/animations/splash_cube.png')
+local gameover = false
+local guards = require "assets.chars.guard"
+local swishfont = love.graphics.newFont('assets/fonts/LovedbytheKing.ttf', 30) 
 
 function level:enter(state)
 
@@ -83,7 +88,11 @@ function level:enter(state)
 	-- set timer to go from intro to play
 	Timer.add(1, function() status = "play" end)
 
-
+	-- enemy spawn (testers)
+	guards:newGuard(2)
+	guards:newGuard(1)
+	guards:newGuard(3)
+	guards:newGuard(4)
 end
 
 function level:leave()
@@ -93,6 +102,10 @@ end
 function level:update(dt)
 	--update all timers
 	Timer.update(dt)
+
+	--update player/enemys
+	guards:update(dt)
+	hero:update(dt)
 
 	if status == "play" then
 
@@ -186,6 +199,25 @@ function level:draw()
 	for key, value in pairs(foreground_panels) do 
 		love.graphics.draw(value.image, value.x, 0)
 	end
+
+	-- draw life count
+	for i=1,hero.lives do
+		--love.graphics.draw(cube, 40*i, 50)
+		love.graphics.printf(hero.lives, 15*i, 20, 250, 'left')
+	end
+
+	if gameover then
+		--draw text
+		love.graphics.setColor(255, 156, 255, 255)
+		love.graphics.setFont(swishfont)
+		love.graphics.printf("LOL NOPE.", love.graphics.getWidth()/2-250, love.graphics.getHeight()/2-25, 500, 'center')
+	end
+	
+	--draw enemies
+	guards:draw()
+
+	--draw hero
+	hero:draw(dt)
 	
 	love.graphics.pop()
 end
@@ -195,6 +227,30 @@ function level:keypressed(key, unicode)
 	if key == "q" then
 		love.event.push("quit")
 	end
+
+end
+
+function level:joystickpressed(joystick, button)
+	hero:eatLife()
+	--print(hero.lives)
+	print(button)
+	if button == 4 then
+		-- Y = 14
+		print("Y")
+		hero:saluteY()
+	end
+	if button == 3 then
+		-- X = 13
+		hero:saluteX()
+	end
+	if button == 2 then
+		-- B = 12
+		hero:saluteB()
+	end
+	if button == 1 then
+		-- A = 11
+		hero:saluteA()
+	end 
 
 end
 
