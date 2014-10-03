@@ -7,3 +7,5 @@ function love.load()
 	Gamestate.switch(splash)
 	Gamestate.registerEvents()
 end
+
+

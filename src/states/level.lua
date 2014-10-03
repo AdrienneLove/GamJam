@@ -106,6 +106,7 @@ function level:update(dt)
 	--update player/enemys
 	guards:update(dt)
 	hero:update(dt)
+	level:checkWave()
 
 	if status == "play" then
 
@@ -229,6 +230,20 @@ function level:keypressed(key, unicode)
 	end
 
 end
+
+function level:checkWave()
+	--printTable(guards.current_guards)
+	-- is there a guard in the area
+	-- if yes > check correct wave was used.
+	--    if correct wave was used, flip taht guard status to wavedAt.
+	--    if wrong wave used, take life.
+	-- if no > take life
+end
+
+-- 
+function level:checkArea()
+end
+
 
 function level:joystickpressed(joystick, button)
 	hero:eatLife()
