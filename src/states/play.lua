@@ -5,6 +5,10 @@ anim8 = require 'lib.anim8'
 
 local rimon_walk = require 'assets.animations.rimon_walk';
 local swishfont = love.graphics.newFont('assets/fonts/LovedbytheKing.ttf', 30) 
+local enemies = {
+	guard = require "assets.chars.guard",
+	citizen = require "assets.chars.guard"
+}
 
 function play:enter(state)
 	
@@ -16,6 +20,7 @@ end
 
 function play:update(dt)
 	rimon_walk.animation:update(dt)
+	enemies.guard.update(dt)
 end
 
 function play:draw()
@@ -34,6 +39,8 @@ function play:draw()
 	love.graphics.setFont(swishfont)
 	love.graphics.printf("I know they make you fur-ious but my cat puns are su-purr-ior.", love.graphics.getWidth()/2-250, love.graphics.getHeight()/2-25, 500, 'center')
 
+	-- manage
+	--drawEnemies(dt)
 	--pop graphics stack
 	love.graphics.pop()
 
