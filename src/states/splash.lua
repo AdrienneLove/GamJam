@@ -110,10 +110,6 @@ function splash:draw()
 
 	self.frame = self.frame + 1
 
-	--draw text
-	love.graphics.setColor(76, 45, 129, 255)
-	love.graphics.printf("Splash screen", 10, 10, 200, 'left')
-
 	--pop graphics stack
 	love.graphics.pop()
 end

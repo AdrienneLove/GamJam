@@ -1,15 +1,15 @@
 local guard_manager = {
 
 	guard_types = {
-		{ -- 1
-			speed = 80,
+		{ -- 1 RED FOX
+			speed = 90,
 			expectedWave = "B",
 			guard_body_anim_data = { --default body
 				_WIDTH = 32,				
 				_HEIGHT = 39,			
 				_FRAMES = 8,			
 				_FILENAME = "fox_body.png", 	
-				_ANIMATIONSPEED = 0.12 		
+				_ANIMATIONSPEED = 0.1	
 			},
 			guard_body_image = nil,
 			guard_body_animation = nil,
@@ -18,7 +18,7 @@ local guard_manager = {
 				_HEIGHT = 39,			
 				_FRAMES = 8,			
 				_FILENAME = "fox_head.png", 	
-				_ANIMATIONSPEED = 0.12	
+				_ANIMATIONSPEED = 0.1	
 			},
 			guard_head_image = nil,
 			guard_head_animation = nil,
@@ -27,23 +27,23 @@ local guard_manager = {
 				_HEIGHT = 39,			
 				_FRAMES = 8,			
 				_FILENAME = "fox_head_expressions.png", 	
-				_ANIMATIONSPEED = 0.12	
+				_ANIMATIONSPEED = 0.1	
 			},
 			guard_stop_image = nil,
 			guard_stop_animation = nil,
 			guard_fail_image = "fox_fail.png"	
 
 		},
-		{ -- 2
+		{ -- 2 YELLOW JAG
 			
-			speed = 90,
+			speed = 95,
 			expectedWave = "Y",
 			guard_body_anim_data = { --default body
 				_WIDTH = 32,				
 				_HEIGHT = 39,			
 				_FRAMES = 8,			
 				_FILENAME = "jaguar_body.png", 	
-				_ANIMATIONSPEED = 0.12 		
+				_ANIMATIONSPEED = 0.11		
 			},
 			guard_body_image = nil,
 			guard_body_animation = nil,
@@ -52,7 +52,7 @@ local guard_manager = {
 				_HEIGHT = 39,			
 				_FRAMES = 8,			
 				_FILENAME = "jaguar_head.png", 	
-				_ANIMATIONSPEED = 0.12	
+				_ANIMATIONSPEED = 0.11	
 			},
 			guard_head_image = nil,
 			guard_head_animation = nil,
@@ -61,21 +61,21 @@ local guard_manager = {
 				_HEIGHT = 39,			
 				_FRAMES = 8,			
 				_FILENAME = "jaguar_head_expressions.png", 	
-				_ANIMATIONSPEED = 0.12	
+				_ANIMATIONSPEED = 0.99
 			},
 			guard_stop_image = nil,
 			guard_stop_animation = nil,
 			guard_fail_image = "jaguar_fail.png"	
 		},
-		{ -- 3
-			speed = 100,
+		{ -- 3 BLUE EAGLE
+			speed = 102,
 			expectedWave = "X",
 			guard_body_anim_data = { --default body
 				_WIDTH = 32,				
 				_HEIGHT = 39,			
 				_FRAMES = 8,			
 				_FILENAME = "eagle_body.png", 	
-				_ANIMATIONSPEED = 0.12 		
+				_ANIMATIONSPEED = 0.11 		
 			},
 			guard_body_image = nil,
 			guard_body_animation = nil,
@@ -84,7 +84,7 @@ local guard_manager = {
 				_HEIGHT = 39,			
 				_FRAMES = 8,			
 				_FILENAME = "eagle_head.png", 	
-				_ANIMATIONSPEED = 0.12	
+				_ANIMATIONSPEED = 0.11	
 			},
 			guard_head_image = nil,
 			guard_head_animation = nil,
@@ -93,13 +93,13 @@ local guard_manager = {
 				_HEIGHT = 39,			
 				_FRAMES = 8,			
 				_FILENAME = "eagle_head_expressions.png", 	
-				_ANIMATIONSPEED = 0.12	
+				_ANIMATIONSPEED = 0.11	
 			},
 			guard_stop_image = nil,
 			guard_stop_animation = nil,
 			guard_fail_image = "eagle_fail.png"	
 		},
-		{ -- 4
+		{ -- 4 GREEN SNAKE SNAAAAKE SNAAAAAAAKKKE!? 
 			speed = 110,
 			expectedWave = "A",
 			guard_body_anim_data = {
