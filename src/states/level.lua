@@ -339,8 +339,25 @@ end
 
 function level:keypressed(key, unicode)
 	-- navigate menu
-	if key == "q" then
-		love.event.push("quit")
+	if key == "w" then
+		-- Y = 14
+		wave = "Y"
+		hero:saluteY()
+	end
+	if key == "a" then
+		-- X = 13
+		wave = "X"
+		hero:saluteX()
+	end
+	if key == "d" then
+		-- B = 12
+		wave = "B"
+		hero:saluteB()
+	end
+	if key == "s" then
+		-- A = 11
+		wave = "A"
+		hero:saluteA()
 	end
 
 end
@@ -405,6 +422,9 @@ end
 
 function level:spawner()
 	local roll = math.random(0,100)
+	if gameover then
+		spawn = false
+	end
 
 	if spawn and roll > 0 and roll < spawnChance then
 		guard = math.random(1,4)
@@ -418,7 +438,9 @@ function level:spawner()
 end
 
 function level:gameover()
-	level:stopNearestGuard()
+	spawnChance = 0
+	spawner = false
+	level:stopNearestGuard()	
 end
 
 function level:stopNearestGuard()
@@ -430,8 +452,8 @@ function level:stopNearestGuard()
 				nearest = guards.current_guards[i]
 			end
 		end
+		nearest.speed = 0
 	end
-
 	--printTable(nearest)
 end
 
