@@ -480,6 +480,7 @@ function level:checkWave(wave)
 		if wave == focusedGuard.expectedWave then
 			--flip this guards wavedAt to true.
 			focusedGuard:successWave()
+			focusedGuard.isWavedAt = true
 			waveCorrect = true
 			particle:spawn("pass", focusedGuard.x + 6, focusedGuard.speed)
 		else
