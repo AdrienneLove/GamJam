@@ -144,6 +144,7 @@ local particle_types = {
 	lose = {image = love.graphics.newImage('assets/images/BubbleExclamation.png')}
 }
 
+guard_manager.allow_particles = true
 guard_manager.particles = particles
 guard_manager.particle_types = particle_types
 
@@ -262,6 +263,10 @@ function guard_manager:draw()
 end
 
 function guard_manager:spawnParticle(type, _x, _speed)
+
+	if self.allow_particles == false then
+		return
+	end
 	
 	temp = {}
 	temp.x = _x
@@ -308,6 +313,7 @@ function guard_manager:particleDraw()
 end
 
 function guard_manager:particlePause()
+	self.allow_particles = false
 	for i, v in ipairs(self.particles) do
 			v.speed = 0
 	end

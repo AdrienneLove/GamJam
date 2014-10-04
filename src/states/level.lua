@@ -530,6 +530,8 @@ end
 function level:gameover()
 	spawnChance = 0
 	spawner = false
+	guards:spawnParticle("lose", hero.x + 6, 0)
+	guards:particlePause()
 	level:stopNearestGuard()
 	level_speed = 0
 end
@@ -547,7 +549,7 @@ function level:stopNearestGuard()
 			nearest.speed = 0
 			hero:stopHero() --only want the hero to stop once the guard has reached them.
 			nearest:stopGuard()
-			guards:particlePause()
+
 		end
 	end
 	--printTable(nearest)
