@@ -446,13 +446,16 @@ function level:gameover()
 end
 
 function level:stopNearestGuard()
-	local lowest = guards.current_guards[1].x
-	local nearest = guards.current_guards[1]
-	for i,v in ipairs(guards.current_guards) do
-		if v.x > 90 and v.x < lowest then
-			nearest = guards.current_guards[i]
+	if #guards.current_guards > 0 then
+		local lowest = guards.current_guards[1].x
+		local nearest = guards.current_guards[1]
+		for i,v in ipairs(guards.current_guards) do
+			if v.x > 90 and v.x < lowest then
+				nearest = guards.current_guards[i]
+			end
 		end
 	end
+
 	--printTable(nearest)
 end
 
