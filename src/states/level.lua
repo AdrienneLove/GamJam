@@ -47,7 +47,7 @@ local waveCorrect = false
 local cube = love.graphics.newImage('assets/animations/splash_cube.png')
 local swishfont = love.graphics.newFont('assets/fonts/LovedbytheKing.ttf', 30)
 
-local staticprops = {}
+local staticprops = require "assets.propfactory"
 
 function level:enter(state)
 
@@ -121,13 +121,7 @@ function level:enter(state)
 	guards:newGuard(4)
 
 	--static props
-	for i = 1,10 do
-		staticprops[i] = {}
-		staticprops[i].image = love.graphics.newImage('assets/images/door1.png')
-		staticprops[i].x = math.random(2000)
-		staticprops[i].y = 34
-		staticprops[i].alive = true
-	end
+	staticprops:populate()
 end
 
 function level:leave()
@@ -157,15 +151,7 @@ function level:update(dt)
 		end
 
 		--static prop
-		for i, v in ipairs(staticprops) do
-			if v.alive then
-				v.x = v.x - level_speed * dt;
-				if v.x <= -200 then
-					v.alive = false
-					v.image = nil
-				end
-			end
-		end
+		staticprops:update(dt, level_speed)
 
 	end
 
@@ -304,11 +290,7 @@ function level:draw()
 	end
 
 	--static props
-	for i, v in ipairs(staticprops) do
-		if v.alive then
-			love.graphics.draw(v.image, v.x, v.y)
-		end
-	end
+	staticprops:draw()
 
 	-- draw life count
 	for i=1,hero.lives do
