@@ -260,13 +260,14 @@ function guard_manager:draw()
 	end
 end
 
-function guard_manager:spawnParticle(type, _x)
+function guard_manager:spawnParticle(type, _x, _speed)
 	
 	temp = {}
 	temp.image = self.particle_types["pass"].image
 	temp.image:setFilter('nearest','nearest')
 	temp.x = _x
-	temp.y = 126
+	temp.y = 100
+	temp.speed = _speed
 
 	if type == "pass" then
 		temp.image = self.particle_types["pass"].image
@@ -277,7 +278,7 @@ function guard_manager:spawnParticle(type, _x)
 		return
 	end
 
-	temp.tween = tween.new(2, temp, {y = 0}, "outInElastic")
+	temp.tween = tween.new(1, temp, {y = 0}, "outInElastic")
 
 	table.insert(self.particles, temp)
 end
@@ -286,6 +287,8 @@ function guard_manager:particleUpdate(dt)
 	for i, v in ipairs(self.particles) do
 		complete = v.tween:update(dt)
 
+		v.x = v.x - v.speed * dt
+
 		if (complete == true) then
 			table.remove(self.particles, i)
 		end
@@ -293,8 +296,11 @@ function guard_manager:particleUpdate(dt)
 end
 
 function guard_manager:particleDraw()
+	love.graphics.setColor(255, 255, 255, 255)
 	for i, v in ipairs(self.particles) do
-		love.graphics.draw(v.image, v.x, v.y)
+		if v.y < 72 then
+			love.graphics.draw(v.image, v.x, v.y)
+		end
 	end
 end
 
