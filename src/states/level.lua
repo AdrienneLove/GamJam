@@ -22,6 +22,7 @@ local cur_level = 1
 
 -- player / enemy stuff
 local guards = require "assets.chars.guard"
+local particle = require "assets.particles"
 local focusedGuard --this is being used by the wave checking
 local spawn = false -- when true, chance for a spawn is triggered.
 
@@ -30,10 +31,11 @@ local spawn = false -- when true, chance for a spawn is triggered.
 local gameover = false
 local indicator = false
 local waveCorrect = false
-local cube = love.graphics.newImage('assets/animations/splash_cube.png')
+--local cube = love.graphics.newImage('assets/animations/splash_cube.png')
+local colorPressed = "none"
 local swishfont = love.graphics.newFont('assets/fonts/LovedbytheKing.ttf', 20)
 
-local staticprops = require "assets.propfactory"
+local props = require "assets.propfactory"
 
 local fading = true
 local game_music
@@ -45,7 +47,6 @@ function level:enter(state)
 	-- intro_completed = false
 
 	love.graphics.setDefaultFilter('nearest')
-	--panel iterates at half screen
 
 	--load in panel data for foreground and background
 	background_imagedata_start = love.image.newImageData('assets/images/start.gif')
@@ -64,9 +65,58 @@ function level:enter(state)
 		love.graphics.newImage(foreground_imagedata_1)
 	}
 
+	--images needed for ui button display
+	green = love.graphics.newImage('assets/images/colourGreen.png')
+	blue = love.graphics.newImage('assets/images/colourBlue.png')
+	yellow = love.graphics.newImage('assets/images/colourYellow.png')
+	red = love.graphics.newImage('assets/images/colourRed.png')
+
+	--panel iterates at half screen
+
+	level:reInit()
+
 	-- set timer to go from intro to play
 	-- Timer.add(1, function() status = "play" end)
-	--Timer.addPeriodic(spawnDelay, function() spawn = true end)
+	Timer.addPeriodic(levels[cur_level]["spawnDelay"], function() spawn = true end)
+
+	--static props
+	--props:populate()
+
+	-- play music
+	game_music = love.audio.newSource( "assets/audio/cephelopod.mp3", "stream" )
+	game_music:setLooping( true )
+	game_music:setVolume(0.5)
+	love.audio.play( game_music )
+
+	-- fade in / out 
+	-- fading = true
+	self.fade_params = { opacity = 255 }
+	bgm_params = { volume = 0.5 }
+	-- Timer.add(1/60, function()
+	-- 	Timer.tween(0.25, self.fade_params, { opacity = 0 }, 'in-out-sine')
+	-- 	Timer.add(0.25, function()
+	-- 		fading = false
+	-- 	end)
+	-- end)
+	Timer.tween(0.25, bgm_params, { volume = 0.8 })
+
+end
+
+function level:reInit()
+
+	for k,v in pairs(package.loaded) do
+		if string.match(k,"level_") then
+			package.loaded[k] = purge(package.loaded[k])
+		end
+	end
+
+	levels = {
+	require 'states.levels.level_one',
+	require 'states.levels.level_two',
+	require 'states.levels.level_three',
+	require 'states.levels.level_four',
+	require 'states.levels.level_five'
+}
 
 	--build initial background panels
 	for i,v in ipairs(levels) do
@@ -106,12 +156,12 @@ function level:enter(state)
 		v.exit_door.y = 0
 	end
 
-	-- set timer to go from intro to play
-	-- Timer.add(1, function() status = "play" end)
-	Timer.addPeriodic(levels[cur_level]["spawnDelay"], function() spawn = true end)
+	cur_level = 1
+	hero:init()
+	purge(guards.current_guards)
 
-	--static props
-	staticprops:populate()
+	particle:purge()
+	particle:start()
 
 	-- play music
 	game_music = love.audio.newSource( "assets/audio/cephelopod.mp3", "stream" )
@@ -126,6 +176,10 @@ function level:enter(state)
 	Timer.tween(0.25, self.fade_params, { opacity = 0, opacity_door = 255 }, 'in-out-sine')
 	Timer.tween(0.25, bgm_params, { volume = 0.8 })
 
+	props:populate()
+
+
+	gameover = false
 end
 
 -- function level:leave(dt)
@@ -162,8 +216,7 @@ function level:update(dt)
 			end
 		end
 
-		--static prop
-		staticprops:update(dt, levels[cur_level]["level_speed"])
+		props:update(dt, levels[cur_level]["level_speed"])
 
 	end
 
@@ -173,15 +226,25 @@ function level:update(dt)
 	end
 	if gameover then
 		level:gameover()
+		return
 	end
 
 	-- Don't spawn at end of level.
-	if levels[cur_level]["status"] == "play"  or levels[cur_level]["status"] == "outro" then
+	if levels[cur_level]["backgrounds_left"] > 0 then
 		level:spawner()
 	end
 
-	guards:update(dt)
+
 	hero:update(dt)
+	guards:update(dt)
+	particle:update(dt)
+
+	local missed = guards:leavecheck(dt)
+	if missed == true then
+		--guards.current_guards[1]:failWave()
+		particle:spawn("what", guards.current_guards[1].x + 6, guards.current_guards[1].speed)
+		hero:eatLife()
+	end
 
 	if levels[cur_level]["status"] == "play" or levels[cur_level]["status"] == "outro" then
 
@@ -261,6 +324,7 @@ function level:update(dt)
 				end
 
 				levels[cur_level]["foregrounds_left"] = levels[cur_level]["foregrounds_left"] - 1
+
 				--print(levels[cur_level]["foregrounds_left"])
 			end
 		end
@@ -321,9 +385,9 @@ function level:newLevel()
 	else
 		cur_level = cur_level + 1
 		hero:newLevel()
+		props:populate()
 		fading = false
 	end
-
 end
 
 function level:draw()
@@ -341,17 +405,21 @@ function level:draw()
 		love.graphics.draw(value.image, value.x, 0)
 	end
 
+	--if levels[cur_level]["entry_door"]["alive"] then
+	--	love.graphics.draw(levels[cur_level]["entry_door"]["image"], levels[cur_level]["entry_door"]["x"], levels[cur_level]["entry_door"]["y"])
+	--end
+
 	if levels[cur_level]["exit_door"]["alive"] then
 		love.graphics.draw(levels[cur_level]["exit_door"]["image"], levels[cur_level]["exit_door"]["x"], levels[cur_level]["exit_door"]["y"])
 	end
 
 	--static props
-	staticprops:draw()
+	props:draw()
 
 	-- draw life count
 	for i=1,hero.lives do
 		--love.graphics.draw(cube, 40*i, 50)
-		love.graphics.printf(hero.lives, 15*i, 20, 250, 'left')
+		love.graphics.draw(hero.life, 15*i, 10)
 	end
 
 	if gameover then
@@ -361,18 +429,68 @@ function level:draw()
 		love.graphics.printf("YOU DIED :'(", 30, 30, 100, 'center')
 	end
 
+
 	-- wave detect / indicator for the zone that enemies can receive waves in
-	if indicator then
-		if waveCorrect then
-			love.graphics.setColor(0, 220, 50, 255)
-		else
-			love.graphics.setColor(240, 30, 30, 255)
+	-- LEAVING THIS IN as it will kind of become the light effect
+	if level:isGuardInRange() then
+		love.graphics.setColor(220, 220, 220, 140)
+		if colourPressed == "blue" then
+			love.graphics.setColor(55, 121, 205, 140)
+		elseif colourPressed == "yellow" then
+			love.graphics.setColor(226, 200, 52, 140)
+		elseif colourPressed == "red" then
+			love.graphics.setColor(220, 52, 52, 140)
+		elseif colourPressed == "green" then
+			love.graphics.setColor(30, 165, 29, 140)
 		end
-	else
-		love.graphics.setColor(45, 45, 45, 255)
+
+		love.graphics.ellipse("fill", 75, 103, 20, 4, math.rad(0), 30)
+
+		-- if indicator then
+		-- 	if waveCorrect then -- this needs to change to show the color pressed instead of correct / incorrect.
+		-- 		love.graphics.setColor(65, 222, , 80)
+		-- 	else
+		-- 		love.graphics.setColor(240, 30, 30, 80)
+		-- 	end
+		-- else
+		-- 	love.graphics.setColor(220, 220, 220, 255)
+		-- end
+		--love.graphics.rectangle("fill", 55, 110, 40, 5)
 	end
-	love.graphics.rectangle("fill", 50, 120, 40, 5)
+
+	--draw indicators.
+	--if colourPressed ==
+	if colourPressed == "blue" then
+		love.graphics.setColor(255, 255, 255, 255)
+	else
+		love.graphics.setColor(90, 90, 90, 255)
+	end
+	love.graphics.draw(blue, 55, 116)
+
+	if colourPressed == "yellow" then
+		love.graphics.setColor(255, 255, 255, 255)
+	else
+		love.graphics.setColor(90, 90, 90, 255)
+	end
+	love.graphics.draw(yellow, 66, 116)
+
+	if colourPressed == "green" then
+		love.graphics.setColor(255, 255, 255, 255)
+	else
+		love.graphics.setColor(90, 90, 90, 255)
+	end
+	love.graphics.draw(green, 77, 116)
+
+	if colourPressed == "red" then
+		love.graphics.setColor(255, 255, 255, 255)
+	else
+		love.graphics.setColor(90, 90, 90, 255)
+	end
+	love.graphics.draw(red, 88, 116)
 	
+	--draw particles
+	particle:draw()
+
 	--draw enemies
 	guards:draw()
 
@@ -384,12 +502,19 @@ function level:draw()
 		love.graphics.draw(levels[cur_level]["entry_door"]["image"], levels[cur_level]["entry_door"]["x"], levels[cur_level]["entry_door"]["y"])
 	end
 
+	if levels[cur_level]["entry_door"]["alive"] then
+		love.graphics.draw(levels[cur_level]["entry_door"]["image"], levels[cur_level]["entry_door"]["x"], levels[cur_level]["entry_door"]["y"])
+	end
+
+	love.graphics.pop()
+
+
 	if fading then
 		love.graphics.setColor(33, 33, 33, self.fade_params.opacity)
 		love.graphics.rectangle("fill", 0, 0, love.graphics.getWidth(), love.graphics.getHeight())
 	end
 
-	love.graphics.pop()
+
 end
 
 function level:keypressed(key, unicode)
@@ -417,13 +542,8 @@ function level:keypressed(key, unicode)
 		hero:saluteA()
 	end
 
-	if key == " " then
-		cur_level = 2
-		hero:newLevel()
-	end
-
 	if key == "p" then
-		guards:spawnParticle("pass", 128, 80)
+		particle:spawn("pass", 128, 80)
 	end
 
 	if wave then level:checkWave(wave) end
@@ -434,19 +554,21 @@ function level:checkWave(wave)
 	if level:checkArea() then
 		if wave == focusedGuard.expectedWave then
 			--flip this guards wavedAt to true.
-			focusedGuard:successWave()			
+			focusedGuard:successWave()
+			focusedGuard.isWavedAt = true
 			waveCorrect = true
-			guards:spawnParticle("pass", focusedGuard.x + 6, focusedGuard.speed)
+			particle:spawn("pass", focusedGuard.x + 6, focusedGuard.speed)
 		else
 			focusedGuard:failWave()
+			focusedGuard.isWavedAt = true
 			waveCorrect = false
-			guards:spawnParticle("fail", focusedGuard.x + 6, focusedGuard.speed)
+			particle:spawn("fail", focusedGuard.x + 6, focusedGuard.speed)
 			hero:eatLife()
 		end
 	else
 		--no guard in area, NOM LYF
 		waveCorrect = false
-		hero:eatLife()
+		--hero:eatLife()
 	end
 	indicator = true
 end
@@ -454,7 +576,7 @@ end
 -- checks the detection area for a guard, returns true / false
 function level:checkArea()
 	for i=1,table.getn(guards.current_guards) do
-		if guards.current_guards[i]["x"] > 50 and guards.current_guards[i]["x"] < 90 then
+		if guards.current_guards[i]["x"] > 55 and guards.current_guards[i]["x"] < 95 then
 			focusedGuard = guards.current_guards[i]
 			return true
 		end
@@ -464,6 +586,7 @@ end
 
 function level:joystickreleased(joystick, button)
 	indicator = false
+	colourPressed = none
 end
 
 
@@ -482,15 +605,19 @@ function level:joystickpressed(joystick, button)
 	
 	if joystick:isGamepadDown("y") then
 		wave = "Y"
+		colourPressed = "yellow"
 	end
 	if joystick:isGamepadDown("x") then
 		wave = "X"
+		colourPressed = "blue"
 	end
 	if joystick:isGamepadDown("b") then
 		wave = "B"
+		colourPressed = "red"
 	end
 	if joystick:isGamepadDown("a") then
 		wave = "A"
+		colourPressed = "green"
 	end
 
 	if wave == "Y" then
@@ -526,8 +653,11 @@ end
 function level:gameover()
 	spawnChance = 0
 	spawner = false
-	level:stopNearestGuard()
-	level_speed = 0
+	particle:spawn("lose", hero.x + 6, 0)
+	particle:pause()
+	-- level:stopNearestGuard()
+	--levels[cur_level]["level_speed"] = 0
+	level:reInit()
 end
 
 function level:stopNearestGuard()
@@ -539,14 +669,25 @@ function level:stopNearestGuard()
 				nearest = guards.current_guards[i]
 			end
 		end
-		if nearest.x <100 then
+		if nearest.x < 100 then
 			nearest.speed = 0
-			hero:stopHero() --only want the hero to stop once the guard has reached them.
+			-- hero:stopHero() --only want the hero to stop once the guard has reached them.
 			nearest:stopGuard()
-			guards:particlePause()
+
 		end
 	end
 	--printTable(nearest)
 end
+
+--checks if guard is nearby to show indicator.
+function level:isGuardInRange()
+	for i=1,table.getn(guards.current_guards) do
+		if guards.current_guards[i]["x"] > 45 and guards.current_guards[i]["x"] < 150 then
+			return true
+		end
+	end
+	return false
+end
+
 
 return level

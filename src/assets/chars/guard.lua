@@ -134,19 +134,6 @@ local guard_manager = {
 
 }
 
-
-local tween = require 'lib.tween'
-
-local particles = {}
-local particle_types = {
-	pass = {image = love.graphics.newImage('assets/images/BubbleStar.png')},
-	fail = {image = love.graphics.newImage('assets/images/BubbleX.png')},
-	lose = {image = love.graphics.newImage('assets/images/BubbleExclamation.png')}
-}
-
-guard_manager.particles = particles
-guard_manager.particle_types = particle_types
-
 function guard_manager:newGuard(num)
 
 	if num < 0 or num > 4 then
@@ -162,6 +149,7 @@ function guard_manager:newGuard(num)
 		x = 240,
 		expectedWave = self.guard_types[num]["expectedWave"],
 		isWavedAt = false,
+		isTooSlow = false,
 		guard_body_anim_data = self.guard_types[num]["guard_body_anim_data"],
 		guard_head_anim_data = self.guard_types[num]["guard_head_anim_data"], 
 		guard_stop_anim_data = self.guard_types[num]["guard_stop_anim_data"],
@@ -239,12 +227,9 @@ function guard_manager:despawn()
 			c = c + 1
 		end
 	end
-	self.current_guards = _current_guards
 end
 
 function guard_manager:update(dt)
-
-	self:particleUpdate(dt)
 
 	for _,guard in ipairs(self.current_guards) do
 		guard:update(dt)
@@ -254,62 +239,20 @@ end
 
 function guard_manager:draw()
 
-	self:particleDraw()
-
 	for _,guard in ipairs(self.current_guards) do
 		guard:draw()
 	end
 end
 
-function guard_manager:spawnParticle(type, _x, _speed)
-	
-	temp = {}
-	temp.x = _x
-	temp.y = 88
-	temp.speed = _speed
-
-	if type == "pass" then
-		temp.image = self.particle_types["pass"].image
-	elseif type == "fail" then
-		temp.image = self.particle_types["fail"].image
-	elseif type == "lose" then
-		temp.image = self.particle_types["lose"].image
-	else
-		print("Unrecognized particle type")
-		return
-	end
-
-	temp.image:setFilter('nearest','nearest')
-
-	temp.tween = tween.new(1, temp, {y = 0}, "outInElastic")
-
-	table.insert(self.particles, temp)
-end
-
-function guard_manager:particleUpdate(dt)
-	for i, v in ipairs(self.particles) do
-		complete = v.tween:update(dt)
-
-		v.x = v.x - v.speed * dt
-
-		if (complete == true) then
-			table.remove(self.particles, i)
+function guard_manager:leavecheck()
+	for _,guard in ipairs(self.current_guards) do
+		if (guard.x + 32) < 50 and guard.isWavedAt == false and guard.isTooSlow == false then
+			guard.isTooSlow = true
+			return true
 		end
 	end
+
+	return false
 end
 
-function guard_manager:particleDraw()
-	love.graphics.setColor(255, 255, 255, 255)
-	for i, v in ipairs(self.particles) do
-		if v.y < 72 then
-			love.graphics.draw(v.image, v.x, v.y)
-		end
-	end
-end
-
-function guard_manager:particlePause()
-	for i, v in ipairs(self.particles) do
-			v.speed = 0
-	end
-end
 return guard_manager
