@@ -3,6 +3,7 @@ local l = {
 	name = "two",
 
 	status = "intro", -- other states are play, dead, outro
+	intro_completed = false,
 
 	-- Difficulty/pacing stuff
 	level_speed = 100,

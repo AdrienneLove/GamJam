@@ -3,6 +3,7 @@ local hero = {
 	state = "intro", -- "play", "stand", "exit"
 	x = -100,
 	leaving = false,
+
 	hero_body = {			--default run body
 		_WIDTH = 32,
 		_HEIGHT = 35,
@@ -65,6 +66,17 @@ local hero = {
 }
 
 local y = 70
+
+local tween = require 'lib.tween'
+
+local particles = {}
+local particle_types = {
+	pass = {image = love.graphics.newImage('assets/images/pass.png')},
+	fail = {image = love.graphics.newImage('assets/images/fail.png')}
+}
+
+hero.particles = particles
+hero.particle_types = particle_types
 
 -- default run animation for body and legs
 hero.hero_body_spritemap = love.graphics.newImage("assets/images/"..hero.hero_body._FILENAME);
@@ -143,7 +155,17 @@ function hero:update(dt)
 	if hero.state == "exit" then
 		hero.x = hero.x + 3
 	end
+
+	self:particleUpdate(dt)
 end
+
+function hero:newLevel()
+	self.lives = 4
+	self.state = "intro" -- "play", "stand", "exit"
+	self.x = -50
+	self.leaving = false
+end
+
 
 function hero:saluteX()
 	active_body_animation = hero.hero_body_wave_x_animation
@@ -173,6 +195,8 @@ function hero:draw()
 	
 	active_legs_animation:draw(active_legs_spritemap, hero.x, 70)
 	active_body_animation:draw(active_body_spritemap, hero.x, 70)
+
+	self:particleDraw()
 end
 
 function hero:eatLife()
@@ -184,6 +208,44 @@ end
 function hero:stopHero()
 	active_legs_animation:pause()
 	active_body_animation:pause()
+end
+
+function hero:spawnParticle(type, _x)
+	
+	temp = {}
+	temp.image = self.particle_types["pass"].image
+	temp.image:setFilter('nearest','nearest')
+	temp.x = _x
+	temp.y = 126
+
+	if type == "pass" then
+		temp.image = self.particle_types["pass"].image
+	elseif type == "fail" then
+		temp.image = self.particle_types["fail"].image
+	else
+		print("Unrecognized particle type")
+		return
+	end
+
+	temp.tween = tween.new(2, temp, {y = 0}, "outInElastic")
+
+	table.insert(self.particles, temp)
+end
+
+function hero:particleUpdate(dt)
+	for i, v in ipairs(self.particles) do
+		complete = v.tween:update(dt)
+
+		if (complete == true) then
+			table.remove(self.particles, i)
+		end
+	end
+end
+
+function hero:particleDraw()
+	for i, v in ipairs(self.particles) do
+		love.graphics.draw(v.image, v.x, v.y)
+	end
 end
 
 return hero
