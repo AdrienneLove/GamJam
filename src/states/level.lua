@@ -3,7 +3,7 @@ local level = {}
 local Timer = require "lib.hump.timer"
 
 --level vars
-local level_speed = 140
+local level_speed = 200
 local backgrounds_left = 4
 local foregrounds_left = backgrounds_left
 local status = "intro" -- other states are play, dead, outro and exit
@@ -44,6 +44,8 @@ local indicator = false
 local waveCorrect = false
 local cube = love.graphics.newImage('assets/animations/splash_cube.png')
 local swishfont = love.graphics.newFont('assets/fonts/LovedbytheKing.ttf', 30)
+
+local staticprops = {}
 
 function level:enter(state)
 
@@ -95,17 +97,32 @@ function level:enter(state)
 	end
 
 	--build entry door
-	entry_door.image = love.graphics.newImage('assets/images/door1.png')
-	entry_door.x = 56
-	entry_door.y = 34
+	entry_door.image = love.graphics.newImage('assets/images/start_door.png')
+	entry_door.x = 0
+	entry_door.y = 0
 
-	exit_door.image = love.graphics.newImage('assets/images/door2.png')
-	exit_door.x = 100
-	exit_door.y = 34
+	exit_door.image = love.graphics.newImage('assets/images/end_door.png')
+	exit_door.x = 197
+	exit_door.y = 0
 
 	-- set timer to go from intro to play
 	Timer.add(1, function() status = "play" end)
 	Timer.addPeriodic(spawnDelay, function() spawn = true end)
+
+	-- enemy spawn (testers)
+	guards:newGuard(2)
+	guards:newGuard(1)
+	guards:newGuard(3)
+	guards:newGuard(4)
+
+	--static props
+	for i = 1,10 do
+		staticprops[i] = {}
+		staticprops[i].image = love.graphics.newImage('assets/images/door1.png')
+		staticprops[i].x = math.random(2000)
+		staticprops[i].y = 34
+		staticprops[i].alive = true
+	end
 end
 
 function level:leave()
@@ -126,6 +143,18 @@ function level:update(dt)
 				entry_door.image = nil
 			end
 		end
+
+		--static prop
+		for i, v in ipairs(staticprops) do
+			if v.alive then
+				v.x = v.x - level_speed * dt;
+				if v.x <= -200 then
+					v.alive = false
+					v.image = nil
+				end
+			end
+		end
+
 	end
 
 	--update player/enemys
@@ -133,7 +162,7 @@ function level:update(dt)
 	guards:update(dt)
 	hero:update(dt)
 
-	if status == "play" then
+	if status == "play" or status == "outro" then
 
 		-- move background panels
 		for key, value in pairs(background_panels) do 
@@ -215,21 +244,21 @@ function level:update(dt)
 		end
 
 		if status == "play" and foregrounds_left == 0 and backgrounds_left == 0 then
-			status = "outro"
 			
 			--search furthest background and put a door there
 			for furthest_key, furthest_value in pairs(foreground_panels) do 
-				if furthest_value.furthest then 
+				if furthest_value.furthest then
 					exit_door.x = furthest_value.x + exit_door.x
 					exit_door.alive = true
 					exit_door.distance = exit_door.x
+					status = "outro"
 					break
 				end
 			end
 		end
 
 		if status == "outro" then
-			if exit_door.distance > 100 then 
+			if exit_door.distance > 200 then 
 				exit_door.x = exit_door.x - level_speed * dt
 				exit_door.distance = exit_door.distance - level_speed * dt
 			else 
@@ -260,6 +289,13 @@ function level:draw()
 
 	if exit_door.alive then
 		love.graphics.draw(exit_door.image, exit_door.x, exit_door.y)
+	end
+
+	--static props
+	for i, v in ipairs(staticprops) do
+		if v.alive then
+			love.graphics.draw(v.image, v.x, v.y)
+		end
 	end
 
 	-- draw life count

@@ -17,6 +17,8 @@ local spritemap, animation
 
 --include image, set up width and frames 
 spritemap = love.graphics.newImage("assets/images/"..hero_walk._FILENAME);
+spritemap:setFilter('nearest', 'nearest')
+
 local g = anim8.newGrid(hero_walk._WIDTH, hero_walk._HEIGHT, spritemap:getWidth(), spritemap:getHeight())
 
 local looper = function()
