@@ -402,11 +402,13 @@ function level:checkWave(wave)
 	if level:checkArea() then
 		if wave == focusedGuard.expectedWave then
 			--flip this guards wavedAt to true.
-			focusedGuard:successWave()
+			focusedGuard:successWave()			
 			waveCorrect = true
+			guards:spawnParticle("pass", focusedGuard.x, focusedGuard.speed)
 		else
 			focusedGuard:failWave()
 			waveCorrect = false
+			guards:spawnParticle("fail", focusedGuard.x, focusedGuard.speed)
 			hero:eatLife()
 		end
 	else
