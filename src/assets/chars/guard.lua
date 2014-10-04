@@ -45,7 +45,6 @@ function guard_manager:newGuard(num)
 	}
 
 	function g:update(dt)
-		-- print("boop")
 		self.x = self.x - self.speed * 0.3
 		self.walk.animation:update(dt)
 	end

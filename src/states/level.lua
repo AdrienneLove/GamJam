@@ -346,16 +346,13 @@ function level:checkWave(wave)
 		if wave == focusedGuard.expectedWave then
 			--flip this guards wavedAt to true.
 			waveCorrect = true
-			print("CORRECT- guard happy")
 		else
 			waveCorrect = false
-			print("WRONG - et life")
 			hero:eatLife()
 		end
 	else
 		--no guard in area, NOM LYF
 		waveCorrect = false
-		print("nothing in zone. torso bleed. lose one life.")
 		hero:eatLife()
 	end
 	indicator = true
@@ -378,7 +375,7 @@ end
 
 
 function level:joystickpressed(joystick, button)
-	--print(hero.lives)
+	
 	if button == 4 then
 		-- Y = 14
 		wave = "Y"
@@ -405,9 +402,8 @@ end
 
 function level:spawner()
 	local roll = math.random(0,100)
-	print(spawn)
+
 	if spawn and roll > 0 and roll < spawnChance then
-		print("spawn triggered")
 		guard = math.random(1,4)
 		guards:newGuard(guard)
 		spawn = false
