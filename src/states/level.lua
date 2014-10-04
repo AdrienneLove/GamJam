@@ -491,7 +491,7 @@ function level:checkWave(wave)
 	else
 		--no guard in area, NOM LYF
 		waveCorrect = false
-		hero:eatLife()
+		--hero:eatLife()
 	end
 	indicator = true
 end
