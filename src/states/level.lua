@@ -405,9 +405,8 @@ end
 
 function level:spawner()
 	local roll = math.random(0,100)
-	print(spawn)
+
 	if spawn and roll > 0 and roll < spawnChance then
-		print("spawn triggered")
 		guard = math.random(1,4)
 		guards:newGuard(guard)
 		spawn = false
