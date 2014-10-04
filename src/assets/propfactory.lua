@@ -69,7 +69,7 @@ local propfactory = {
 	static_props = {},
 	anim_props = {},
 	offset = 64,
-	level_width = 1260
+	level_width = 1008
 }
 
 
@@ -133,7 +133,7 @@ function propfactory:populate()
 
 		propfactory:addStatic(selected, placement)
 
-		if (self.offset - 96) > 1280 then
+		if (self.offset - 96) > self.level_width then
 			break
 		end
 	end

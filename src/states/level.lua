@@ -151,6 +151,10 @@ function level:reInit()
 	cur_level = 1
 	hero:init()
 	purge(guards.current_guards)
+	guards:particlePurge()
+	staticprops:purge()
+
+	staticprops:populate()
 
 	gameover = false
 
