@@ -13,7 +13,7 @@ local levels = {
 
 local cur_level = 1
 
-print(levels[2]["name"])
+--print(levels[2]["name"])
 
 --print(levels[cur_level]["foregrounds_left"])
 
@@ -27,9 +27,14 @@ local spawn = false -- when true, chance for a spawn is triggered.
 local gameover = false
 local indicator = false
 local waveCorrect = false
-local swishfont = love.graphics.newFont('assets/fonts/LovedbytheKing.ttf', 30)
+local cube = love.graphics.newImage('assets/animations/splash_cube.png')
+local swishfont = love.graphics.newFont('assets/fonts/LovedbytheKing.ttf', 20)
 
 local staticprops = require "assets.propfactory"
+
+local fading = true
+local game_music
+local bgm_params 
 
 function level:enter(state)
 
@@ -58,7 +63,7 @@ function level:enter(state)
 
 	-- set timer to go from intro to play
 	-- Timer.add(1, function() status = "play" end)
-	Timer.addPeriodic(spawnDelay, function() spawn = true end)
+	--Timer.addPeriodic(spawnDelay, function() spawn = true end)
 
 	--build initial background panels
 	for i,v in ipairs(levels) do
@@ -104,6 +109,25 @@ function level:enter(state)
 
 	--static props
 	staticprops:populate()
+
+	-- play music
+	game_music = love.audio.newSource( "assets/audio/cephelopod.mp3", "stream" )
+	game_music:setLooping( true )
+	game_music:setVolume(0.5)
+	love.audio.play( game_music )
+
+	-- fade in / out 
+	fading = true
+	self.fade_params = { opacity = 255 }
+	bgm_params = { volume = 0.5 }
+	Timer.add(1/60, function()
+		Timer.tween(0.25, self.fade_params, { opacity = 0 }, 'in-out-sine')
+		Timer.add(0.25, function()
+			fading = false
+		end)
+	end)
+	Timer.tween(0.25, bgm_params, { volume = 0.8 })
+
 end
 
 function level:leave()
@@ -265,6 +289,10 @@ function level:update(dt)
 			levels[cur_level]["status"] = "quit"
 		end
 	end
+
+	if self.fading then
+		game_music:setVolume(self.bgm_params.volume)
+	end
 end
 
 function level:draw()
@@ -301,9 +329,9 @@ function level:draw()
 
 	if gameover then
 		--draw text
-		love.graphics.setColor(255, 156, 255, 255)
+		love.graphics.setColor(255, 255, 255, 255)
 		love.graphics.setFont(swishfont)
-		love.graphics.printf("LOL NOPE.", love.graphics.getWidth()/2-250, love.graphics.getHeight()/2-25, 500, 'center')
+		love.graphics.printf("YOU DIED :'(", 30, 30, 100, 'center')
 	end
 
 	-- wave detect / indicator for the zone that enemies can receive waves in
@@ -325,9 +353,16 @@ function level:draw()
 	hero:draw(dt)
 	
 	love.graphics.pop()
+
+	if fading then
+		love.graphics.setColor(33, 33, 33, self.fade_params.opacity)
+		love.graphics.rectangle("fill", 0, 0, love.graphics.getWidth(), love.graphics.getHeight())
+	end
 end
 
 function level:keypressed(key, unicode)
+	local wave
+
 	-- navigate menu
 	if key == "w" then
 		-- Y = 14
@@ -354,6 +389,8 @@ function level:keypressed(key, unicode)
 		cur_level = 2
 		hero:newLevel()
 	end
+
+	if wave then level:checkWave(wave) end
 end
 
 function level:checkWave(wave)
@@ -361,8 +398,10 @@ function level:checkWave(wave)
 	if level:checkArea() then
 		if wave == focusedGuard.expectedWave then
 			--flip this guards wavedAt to true.
+			focusedGuard:successWave()
 			waveCorrect = true
 		else
+			focusedGuard:failWave()
 			waveCorrect = false
 			hero:eatLife()
 		end
@@ -435,6 +474,7 @@ function level:gameover()
 	spawnChance = 0
 	spawner = false
 	level:stopNearestGuard()
+	level_speed = 0
 end
 
 function level:stopNearestGuard()
@@ -446,7 +486,11 @@ function level:stopNearestGuard()
 				nearest = guards.current_guards[i]
 			end
 		end
-		nearest.speed = 0
+		if nearest.x <100 then
+			nearest.speed = 0
+			hero:stopHero() --only want the hero to stop once the guard has reached them.
+			nearest:stopGuard()
+		end
 	end
 	--printTable(nearest)
 end

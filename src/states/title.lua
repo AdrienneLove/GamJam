@@ -83,7 +83,7 @@ function title:keypressed(key, unicode)
 
 		local action = self.actions[self.current]
 
-		if action.name == "exit" then 
+		if action.screen == "exit" then 
 			love.event.push("quit")
 		else
 			Gamestate.switch(require("states."..action.screen), self.save)
@@ -111,7 +111,7 @@ function title:joystickpressed(joystick, button)
 	if joystick:isGamepadDown("a") or joystick:isGamepadDown("start") then  -- A button or Start
 		local action = self.actions[self.current]
 
-		if action.name == "exit" then 
+		if action.screen == "exit" then 
 			love.event.push("quit")
 		else
 			Gamestate.switch(require("states."..action.screen), self.save)
