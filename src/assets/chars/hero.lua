@@ -1,7 +1,8 @@
 local hero = {	
 	lives = 4,
-	state = "intro",
-	x = -50
+	state = "intro", -- "play", "stand", "exit"
+	x = -50,
+	leaving = false
 }
 
 local walk = require 'assets.animations.hero_walk'
@@ -20,6 +21,10 @@ local y = 70
 function hero:update(dt)
 	if hero.state == "intro" then
 		hero.x = hero.x + 1
+	end
+
+	if hero.state == "exit" then
+		hero.x = hero.x + 3
 	end
 
 	walk.animation:update(dt)

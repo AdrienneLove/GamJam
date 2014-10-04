@@ -259,9 +259,20 @@ function level:update(dt)
 			if exit_door.distance > 200 then 
 				exit_door.x = exit_door.x - level_speed * dt
 				exit_door.distance = exit_door.distance - level_speed * dt
-			else 
+			else
 				status = "exit"
 			end 
+		end
+	end
+
+	if status == "exit" then
+		if hero.state ~= "stand" and not hero.leaving then
+			hero.state = "stand"
+			Timer.add(1, function() hero.state = "exit"; hero.leaving = true end)
+		end
+
+		if hero.x > 250 then
+			status = "quit"
 		end
 	end
 end
