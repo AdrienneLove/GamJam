@@ -5,9 +5,9 @@ local l = {
 	status = "intro", -- other states are play, dead, outro
 
 	-- Difficulty/pacing stuff
-	level_speed = 100,
-	spawnChance = 10, -- out of 100; chance on a spawn tick that enemy will spawn
-	spawnDelay = .5, -- spawn tick. on tick enemies will have a chance to spawn
+	level_speed = 50,
+	spawnChance = 5, -- out of 100; chance on a spawn tick that enemy will spawn
+	spawnDelay = 2, -- spawn tick. on tick enemies will have a chance to spawn
 
 	--background stuff
 	backgrounds_left = 4, -- these two values the same

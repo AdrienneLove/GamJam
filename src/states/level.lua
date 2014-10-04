@@ -63,7 +63,7 @@ function level:enter(state)
 
 	-- set timer to go from intro to play
 	-- Timer.add(1, function() status = "play" end)
-	Timer.addPeriodic(spawnDelay, function() spawn = true end)
+	--Timer.addPeriodic(spawnDelay, function() spawn = true end)
 
 	--build initial background panels
 	for key,value in pairs(levels[cur_level]["background_panels"]) do 
