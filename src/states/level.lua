@@ -79,12 +79,10 @@ function level:enter(state)
 	--build initial background panels
 	for key,value in pairs(background_panels) do 
 		value.x = background_imagedata_1:getWidth() * (key-1)
-
+		value.image = background_panel_images[math.random(table.getn(background_panel_images))]
    		if key == 1 then
-   			value.image = love.graphics.newImage(background_imagedata_1)
    			value.current = true
    		else 
-   			value.image = background_panel_images[math.random(0, table.getn(background_panel_images))]
    			value.current = false
    		end
 	end
