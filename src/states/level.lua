@@ -22,6 +22,7 @@ local cur_level = 1
 
 -- player / enemy stuff
 local guards = require "assets.chars.guard"
+local particle = require "assets.particles"
 local focusedGuard --this is being used by the wave checking
 local spawn = false -- when true, chance for a spawn is triggered.
 
@@ -152,7 +153,8 @@ function level:reInit()
 	hero:init()
 	purge(guards.current_guards)
 
-	guards:particlePurge()
+	particle:purge()
+	particle:start()
 
 	props:populate()
 
@@ -214,6 +216,7 @@ function level:update(dt)
 
 	hero:update(dt)
 	guards:update(dt)
+	particle:update(dt)
 
 	if levels[cur_level]["status"] == "play" or levels[cur_level]["status"] == "outro" then
 
@@ -411,6 +414,9 @@ function level:draw()
 	end
 	love.graphics.rectangle("fill", 50, 120, 40, 5)
 	
+	--draw particles
+	particle:draw()
+
 	--draw enemies
 	guards:draw()
 
@@ -455,7 +461,7 @@ function level:keypressed(key, unicode)
 	end
 
 	if key == "p" then
-		guards:spawnParticle("pass", 128, 80)
+		particle:spawn("pass", 128, 80)
 	end
 
 	if wave then level:checkWave(wave) end
@@ -468,11 +474,11 @@ function level:checkWave(wave)
 			--flip this guards wavedAt to true.
 			focusedGuard:successWave()
 			waveCorrect = true
-			guards:spawnParticle("pass", focusedGuard.x + 6, focusedGuard.speed)
+			particle:spawn("pass", focusedGuard.x + 6, focusedGuard.speed)
 		else
 			focusedGuard:failWave()
 			waveCorrect = false
-			guards:spawnParticle("fail", focusedGuard.x + 6, focusedGuard.speed)
+			particle:spawn("fail", focusedGuard.x + 6, focusedGuard.speed)
 			hero:eatLife()
 		end
 	else
@@ -558,8 +564,8 @@ end
 function level:gameover()
 	spawnChance = 0
 	spawner = false
-	guards:spawnParticle("lose", hero.x + 6, 0)
-	guards:particlePause()
+	particle:spawn("lose", hero.x + 6, 0)
+	particle:Pause()
 	-- level:stopNearestGuard()
 	--levels[cur_level]["level_speed"] = 0
 	level:reInit()

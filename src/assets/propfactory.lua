@@ -43,7 +43,7 @@ local propFactory = {
 		{
 			image = love.graphics.newImage('assets/images/altar.png'),
 			y = 48,
-			door = false
+			door = true
 		},
 		{
 			image = love.graphics.newImage('assets/images/painting.png'),
@@ -142,7 +142,7 @@ function propFactory:populate()
 
 	for i, v in ipairs(self.torchpoints) do
 		local flip = math.random()
-		if flip < 0.25 then
+		if flip < 0.33 then
 			self:addAnim(v)
 		end
 	end
