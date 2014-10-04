@@ -121,14 +121,9 @@ function level:enter(state)
 
 	-- fade in / out 
 	-- fading = true
-	self.fade_params = { opacity = 255 }
+	self.fade_params = { opacity = 255, opacity_door = 0 }
 	bgm_params = { volume = 0.5 }
-	-- Timer.add(1/60, function()
-	-- 	Timer.tween(0.25, self.fade_params, { opacity = 0 }, 'in-out-sine')
-	-- 	Timer.add(0.25, function()
-	-- 		fading = false
-	-- 	end)
-	-- end)
+	Timer.tween(0.25, self.fade_params, { opacity = 0, opacity_door = 255 }, 'in-out-sine')
 	Timer.tween(0.25, bgm_params, { volume = 0.8 })
 
 end
@@ -266,7 +261,7 @@ function level:update(dt)
 				end
 
 				levels[cur_level]["foregrounds_left"] = levels[cur_level]["foregrounds_left"] - 1
-				print(levels[cur_level]["foregrounds_left"])
+				--print(levels[cur_level]["foregrounds_left"])
 			end
 		end
 
@@ -346,10 +341,6 @@ function level:draw()
 		love.graphics.draw(value.image, value.x, 0)
 	end
 
-	if levels[cur_level]["entry_door"]["alive"] then
-		love.graphics.draw(levels[cur_level]["entry_door"]["image"], levels[cur_level]["entry_door"]["x"], levels[cur_level]["entry_door"]["y"])
-	end
-
 	if levels[cur_level]["exit_door"]["alive"] then
 		love.graphics.draw(levels[cur_level]["exit_door"]["image"], levels[cur_level]["exit_door"]["x"], levels[cur_level]["exit_door"]["y"])
 	end
@@ -387,13 +378,18 @@ function level:draw()
 
 	--draw hero
 	hero:draw(dt)
-	
-	love.graphics.pop()
+
+	--draw entry door on 
+	if levels[cur_level]["entry_door"]["alive"] then
+		love.graphics.draw(levels[cur_level]["entry_door"]["image"], levels[cur_level]["entry_door"]["x"], levels[cur_level]["entry_door"]["y"])
+	end
 
 	if fading then
 		love.graphics.setColor(33, 33, 33, self.fade_params.opacity)
 		love.graphics.rectangle("fill", 0, 0, love.graphics.getWidth(), love.graphics.getHeight())
 	end
+
+	love.graphics.pop()
 end
 
 function level:keypressed(key, unicode)
