@@ -155,6 +155,7 @@ function propfactory:populate()
 		else
 			propfactory:addStatic(selected, placement)
 		end
+
 	end
 
 	print("Added "..table.getn(self.static_props))
