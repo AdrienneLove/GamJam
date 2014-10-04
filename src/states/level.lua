@@ -109,12 +109,6 @@ function level:enter(state)
 	Timer.add(1, function() status = "play" end)
 	Timer.addPeriodic(spawnDelay, function() spawn = true end)
 
-	-- enemy spawn (testers)
-	guards:newGuard(2)
-	guards:newGuard(1)
-	guards:newGuard(3)
-	guards:newGuard(4)
-
 	--static props
 	for i = 1,10 do
 		staticprops[i] = {}
@@ -158,6 +152,12 @@ function level:update(dt)
 	end
 
 	--update player/enemys
+	if hero.lives == 0 then
+		gameover = true
+	end
+	if gameover then
+		level:gameover()
+	end
 	level:spawner()
 	guards:update(dt)
 	hero:update(dt)
@@ -375,7 +375,7 @@ end
 
 
 function level:joystickpressed(joystick, button)
-	
+
 	if button == 4 then
 		-- Y = 14
 		wave = "Y"
@@ -413,5 +413,21 @@ function level:spawner()
 	end
 	-- timer that has a x% chance to trigger spawn.
 end
+
+function level:gameover()
+	level:stopNearestGuard()	
+end
+
+function level:stopNearestGuard()
+	local lowest = guards.current_guards[1].x
+	local nearest = guards.current_guards[1]
+	for i,v in ipairs(guards.current_guards) do
+		if v.x > 90 and v.x < lowest then
+			nearest = guards.current_guards[i]
+		end
+	end
+	--printTable(nearest)
+end
+
 
 return level

@@ -54,6 +54,7 @@ function guard_manager:newGuard(num)
 		love.graphics.setColor(255, 255, 255, 255)
 		self.walk.animation:draw(self.walk.rimon_walk_spritemap, self.x, 70)
 	end
+	
 
 	table.insert(self.current_guards, g)
 end
