@@ -154,8 +154,6 @@ function level:reInit()
 
 	gameover = false
 
-
-
 end
 
 -- function level:leave(dt)
@@ -203,15 +201,17 @@ function level:update(dt)
 	end
 	if gameover then
 		level:gameover()
+		return
 	end
 
 	-- Don't spawn at end of level.
-	if levels[cur_level]["status"] == "play"  or levels[cur_level]["status"] == "outro" then
+	if levels[cur_level]["backgrounds_left"] > 0 then
 		level:spawner()
 	end
 
-	guards:update(dt)
+
 	hero:update(dt)
+	guards:update(dt)
 
 	if levels[cur_level]["status"] == "play" or levels[cur_level]["status"] == "outro" then
 
@@ -447,11 +447,6 @@ function level:keypressed(key, unicode)
 		hero:saluteA()
 	end
 
-	if key == " " then
-		cur_level = 2
-		hero:newLevel()
-	end
-
 	if key == "p" then
 		guards:spawnParticle("pass", 128, 80)
 	end
@@ -464,7 +459,7 @@ function level:checkWave(wave)
 	if level:checkArea() then
 		if wave == focusedGuard.expectedWave then
 			--flip this guards wavedAt to true.
-			focusedGuard:successWave()			
+			focusedGuard:successWave()
 			waveCorrect = true
 			guards:spawnParticle("pass", focusedGuard.x + 6, focusedGuard.speed)
 		else
@@ -558,8 +553,8 @@ function level:gameover()
 	spawner = false
 	guards:spawnParticle("lose", hero.x + 6, 0)
 	guards:particlePause()
-	level:stopNearestGuard()
-	levels[cur_level]["level_speed"] = 0
+	-- level:stopNearestGuard()
+	--levels[cur_level]["level_speed"] = 0
 	level:reInit()
 end
 
@@ -572,9 +567,9 @@ function level:stopNearestGuard()
 				nearest = guards.current_guards[i]
 			end
 		end
-		if nearest.x <100 then
+		if nearest.x < 100 then
 			nearest.speed = 0
-			hero:stopHero() --only want the hero to stop once the guard has reached them.
+			-- hero:stopHero() --only want the hero to stop once the guard has reached them.
 			nearest:stopGuard()
 
 		end

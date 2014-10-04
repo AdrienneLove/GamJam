@@ -240,7 +240,6 @@ function guard_manager:despawn()
 			c = c + 1
 		end
 	end
-	self.current_guards = _current_guards
 end
 
 function guard_manager:update(dt)

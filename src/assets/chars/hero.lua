@@ -156,6 +156,8 @@ function hero:update(dt)
 end
 
 function hero:init()
+	active_body_animation:resume()
+	active_legs_animation:resume()
 	self.lives = 4
 	self.state = "intro" -- "play", "stand", "exit"
 	self.x = -100
