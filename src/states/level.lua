@@ -218,6 +218,13 @@ function level:update(dt)
 	guards:update(dt)
 	particle:update(dt)
 
+	local missed = guards:leavecheck(dt)
+	if missed == true then
+		--guards.current_guards[1]:failWave()
+		particle:spawn("what", guards.current_guards[1].x + 6, guards.current_guards[1].speed)
+		hero:eatLife()
+	end
+
 	if levels[cur_level]["status"] == "play" or levels[cur_level]["status"] == "outro" then
 
 		-- move background panels

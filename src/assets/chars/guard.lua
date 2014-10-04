@@ -149,6 +149,7 @@ function guard_manager:newGuard(num)
 		x = 240,
 		expectedWave = self.guard_types[num]["expectedWave"],
 		isWavedAt = false,
+		isTooSlow = false,
 		guard_body_anim_data = self.guard_types[num]["guard_body_anim_data"],
 		guard_head_anim_data = self.guard_types[num]["guard_head_anim_data"], 
 		guard_stop_anim_data = self.guard_types[num]["guard_stop_anim_data"],
@@ -241,6 +242,17 @@ function guard_manager:draw()
 	for _,guard in ipairs(self.current_guards) do
 		guard:draw()
 	end
+end
+
+function guard_manager:leavecheck()
+	for _,guard in ipairs(self.current_guards) do
+		if (guard.x + 32) < 50 and guard.isWavedAt == false and guard.isTooSlow == false then
+			guard.isTooSlow = true
+			return true
+		end
+	end
+
+	return false
 end
 
 return guard_manager

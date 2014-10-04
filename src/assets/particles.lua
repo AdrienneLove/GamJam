@@ -7,7 +7,8 @@ local particles = {}
 local particle_types = {
 	pass = {image = love.graphics.newImage('assets/images/BubbleStar.png')},
 	fail = {image = love.graphics.newImage('assets/images/BubbleX.png')},
-	lose = {image = love.graphics.newImage('assets/images/BubbleExclamation.png')}
+	lose = {image = love.graphics.newImage('assets/images/BubbleExclamation.png')},
+	what = {image = love.graphics.newImage('assets/images/BubbleQuestion.png')}
 }
 
 particle.allow_particles = true
@@ -31,6 +32,8 @@ function particle:spawn(type, _x, _speed)
 		temp.image = self.particle_types["fail"].image
 	elseif type == "lose" then
 		temp.image = self.particle_types["lose"].image
+	elseif type == "what" then
+		temp.image = self.particle_types["what"].image
 	else
 		print("Unrecognized particle type")
 		return
