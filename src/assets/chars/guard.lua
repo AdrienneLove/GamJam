@@ -97,11 +97,25 @@ function guard_manager:newGuard(num)
 	table.insert(self.current_guards, g)
 end
 
+function guard_manager:despawn()
+	local _current_guards = self.current_guards
+	local c = 0
+	for i=1,table.getn(self.current_guards) do
+		if self.current_guards[i-c]["x"] < -20 then
+			purge(_current_guards[i-c])
+			table.remove(_current_guards, i - c)
+			c = c + 1
+		end
+	end
+	self.current_guards = _current_guards
+end
 
 function guard_manager:update(dt)
 	for _,guard in ipairs(self.current_guards) do
 		guard:update(dt)
 	end
+	print(table.getn(self.current_guards))
+	self:despawn()
 end
 
 function guard_manager:draw()

@@ -38,7 +38,7 @@ local guards = require "assets.chars.guard"
 local focusedGuard --this is being used by the wave checking
 local spawnChance = 10 -- out of 100; chance on a spawn tick that enemy will spawn
 local spawn = false -- when true, chance for a spawn is triggered.
-local spawnDelay = 2 -- spawn tick. on tick enemies will have a chance to spawn
+local spawnDelay = .5 -- spawn tick. on tick enemies will have a chance to spawn
 
 -- ui stuff
 local gameover = false
