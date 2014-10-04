@@ -38,7 +38,7 @@ local guards = require "assets.chars.guard"
 local focusedGuard --this is being used by the wave checking
 local spawnChance = 10 -- out of 100; chance on a spawn tick that enemy will spawn
 local spawn = false -- when true, chance for a spawn is triggered.
-local spawnDelay = 1 -- spawn tick. on tick enemies will have a chance to spawn
+local spawnDelay = 2 -- spawn tick. on tick enemies will have a chance to spawn
 
 -- ui stuff
 local gameover = false
@@ -74,7 +74,9 @@ function level:enter(state)
 		love.graphics.newImage(foreground_imagedata_1)
 	}
 
-
+	-- set timer to go from intro to play
+	-- Timer.add(1, function() status = "play" end)
+	Timer.addPeriodic(spawnDelay, function() spawn = true end)
 
 	--build initial background panels
 	for key,value in pairs(background_panels) do 
@@ -108,22 +110,13 @@ function level:enter(state)
 	exit_door.x = 197
 	exit_door.y = 0
 
-	-- set timer to go from intro to play
-	-- Timer.add(1, function() status = "play" end)
-	Timer.addPeriodic(spawnDelay, function() spawn = true end)
-
-	-- enemy spawn (testers)
-	guards:newGuard(2)
-	guards:newGuard(1)
-	guards:newGuard(3)
-	guards:newGuard(4)
 
 	--static props
 	staticprops:populate()
 end
 
 function level:leave()
-	
+
 end
 
 function level:update(dt)
@@ -378,23 +371,47 @@ end
 
 
 function level:joystickpressed(joystick, button)
-	
-	if button == 4 then
+
+	local cur_os
+
+	local schema = {
+	mac = {
+		Y = 4,
+		X = 3,
+		B = 2,
+		A = 1
+	},
+	win = {
+		Y = 14,
+		X = 13,
+		B = 12,
+		A = 11
+	}
+}
+
+	if love._os == "OS X" then
+		cur_os = "mac"
+	elseif love._os == "Windows" then
+		cur_os = "win"
+	end
+	print(cur_os)
+
+	if button == schema[cur_os]["Y"] then
 		-- Y = 14
 		wave = "Y"
 		hero:saluteY()
 	end
-	if button == 3 then
+	if button == schema[cur_os]["X"] then
 		-- X = 13
 		wave = "X"
 		hero:saluteX()
 	end
-	if button == 2 then
+	if button == schema[cur_os]["B"] then
 		-- B = 12
 		wave = "B"
 		hero:saluteB()
 	end
-	if button == 1 then
+	if button == schema[cur_os]["A"] then
 		-- A = 11
 		wave = "A"
 		hero:saluteA()
