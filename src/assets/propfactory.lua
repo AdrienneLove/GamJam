@@ -68,7 +68,8 @@ local propfactory = {
 
 	static_props = {},
 	anim_props = {},
-	offset = 64
+	offset = 64,
+	level_width = 1008
 }
 
 
@@ -117,7 +118,7 @@ function propfactory:addStatic(selected, placement)
 
 	if (self.static_prop_types[selected].door == true) then
 		local templeft = placement - 14
-		local tempright = self.offset
+		local tempright = self.offset + 1
 		table.insert(self.torchpoints, templeft)
 		table.insert(self.torchpoints, tempright)
 	end
@@ -132,7 +133,7 @@ function propfactory:populate()
 
 		propfactory:addStatic(selected, placement)
 
-		if (self.offset - 96) > 1280 then
+		if (self.offset - 96) > self.level_width then
 			break
 		end
 	end
@@ -180,6 +181,23 @@ function propfactory:draw()
 			v:draw()
 		end
 	end
+end
+
+function propfactory:purge()
+
+	for i, v in ipairs(self.static_props) do
+		table.remove(self.static_props, i)
+	end
+
+	for i, v in ipairs(self.anim_props) do
+		table.remove(self.anim_props, i)
+	end
+
+	for i, v in ipairs(self.torchpoints) do
+		table.remove(self.torchpoints, i)
+	end
+
+	offset = 64
 end
 
 return propfactory

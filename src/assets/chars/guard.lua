@@ -317,4 +317,11 @@ function guard_manager:particlePause()
 			v.speed = 0
 	end
 end
+
+function guard_manager:particlePurge()
+	self.allow_particles = false
+	for i, v in ipairs(self.particles) do
+		table.remove(self.particles, i)
+	end
+end
 return guard_manager
