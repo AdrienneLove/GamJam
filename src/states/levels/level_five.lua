@@ -24,7 +24,7 @@ local l = {
 
 	foreground_panels = {
 		{ x = 0, image = nil, current = false, furthest = false},
-		{ x = 0, image = nil, current = false, furthest = false}	,
+		{ x = 0, image = nil, current = false, furthest = false},
 		{ x = 0, image = nil, current = false, furthest = true}
 	},
 

@@ -8,7 +8,10 @@ hero = require "assets.chars.hero"
 
 local levels = {
 	require 'states.levels.level_one',
-	require 'states.levels.level_two'
+	require 'states.levels.level_two',
+	require 'states.levels.level_three',
+	require 'states.levels.level_four',
+	require 'states.levels.level_five'
 }
 
 local cur_level = 1
@@ -38,8 +41,8 @@ local bgm_params
 
 function level:enter(state)
 
-	-- Test for intro, set to true if into has finished not used otherwise.
-	intro_completed = false
+	-- -- Test for intro, set to true if into has finished not used otherwise.
+	-- intro_completed = false
 
 	love.graphics.setDefaultFilter('nearest')
 	--panel iterates at half screen
@@ -117,35 +120,42 @@ function level:enter(state)
 	love.audio.play( game_music )
 
 	-- fade in / out 
-	fading = true
+	-- fading = true
 	self.fade_params = { opacity = 255 }
 	bgm_params = { volume = 0.5 }
-	Timer.add(1/60, function()
-		Timer.tween(0.25, self.fade_params, { opacity = 0 }, 'in-out-sine')
-		Timer.add(0.25, function()
-			fading = false
-		end)
-	end)
+	-- Timer.add(1/60, function()
+	-- 	Timer.tween(0.25, self.fade_params, { opacity = 0 }, 'in-out-sine')
+	-- 	Timer.add(0.25, function()
+	-- 		fading = false
+	-- 	end)
+	-- end)
 	Timer.tween(0.25, bgm_params, { volume = 0.8 })
 
 end
 
-function level:leave()
+-- function level:leave(dt)
+-- 	fading = true
 
-end
+-- end
 
 function level:update(dt)
 	--update all timers
 	Timer.update(dt)
 
-	-- For intro
-	if hero.x == 20 and not levels[cur_level]["intro_completed"] then
+	if levels[cur_level]["pre_intro"] == false then
+
+		Timer.tween(0.50, self.fade_params, { opacity = 0 }, 'in-out-sine',
+		            function () levels[cur_level]["pre_intro"] = true
+		            	fading = false
+		             end)
+		levels[cur_level]["pre_intro"] = true
+
+	elseif hero.x == 20 and not levels[cur_level]["intro_completed"] then
 		levels[cur_level]["status"] = "play"
 		hero.state = levels[cur_level]["status"]
 		levels[cur_level]["intro_completed"] = true
 	end
 
-	print(levels[cur_level]["status"])
 	if levels[cur_level]["status"] == "play" or levels[cur_level]["status"] == "outro" then
 
 		--move entry door 
@@ -169,7 +179,12 @@ function level:update(dt)
 	if gameover then
 		level:gameover()
 	end
-	level:spawner()
+
+	-- Don't spawn at end of level.
+	if levels[cur_level]["status"] == "play"  or levels[cur_level]["status"] == "outro" then
+		level:spawner()
+	end
+
 	guards:update(dt)
 	hero:update(dt)
 
@@ -290,9 +305,30 @@ function level:update(dt)
 		end
 	end
 
+	if levels[cur_level]["status"] == "quit" then
+
+		if not fading then
+			fading = true
+			Timer.tween(0.5, self.fade_params, { opacity = 255 }, 'in-out-sine',
+			            function () level:newLevel() end)
+		end
+	end
+
 	if self.fading then
 		game_music:setVolume(self.bgm_params.volume)
 	end
+end
+
+function level:newLevel()
+
+	if cur_level == 5 then
+		--??
+	else
+		cur_level = cur_level + 1
+		hero:newLevel()
+		fading = false
+	end
+
 end
 
 function level:draw()

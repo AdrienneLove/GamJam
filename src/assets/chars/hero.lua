@@ -1,4 +1,7 @@
 local hero = {	
+
+	-- IF YOU ARE CHANGING THESE REMEMBER TO CHANGE THEM
+	-- IN hero:newLevel() ALSO, THANKS
 	lives = 4,
 	state = "intro", -- "play", "stand", "exit"
 	x = -100,
@@ -149,7 +152,7 @@ end
 function hero:newLevel()
 	self.lives = 4
 	self.state = "intro" -- "play", "stand", "exit"
-	self.x = -50
+	self.x = -100
 	self.leaving = false
 end
 
