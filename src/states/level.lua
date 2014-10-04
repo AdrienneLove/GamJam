@@ -391,7 +391,7 @@ function level:keypressed(key, unicode)
 	end
 
 	if key == "p" then
-		hero:spawnParticle("pass", 128)
+		guards:spawnParticle("pass", 128)
 	end
 
 	if wave then level:checkWave(wave) end

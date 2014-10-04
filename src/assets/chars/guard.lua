@@ -134,6 +134,18 @@ local guard_manager = {
 
 }
 
+
+local tween = require 'lib.tween'
+
+local particles = {}
+local particle_types = {
+	pass = {image = love.graphics.newImage('assets/images/pass.png')},
+	fail = {image = love.graphics.newImage('assets/images/fail.png')}
+}
+
+guard_manager.particles = particles
+guard_manager.particle_types = particle_types
+
 function guard_manager:newGuard(num)
 
 	if num < 0 or num > 4 then
@@ -230,6 +242,9 @@ function guard_manager:despawn()
 end
 
 function guard_manager:update(dt)
+
+	self:particleUpdate(dt)
+
 	for _,guard in ipairs(self.current_guards) do
 		guard:update(dt)
 	end
@@ -238,8 +253,48 @@ end
 
 function guard_manager:draw()
 
+	self:particleDraw()
+
 	for _,guard in ipairs(self.current_guards) do
 		guard:draw()
+	end
+end
+
+function guard_manager:spawnParticle(type, _x)
+	
+	temp = {}
+	temp.image = self.particle_types["pass"].image
+	temp.image:setFilter('nearest','nearest')
+	temp.x = _x
+	temp.y = 126
+
+	if type == "pass" then
+		temp.image = self.particle_types["pass"].image
+	elseif type == "fail" then
+		temp.image = self.particle_types["fail"].image
+	else
+		print("Unrecognized particle type")
+		return
+	end
+
+	temp.tween = tween.new(2, temp, {y = 0}, "outInElastic")
+
+	table.insert(self.particles, temp)
+end
+
+function guard_manager:particleUpdate(dt)
+	for i, v in ipairs(self.particles) do
+		complete = v.tween:update(dt)
+
+		if (complete == true) then
+			table.remove(self.particles, i)
+		end
+	end
+end
+
+function guard_manager:particleDraw()
+	for i, v in ipairs(self.particles) do
+		love.graphics.draw(v.image, v.x, v.y)
 	end
 end
 
