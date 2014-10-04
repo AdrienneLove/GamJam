@@ -242,7 +242,7 @@ function level:update(dt)
 	local missed = guards:leavecheck(dt)
 	if missed == true then
 		--guards.current_guards[1]:failWave()
-		particle:spawn("what", guards.current_guards[1].x + 6, guards.current_guards[1].speed)
+		particle:spawn("fail", guards.current_guards[1].x + 6, guards.current_guards[1].speed)
 		hero:eatLife()
 	end
 
@@ -582,7 +582,7 @@ end
 -- checks the detection area for a guard, returns true / false
 function level:checkArea()
 	for i=1,table.getn(guards.current_guards) do
-		if guards.current_guards[i]["x"] > 55 and guards.current_guards[i]["x"] < 95 then
+		if guards.current_guards[i]["x"] > 42 and guards.current_guards[i]["x"] < 95 then
 			focusedGuard = guards.current_guards[i]
 			return true
 		end
