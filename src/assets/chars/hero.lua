@@ -3,6 +3,7 @@ local hero = {
 	state = "intro", -- "play", "stand", "exit"
 	x = -50,
 	leaving = false,
+
 	hero_body = {			--default run body
 		_WIDTH = 32,
 		_HEIGHT = 35,
@@ -88,6 +89,14 @@ function hero:update(dt)
 		hero.x = hero.x + 3
 	end
 end
+
+function hero:newLevel()
+	self.lives = 4
+	self.state = "intro" -- "play", "stand", "exit"
+	self.x = -50
+	self.leaving = false
+end
+
 
 function hero:saluteX()
 	active_body_animation = hero.hero_body_wave_x_animation

@@ -61,30 +61,34 @@ function level:enter(state)
 	Timer.addPeriodic(spawnDelay, function() spawn = true end)
 
 	--build initial background panels
-	for key,value in pairs(levels[cur_level]["background_panels"]) do 
-		value.x = background_imagedata_1:getWidth() * (key-1)
-		value.image = background_panel_images[math.random(table.getn(background_panel_images))]
-		if key == 1 then
-			value.current = true
-		else 
-			value.current = false
+	for i,v in ipairs(levels) do
+		for key,value in pairs(levels[i]["background_panels"]) do 
+			value.x = background_imagedata_1:getWidth() * (key-1)
+			value.image = background_panel_images[math.random(table.getn(background_panel_images))]
+			if key == 1 then
+				value.current = true
+			else 
+				value.current = false
+			end
 		end
 	end
 
 	--build initial foreground panels
-	for key,value in pairs(levels[cur_level]["foreground_panels"]) do 
-		value.x = foreground_imagedata_1:getWidth() * (key-1)
-		value.image = foreground_panel_images[math.random(table.getn(foreground_panel_images))]
+	for i,v in ipairs(levels) do
+		for key,value in pairs(levels[i]["foreground_panels"]) do 
+			value.x = foreground_imagedata_1:getWidth() * (key-1)
+			value.image = foreground_panel_images[math.random(table.getn(foreground_panel_images))]
 
-		if key == 1 then
-			value.current = true
-		else 
-			value.current = false
+			if key == 1 then
+				value.current = true
+			else 
+				value.current = false
+			end
 		end
 	end
 
 	--build entry doors
-	for _,v in pairs(levels) do
+	for _,v in ipairs(levels) do
 		v.entry_door.image = love.graphics.newImage('assets/images/start_door.png')
 		v.entry_door.x = 0
 		v.entry_door.y = 0
@@ -110,16 +114,15 @@ function level:update(dt)
 	--update all timers
 	Timer.update(dt)
 
-	if not intro_completed then
 	-- For intro
-		if hero.x == 20 and not intro_completed then
-			status = "play"
-			hero.state = status
-			intro_completed = true
-		end
+	if hero.x == 20 and not levels[cur_level]["intro_completed"] then
+		levels[cur_level]["status"] = "play"
+		hero.state = levels[cur_level]["status"]
+		levels[cur_level]["intro_completed"] = true
 	end
 
-	if status == "play" or status == "outro" then
+	print(levels[cur_level]["status"])
+	if levels[cur_level]["status"] == "play" or levels[cur_level]["status"] == "outro" then
 
 		--move entry door 
 		if levels[cur_level]["entry_door"]["alive"] then
@@ -146,7 +149,7 @@ function level:update(dt)
 	guards:update(dt)
 	hero:update(dt)
 
-	if status == "play" or status == "outro" then
+	if levels[cur_level]["status"] == "play" or levels[cur_level]["status"] == "outro" then
 
 		-- move background panels
 		for key, value in pairs(levels[cur_level]["background_panels"]) do 
@@ -228,7 +231,7 @@ function level:update(dt)
 			end
 		end
 
-		if status == "play" and levels[cur_level]["foregrounds_left"] == 0 and levels[cur_level]["backgrounds_left"] == 0 then
+		if levels[cur_level]["status"] == "play" and levels[cur_level]["foregrounds_left"] == 0 and levels[cur_level]["backgrounds_left"] == 0 then
 			
 			--search furthest background and put a door there
 			for furthest_key, furthest_value in pairs(levels[cur_level]["foreground_panels"]) do 
@@ -236,30 +239,30 @@ function level:update(dt)
 					levels[cur_level]["exit_door"]["x"] = furthest_value.x + levels[cur_level]["exit_door"]["x"]
 					levels[cur_level]["exit_door"]["alive"] = true
 					levels[cur_level]["exit_door"]["distance"] = levels[cur_level]["exit_door"]["x"]
-					status = "outro"
+					levels[cur_level]["status"] = "outro"
 					break
 				end
 			end
 		end
 
-		if status == "outro" then
+		if levels[cur_level]["status"] == "outro" then
 			if levels[cur_level]["exit_door"]["distance"] > 200 then 
 				levels[cur_level]["exit_door"]["x"] = levels[cur_level]["exit_door"]["x"] - levels[cur_level]["level_speed"] * dt
 				levels[cur_level]["exit_door"]["distance"] = levels[cur_level]["exit_door"]["distance"] - levels[cur_level]["level_speed"] * dt
 			else
-				status = "exit"
+				levels[cur_level]["status"] = "exit"
 			end 
 		end
 	end
 
-	if status == "exit" then
+	if levels[cur_level]["status"] == "exit" then
 		if hero.state ~= "stand" and not hero.leaving then
 			hero.state = "stand"
 			Timer.add(1, function() hero.state = "exit"; hero.leaving = true end)
 		end
 
 		if hero.x > 250 then
-			status = "quit"
+			levels[cur_level]["status"] = "quit"
 		end
 	end
 end
@@ -347,6 +350,10 @@ function level:keypressed(key, unicode)
 		hero:saluteA()
 	end
 
+	if key == " " then
+		cur_level = 2
+		hero:newLevel()
+	end
 end
 
 function level:checkWave(wave)
