@@ -117,7 +117,7 @@ function level:update(dt)
 			hero.state = status
 			intro_completed = true
 		end
-
+	end
 
 	if status == "play" or status == "outro" then
 
