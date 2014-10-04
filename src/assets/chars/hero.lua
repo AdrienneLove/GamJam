@@ -1,7 +1,7 @@
 local hero = {	
 	lives = 4,
 	state = "intro", -- "play", "stand", "exit"
-	x = -50,
+	x = -100,
 	leaving = false,
 	hero_body = {			--default run body
 		_WIDTH = 32,
