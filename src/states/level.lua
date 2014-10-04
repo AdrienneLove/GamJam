@@ -525,21 +525,25 @@ function level:keypressed(key, unicode)
 		-- Y = 14
 		wave = "Y"
 		hero:saluteY()
+		colourPressed = "yellow"
 	end
 	if key == "a" then
 		-- X = 13
 		wave = "X"
 		hero:saluteX()
+		colourPressed = "blue"
 	end
 	if key == "d" then
 		-- B = 12
 		wave = "B"
 		hero:saluteB()
+		colourPressed = "red"
 	end
 	if key == "s" then
 		-- A = 11
 		wave = "A"
 		hero:saluteA()
+		colourPressed = "green"
 	end
 
 	if key == "p" then
@@ -559,11 +563,13 @@ function level:checkWave(wave)
 			waveCorrect = true
 			particle:spawn("pass", focusedGuard.x + 6, focusedGuard.speed)
 		else
-			focusedGuard:failWave()
-			focusedGuard.isWavedAt = true
-			waveCorrect = false
-			particle:spawn("fail", focusedGuard.x + 6, focusedGuard.speed)
-			hero:eatLife()
+			if focusedGuard.isWavedAt == false then
+				focusedGuard:failWave()
+				focusedGuard.isWavedAt = true
+				waveCorrect = false
+				particle:spawn("fail", focusedGuard.x + 6, focusedGuard.speed)
+				hero:eatLife()
+			end
 		end
 	else
 		--no guard in area, NOM LYF
@@ -585,6 +591,11 @@ function level:checkArea()
 end
 
 function level:joystickreleased(joystick, button)
+	indicator = false
+	colourPressed = none
+end
+
+function level:keyreleased(key)
 	indicator = false
 	colourPressed = none
 end
