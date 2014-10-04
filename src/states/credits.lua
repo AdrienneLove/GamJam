@@ -51,8 +51,6 @@ function credits:draw()
 		love.graphics.printf(v.title, positionToDrawCredits.x, positionToDrawCredits.y + (spacing_index*spacing), 200, 'left')
 		spacing_index = spacing_index + 1
 		for ind=1,#v.info do
-
-			print(v.info[ind])
 			love.graphics.printf(v.info[ind], positionToDrawCredits.x, positionToDrawCredits.y + (spacing_index*spacing), 200, 'left')
 			spacing_index = spacing_index + 1
 		end

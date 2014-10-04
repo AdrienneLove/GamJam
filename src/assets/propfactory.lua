@@ -39,6 +39,16 @@ local propfactory = {
 			image = love.graphics.newImage('assets/images/vine.png'),
 			y = 6,
 			door = false
+		},
+		{
+			image = love.graphics.newImage('assets/images/altar.png'),
+			y = 48,
+			door = false
+		},
+		{
+			image = love.graphics.newImage('assets/images/painting.png'),
+			y = 26,
+			door = false
 		}
 	},
 	anim_prop_types = {
@@ -58,7 +68,8 @@ local propfactory = {
 
 	static_props = {},
 	anim_props = {},
-	offset = 36
+	offset = 64,
+	level_width = 1008
 }
 
 
@@ -104,66 +115,13 @@ function propfactory:addStatic(selected, placement)
 	table.insert(self.static_props, temp)
 
 	self.offset = placement + temp.image:getWidth()
-	print("width + "..temp.image:getWidth())
 
 	if (self.static_prop_types[selected].door == true) then
 		local templeft = placement - 14
-		local tempright = self.offset
+		local tempright = self.offset + 1
 		table.insert(self.torchpoints, templeft)
 		table.insert(self.torchpoints, tempright)
 	end
-end
-
-function propfactory:collisionCheck(x1, w1, x2, w2)
-
-	if (x1 < (x2+w2)) and ((x1+w1)>x2) then
-		return false
-	else
-		return true -- no collision
-	end
-end
-
---given a width of a prop, it returns a safe x-coord or a 0
-function propfactory:findSpace(width, stage_width)
-
-	local stage_width = stage_width or 720
-
-	local static_size = table.getn(self.static_props)
-
-	if static_size == 0 then
-		return ( math.random(stage_width - 64) + 36 )
-	end
-
-	for attempt = 1, 3 do
-
-		local placement = ( math.random(stage_width - 64) + 36 )
-
-		local test = false
-
-		for i = 1, static_size do
-
-			if (self.static_props[i].x == nil) then
-
-			end
-
-			local x1 = self.static_props[i].x
-			local w1 = self.static_props[i].image:getWidth()
-
-			--print("collision check no."..i.." of "..static_size.." "..x1.." < "..(x1+w1).." < "..placement.." < "..(placement+width))
-
-			test = self:collisionCheck(x1, w1, placement, width)
-
-			if test == false then
-				break
-			end
-		end
-
-		if test == true then
-			return placement
-		end
-	end
-
-	return 0 -- failure
 end
 
 function propfactory:populate()
@@ -174,19 +132,13 @@ function propfactory:populate()
 		local placement = self.offset + math.random(24) + 12
 
 		propfactory:addStatic(selected, placement)
-		print("offset: "..self.offset)
 
-		--local width = self.static_prop_types[selected].image:getWidth()
-
-		if (self.offset - 96) > 1280 then
+		if (self.offset - 96) > self.level_width then
 			break
 		end
 	end
 
-	print("torchpoints")
-
 	for i, v in ipairs(self.torchpoints) do
-		print(v)
 		local flip = math.random()
 		if flip < 0.5 then
 			self:addAnim(v)
@@ -220,6 +172,7 @@ function propfactory:draw()
 		if v.alive then
 			love.graphics.draw(v.image, v.x, v.y)
 			--love.graphics.printf(i, v.x, v.y, 128, "left")
+			--decomment to show indexes onscreen
 		end
 	end
 
@@ -228,6 +181,23 @@ function propfactory:draw()
 			v:draw()
 		end
 	end
+end
+
+function propfactory:purge()
+
+	for i, v in ipairs(self.static_props) do
+		table.remove(self.static_props, i)
+	end
+
+	for i, v in ipairs(self.anim_props) do
+		table.remove(self.anim_props, i)
+	end
+
+	for i, v in ipairs(self.torchpoints) do
+		table.remove(self.torchpoints, i)
+	end
+
+	offset = 64
 end
 
 return propfactory
