@@ -2,28 +2,6 @@ local level = {}
 
 local Timer = require "lib.hump.timer"
 
--- Controller support, auto detects across OSX and win
-local cur_os
-
-if love._os == "OS X" then cur_os = "mac"
-elseif love._os == "Windows" then cur_os = "win"
-end
-
-local schema = {
-	mac = {
-		Y = 4,
-		X = 3,
-		B = 2,
-		A = 1
-	},
-	win = {
-		Y = 14,
-		X = 13,
-		B = 12,
-		A = 11
-	}
-}
-
 --level vars
 local level_speed = 200
 local backgrounds_left = 4
@@ -361,8 +339,25 @@ end
 
 function level:keypressed(key, unicode)
 	-- navigate menu
-	if key == "q" then
-		love.event.push("quit")
+	if key == "w" then
+		-- Y = 14
+		wave = "Y"
+		hero:saluteY()
+	end
+	if key == "a" then
+		-- X = 13
+		wave = "X"
+		hero:saluteX()
+	end
+	if key == "d" then
+		-- B = 12
+		wave = "B"
+		hero:saluteB()
+	end
+	if key == "s" then
+		-- A = 11
+		wave = "A"
+		hero:saluteA()
 	end
 
 end
@@ -403,28 +398,26 @@ end
 
 function level:joystickpressed(joystick, button)
 
-	if button == schema[cur_os]["Y"] then
-		-- Y = 14
+	local wave
+
+	if joystick:isGamepadDown("y") then
 		wave = "Y"
 		hero:saluteY()
 	end
-	if button == schema[cur_os]["X"] then
-		-- X = 13
+	if joystick:isGamepadDown("x") then
 		wave = "X"
 		hero:saluteX()
 	end
-	if button == schema[cur_os]["B"] then
-		-- B = 12
+	if joystick:isGamepadDown("b") then
 		wave = "B"
 		hero:saluteB()
 	end
-	if button == schema[cur_os]["A"] then
-		-- A = 11
+	if joystick:isGamepadDown("a") then
 		wave = "A"
 		hero:saluteA()
 	end
 
-	level:checkWave(wave)
+	if wave then level:checkWave(wave) end
 end
 
 function level:spawner()

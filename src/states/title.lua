@@ -105,44 +105,26 @@ end
 
 function title:joystickpressed(joystick, button)
 
-	if love._os == "Windows" then -- Windows, buttonpress only
-		if (button == 1 or button == 8)  then  -- A button or Start
+	if joystick:isGamepadDown("a") or joystick:isGamepadDown("start") then  -- A button or Start
+		local action = self.actions[self.current]
 
-			local action = self.actions[self.current]
-
-			if action.name == "exit" then 
-				love.event.push("quit")
-			else
-				Gamestate.switch(require("states."..action.screen), self.save)
-			end
+		if action.name == "exit" then 
+			love.event.push("quit")
+		else
+			Gamestate.switch(require("states."..action.screen), self.save)
 		end
 	end
 
-	if love._os == "OS X" then
 
-		-- OSX, navigation
-
-		if (button == 12 or button == 5)  then  -- A button or Start
-
-			local action = self.actions[self.current]
-
-			if action.name == "exit" then 
-				love.event.push("quit")
-			else
-				Gamestate.switch(require("states."..action.screen), self.save)
-			end
-
-		-- OSX, button press
-
-		elseif button == 1 then
-			self.current = self.current - 1
-			if self.current < 1 then
-				self.current = #self.actions
-			end
-		elseif button == 2 then
-			self.current = (self.current % #self.actions) + 1
+	if joystick:isGamepadDown("dpdown") then
+		self.current = self.current - 1
+		if self.current < 1 then
+			self.current = #self.actions
 		end
+	elseif joystick:isGamepadDown("dpup") then
+		self.current = (self.current % #self.actions) + 1
 	end
+
 end
 
 return title
