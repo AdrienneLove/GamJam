@@ -181,4 +181,9 @@ function hero:eatLife()
 	end
 end
 
+function hero:stopHero()
+	active_legs_animation:pause()
+	active_body_animation:pause()
+end
+
 return hero

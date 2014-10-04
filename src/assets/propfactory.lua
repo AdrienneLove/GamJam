@@ -151,6 +151,14 @@ function propfactory:populate()
 
 		local selected = math.random(table.getn(self.static_prop_types))
 
+		--print(selected)
+		self.static_props[i] = {}
+		self.static_props[i].image = self.static_prop_types[selected].image
+		self.static_props[i].image:setFilter('nearest','nearest')
+		self.static_props[i].x = math.random(2000)
+		self.static_props[i].y = self.static_prop_types[selected].y
+		self.static_props[i].alive = true
+
 		local width = self.static_prop_types[selected].image:getWidth()
 
 		local placement = self:findSpace(width, 1440)
@@ -160,7 +168,6 @@ function propfactory:populate()
 		else
 			propfactory:addStatic(selected, placement)
 		end
-
 	end
 
 	for i = 1, 4 do
