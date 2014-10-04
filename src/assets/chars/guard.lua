@@ -30,7 +30,8 @@ local guard_manager = {
 				_ANIMATIONSPEED = 0.12	
 			},
 			guard_stop_image = nil,
-			guard_stop_animation = nil
+			guard_stop_animation = nil,
+			guard_fail_image = "fox_fail.png"	
 
 		},
 		{ -- 2
@@ -63,7 +64,8 @@ local guard_manager = {
 				_ANIMATIONSPEED = 0.12	
 			},
 			guard_stop_image = nil,
-			guard_stop_animation = nil
+			guard_stop_animation = nil,
+			guard_fail_image = "jaguar_fail.png"	
 		},
 		{ -- 3
 			speed = 100,
@@ -94,7 +96,8 @@ local guard_manager = {
 				_ANIMATIONSPEED = 0.12	
 			},
 			guard_stop_image = nil,
-			guard_stop_animation = nil
+			guard_stop_animation = nil,
+			guard_fail_image = "eagle_fail.png"	
 		},
 		{ -- 4
 			speed = 110,
@@ -125,7 +128,8 @@ local guard_manager = {
 				_ANIMATIONSPEED = 0.12	
 			},
 			guard_stop_image = nil,
-			guard_stop_animation = nil
+			guard_stop_animation = nil,
+			guard_fail_image = "snake_fail.png"	
 
 		}
 	},
@@ -145,6 +149,7 @@ function guard_manager:newGuard(num)
 		guard_body_image = love.graphics.newImage("assets/images/"..self.guard_types[num]["guard_body_anim_data"]._FILENAME),
 		guard_head_image = love.graphics.newImage("assets/images/"..self.guard_types[num]["guard_head_anim_data"]._FILENAME),
 		guard_stop_image = love.graphics.newImage("assets/images/"..self.guard_types[num]["guard_stop_anim_data"]._FILENAME),
+		guard_fail_image = love.graphics.newImage("assets/images/"..self.guard_types[num]["guard_fail_image"]),
 		speed = self.guard_types[num]["speed"],
 		x = 240,
 		expectedWave = self.guard_types[num]["expectedWave"],
@@ -191,8 +196,12 @@ function guard_manager:newGuard(num)
 	function g:draw()
 		--draw test anim
 		love.graphics.setColor(255, 255, 255, 255)
-		self.active_body_animation:draw(self.guard_body_image, self.x, 65)
-		self.active_head_animation:draw(self.guard_head_image, self.x, 65)
+		if self.state ~= "stop" then
+			self.active_body_animation:draw(self.guard_body_image, self.x, 65)
+			self.active_head_animation:draw(self.guard_head_image, self.x, 65)
+		else
+			love.graphics.draw(self.guard_fail_image, self.x, 64 )
+		end
 	end
 	
 	function g:failWave()
@@ -210,7 +219,7 @@ function guard_manager:newGuard(num)
 	function g:stopGuard()
 		--used by gameover to stop the guard in place and halt animation
 		--self.active_head_animation:pause()
-		self.active_body_animation:pause()
+		self.state = "stop"
 	end
 
 

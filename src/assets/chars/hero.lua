@@ -67,7 +67,8 @@ local hero = {
 		_ANIMATIONSPEED = 0.08
 	},
 	hero_body_wave_b_spritemap = nil,
-	hero_body_wave_b_animation = nil
+	hero_body_wave_b_animation = nil,
+	hero_fail = "sheep_fail.png"
 }
 
 hero.life:setFilter('nearest','nearest')
@@ -75,11 +76,14 @@ hero.empty:setFilter('nearest','nearest')
 
 local y = 70
 
+hero.hero_fail = love.graphics.newImage("assets/images/"..hero.hero_fail)
+hero.hero_fail:setFilter("nearest", "nearest")
+
 -- default run animation for body and legs
-hero.hero_body_spritemap = love.graphics.newImage("assets/images/"..hero.hero_body._FILENAME);
+hero.hero_body_spritemap = love.graphics.newImage("assets/images/"..hero.hero_body._FILENAME)
 hero.hero_body_spritemap:setFilter('nearest', 'nearest')
 
-hero.hero_legs_spritemap = love.graphics.newImage("assets/images/"..hero.hero_legs._FILENAME);
+hero.hero_legs_spritemap = love.graphics.newImage("assets/images/"..hero.hero_legs._FILENAME)
 hero.hero_legs_spritemap:setFilter('nearest', 'nearest')
 
 local hero_body_grid = anim8.newGrid(hero.hero_body._WIDTH, hero.hero_body._HEIGHT, hero.hero_body_spritemap:getWidth(), hero.hero_body_spritemap:getHeight())
@@ -198,8 +202,12 @@ function hero:draw()
 	--draw test anim
 	love.graphics.setColor(255, 255, 255, 255)
 	
-	active_legs_animation:draw(active_legs_spritemap, hero.x, 70)
-	active_body_animation:draw(active_body_spritemap, hero.x, 70)
+	if hero.state ~= "stand" then
+		active_legs_animation:draw(active_legs_spritemap, hero.x, 70)
+		active_body_animation:draw(active_body_spritemap, hero.x, 70)
+	else
+		love.graphics.draw(hero.hero_fail, self.x, y )
+	end
 end
 
 function hero:eatLife()
@@ -209,8 +217,7 @@ function hero:eatLife()
 end
 
 function hero:stopHero()
-	active_legs_animation:pause()
-	active_body_animation:pause()
+	hero.state = "stand"
 end
 
 return hero

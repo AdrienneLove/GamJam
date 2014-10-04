@@ -242,8 +242,13 @@ function level:update(dt)
 	local missed = guards:leavecheck(dt)
 	if missed == true then
 		--guards.current_guards[1]:failWave()
-		particle:spawn("what", guards.current_guards[1].x + 6, guards.current_guards[1].speed)
-		hero:eatLife()
+		if hero.lives > 1 then
+			particle:spawn("what", guards.current_guards[1].x + 6, guards.current_guards[1].speed)
+			hero:eatLife()
+		else
+			hero:eatLife()
+			guards.current_guards[1].x  = guards.current_guards[1].x + 50
+		end
 	end
 
 	if levels[cur_level]["status"] == "play" or levels[cur_level]["status"] == "outro" then
@@ -655,9 +660,9 @@ function level:gameover()
 	spawner = false
 	particle:spawn("lose", hero.x + 6, 0)
 	particle:pause()
-	-- level:stopNearestGuard()
-	--levels[cur_level]["level_speed"] = 0
-	level:reInit()
+	level:stopNearestGuard()
+	levels[cur_level]["level_speed"] = 0
+	--level:reInit()
 end
 
 function level:stopNearestGuard()
@@ -671,9 +676,8 @@ function level:stopNearestGuard()
 		end
 		if nearest.x < 100 then
 			nearest.speed = 0
-			-- hero:stopHero() --only want the hero to stop once the guard has reached them.
+			hero:stopHero()
 			nearest:stopGuard()
-
 		end
 	end
 	--printTable(nearest)
