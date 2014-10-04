@@ -436,11 +436,11 @@ function level:checkWave(wave)
 			--flip this guards wavedAt to true.
 			focusedGuard:successWave()			
 			waveCorrect = true
-			guards:spawnParticle("pass", focusedGuard.x, focusedGuard.speed)
+			guards:spawnParticle("pass", focusedGuard.x + 6, focusedGuard.speed)
 		else
 			focusedGuard:failWave()
 			waveCorrect = false
-			guards:spawnParticle("fail", focusedGuard.x, focusedGuard.speed)
+			guards:spawnParticle("fail", focusedGuard.x + 6, focusedGuard.speed)
 			hero:eatLife()
 		end
 	else
@@ -468,25 +468,40 @@ end
 
 
 function level:joystickpressed(joystick, button)
-
 	local wave
 
+	if button == 1 then
+		wave = "A"
+	elseif button == 2 then
+		wave = "B"
+	elseif button == 3 then
+		wave = "X"
+	elseif button == 4 then
+		wave = "Y"
+	end
+	
 	if joystick:isGamepadDown("y") then
 		wave = "Y"
-		hero:saluteY()
 	end
 	if joystick:isGamepadDown("x") then
 		wave = "X"
-		hero:saluteX()
 	end
 	if joystick:isGamepadDown("b") then
 		wave = "B"
-		hero:saluteB()
 	end
 	if joystick:isGamepadDown("a") then
 		wave = "A"
-		hero:saluteA()
 	end
+
+	if wave == "Y" then
+		hero:saluteY()
+	elseif wave == "X" then
+		hero:saluteX()
+	elseif wave == "B" then
+		hero:saluteB()
+	elseif wave == "A" then
+		hero:saluteA()
+	end		
 
 	if wave then level:checkWave(wave) end
 end
@@ -528,6 +543,7 @@ function level:stopNearestGuard()
 			nearest.speed = 0
 			hero:stopHero() --only want the hero to stop once the guard has reached them.
 			nearest:stopGuard()
+			guards:particlePause()
 		end
 	end
 	--printTable(nearest)

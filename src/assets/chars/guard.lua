@@ -139,8 +139,9 @@ local tween = require 'lib.tween'
 
 local particles = {}
 local particle_types = {
-	pass = {image = love.graphics.newImage('assets/images/pass.png')},
-	fail = {image = love.graphics.newImage('assets/images/fail.png')}
+	pass = {image = love.graphics.newImage('assets/images/BubbleStar.png')},
+	fail = {image = love.graphics.newImage('assets/images/BubbleX.png')},
+	lose = {image = love.graphics.newImage('assets/images/BubbleExclamation.png')}
 }
 
 guard_manager.particles = particles
@@ -263,20 +264,22 @@ end
 function guard_manager:spawnParticle(type, _x, _speed)
 	
 	temp = {}
-	temp.image = self.particle_types["pass"].image
-	temp.image:setFilter('nearest','nearest')
 	temp.x = _x
-	temp.y = 100
+	temp.y = 88
 	temp.speed = _speed
 
 	if type == "pass" then
 		temp.image = self.particle_types["pass"].image
 	elseif type == "fail" then
 		temp.image = self.particle_types["fail"].image
+	elseif type == "lose" then
+		temp.image = self.particle_types["lose"].image
 	else
 		print("Unrecognized particle type")
 		return
 	end
+
+	temp.image:setFilter('nearest','nearest')
 
 	temp.tween = tween.new(1, temp, {y = 0}, "outInElastic")
 
@@ -304,4 +307,9 @@ function guard_manager:particleDraw()
 	end
 end
 
+function guard_manager:particlePause()
+	for i, v in ipairs(self.particles) do
+			v.speed = 0
+	end
+end
 return guard_manager
