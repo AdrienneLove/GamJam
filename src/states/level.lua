@@ -45,7 +45,6 @@ function level:enter(state)
 	-- intro_completed = false
 
 	love.graphics.setDefaultFilter('nearest')
-	--panel iterates at half screen
 
 	--load in panel data for foreground and background
 	background_imagedata_start = love.image.newImageData('assets/images/start.gif')
@@ -64,9 +63,52 @@ function level:enter(state)
 		love.graphics.newImage(foreground_imagedata_1)
 	}
 
+	--panel iterates at half screen
+
+	level:reInit()
+
 	-- set timer to go from intro to play
 	-- Timer.add(1, function() status = "play" end)
-	--Timer.addPeriodic(spawnDelay, function() spawn = true end)
+	Timer.addPeriodic(levels[cur_level]["spawnDelay"], function() spawn = true end)
+
+	--static props
+	staticprops:populate()
+
+	-- play music
+	game_music = love.audio.newSource( "assets/audio/cephelopod.mp3", "stream" )
+	game_music:setLooping( true )
+	game_music:setVolume(0.5)
+	love.audio.play( game_music )
+
+	-- fade in / out 
+	-- fading = true
+	self.fade_params = { opacity = 255 }
+	bgm_params = { volume = 0.5 }
+	-- Timer.add(1/60, function()
+	-- 	Timer.tween(0.25, self.fade_params, { opacity = 0 }, 'in-out-sine')
+	-- 	Timer.add(0.25, function()
+	-- 		fading = false
+	-- 	end)
+	-- end)
+	Timer.tween(0.25, bgm_params, { volume = 0.8 })
+
+end
+
+function level:reInit()
+
+	for k,v in pairs(package.loaded) do
+		if string.match(k,"level_") then
+			package.loaded[k] = purge(package.loaded[k])
+		end
+	end
+
+	levels = {
+	require 'states.levels.level_one',
+	require 'states.levels.level_two',
+	require 'states.levels.level_three',
+	require 'states.levels.level_four',
+	require 'states.levels.level_five'
+}
 
 	--build initial background panels
 	for i,v in ipairs(levels) do
@@ -106,30 +148,13 @@ function level:enter(state)
 		v.exit_door.y = 0
 	end
 
-	-- set timer to go from intro to play
-	-- Timer.add(1, function() status = "play" end)
-	Timer.addPeriodic(levels[cur_level]["spawnDelay"], function() spawn = true end)
+	cur_level = 1
+	hero:init()
+	purge(guards.current_guards)
 
-	--static props
-	staticprops:populate()
+	gameover = false
 
-	-- play music
-	game_music = love.audio.newSource( "assets/audio/cephelopod.mp3", "stream" )
-	game_music:setLooping( true )
-	game_music:setVolume(0.5)
-	love.audio.play( game_music )
 
-	-- fade in / out 
-	-- fading = true
-	self.fade_params = { opacity = 255 }
-	bgm_params = { volume = 0.5 }
-	-- Timer.add(1/60, function()
-	-- 	Timer.tween(0.25, self.fade_params, { opacity = 0 }, 'in-out-sine')
-	-- 	Timer.add(0.25, function()
-	-- 		fading = false
-	-- 	end)
-	-- end)
-	Timer.tween(0.25, bgm_params, { volume = 0.8 })
 
 end
 
@@ -266,7 +291,6 @@ function level:update(dt)
 				end
 
 				levels[cur_level]["foregrounds_left"] = levels[cur_level]["foregrounds_left"] - 1
-				print(levels[cur_level]["foregrounds_left"])
 			end
 		end
 
@@ -328,7 +352,6 @@ function level:newLevel()
 		hero:newLevel()
 		fading = false
 	end
-
 end
 
 function level:draw()
@@ -360,7 +383,7 @@ function level:draw()
 	-- draw life count
 	for i=1,hero.lives do
 		--love.graphics.draw(cube, 40*i, 50)
-		love.graphics.printf(hero.lives, 15*i, 20, 250, 'left')
+		love.graphics.draw(hero.life, 15*i, 10)
 	end
 
 	if gameover then
@@ -368,6 +391,9 @@ function level:draw()
 		love.graphics.setColor(255, 255, 255, 255)
 		love.graphics.setFont(swishfont)
 		love.graphics.printf("YOU DIED :'(", 30, 30, 100, 'center')
+
+
+
 	end
 
 	-- wave detect / indicator for the zone that enemies can receive waves in
@@ -387,7 +413,7 @@ function level:draw()
 
 	--draw hero
 	hero:draw(dt)
-	
+
 	love.graphics.pop()
 
 	if fading then
@@ -516,7 +542,8 @@ function level:gameover()
 	spawnChance = 0
 	spawner = false
 	level:stopNearestGuard()
-	level_speed = 0
+	levels[cur_level]["level_speed"] = 0
+	level:reInit()
 end
 
 function level:stopNearestGuard()

@@ -12,6 +12,11 @@ end
 
 -- Deep clean to set all values on each level to nil.
 function purge(_table)
+
+	if _table == nil then
+		return
+	end
+
 	for k,v in pairs(_table) do
 		if type(v) == table then
 			purge(v)
