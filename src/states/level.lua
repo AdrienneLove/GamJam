@@ -3,7 +3,7 @@ local level = {}
 local Timer = require "lib.hump.timer"
 
 --level vars
-local level_speed = 140
+local level_speed = 200
 local backgrounds_left = 4
 local foregrounds_left = backgrounds_left
 local status = "intro" -- other states are play, dead, outro and exit
@@ -90,13 +90,13 @@ function level:enter(state)
 	end
 
 	--build entry door
-	entry_door.image = love.graphics.newImage('assets/images/door1.png')
-	entry_door.x = 56
-	entry_door.y = 34
+	entry_door.image = love.graphics.newImage('assets/images/start_door.png')
+	entry_door.x = 0
+	entry_door.y = 0
 
-	exit_door.image = love.graphics.newImage('assets/images/door2.png')
-	exit_door.x = 100
-	exit_door.y = 34
+	exit_door.image = love.graphics.newImage('assets/images/end_door.png')
+	exit_door.x = 197
+	exit_door.y = 0
 
 	-- set timer to go from intro to play
 	Timer.add(1, function() status = "play" end)
@@ -132,7 +132,7 @@ function level:update(dt)
 	guards:update(dt)
 	hero:update(dt)
 
-	if status == "play" then
+	if status == "play" or status == "outro" then
 
 		-- move background panels
 		for key, value in pairs(background_panels) do 
@@ -214,21 +214,21 @@ function level:update(dt)
 		end
 
 		if status == "play" and foregrounds_left == 0 and backgrounds_left == 0 then
-			status = "outro"
 			
 			--search furthest background and put a door there
 			for furthest_key, furthest_value in pairs(foreground_panels) do 
-				if furthest_value.furthest then 
+				if furthest_value.furthest then
 					exit_door.x = furthest_value.x + exit_door.x
 					exit_door.alive = true
 					exit_door.distance = exit_door.x
+					status = "outro"
 					break
 				end
 			end
 		end
 
 		if status == "outro" then
-			if exit_door.distance > 100 then 
+			if exit_door.distance > 200 then 
 				exit_door.x = exit_door.x - level_speed * dt
 				exit_door.distance = exit_door.distance - level_speed * dt
 			else 
