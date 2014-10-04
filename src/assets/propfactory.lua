@@ -82,7 +82,7 @@ function propfactory:populate()
 
 	for i = 1,14 do
 		local selected = math.random(table.getn(self.static_prop_types))
-		print(selected)
+		--print(selected)
 		self.static_props[i] = {}
 		self.static_props[i].image = self.static_prop_types[selected].image
 		self.static_props[i].image:setFilter('nearest','nearest')

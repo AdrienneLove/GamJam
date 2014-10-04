@@ -4,56 +4,128 @@ local guard_manager = {
 		{ -- 1
 			speed = 50,
 			expectedWave = "B",
-			guard_anim_data = {
+			guard_body_anim_data = { --default body
 				_WIDTH = 32,				
 				_HEIGHT = 35,			
 				_FRAMES = 12,			
 				_FILENAME = "sheepRun_RED.png", 	
 				_ANIMATIONSPEED = 0.12 		
 			},
-			guard_image = nil,
-			guard_animation = nil
+			guard_body_image = nil,
+			guard_body_animation = nil,
+			guard_head_anim_data = { --default head
+				_WIDTH = 32,				
+				_HEIGHT = 35,			
+				_FRAMES = 12,			
+				_FILENAME = "sheepRun_RED.png", 	
+				_ANIMATIONSPEED = 0.12	
+			},
+			guard_head_image = nil,
+			guard_head_animation = nil,
+			guard_stop_anim_data = { -- halt body (gameover)
+				_WIDTH = 32,				
+				_HEIGHT = 35,			
+				_FRAMES = 6,			
+				_FILENAME = "sheep_wave_x.png", 	
+				_ANIMATIONSPEED = 0.12	
+			},
+			guard_stop_image = nil,
+			guard_stop_animation = nil
 
 		},
 		{ -- 2
 			
 			speed = 100,
 			expectedWave = "Y",
-			guard_anim_data = {
+			guard_body_anim_data = { --default body
 				_WIDTH = 32,				
 				_HEIGHT = 35,			
 				_FRAMES = 12,			
 				_FILENAME = "sheepRun_YELLOW.png", 	
 				_ANIMATIONSPEED = 0.12 		
 			},
-			guard_image = nil,
-			guard_animation = nil
+			guard_body_image = nil,
+			guard_body_animation = nil,
+			guard_head_anim_data = { --default head
+				_WIDTH = 32,				
+				_HEIGHT = 35,			
+				_FRAMES = 12,			
+				_FILENAME = "sheepRun_YELLOW.png", 	
+				_ANIMATIONSPEED = 0.12	
+			},
+			guard_head_image = nil,
+			guard_head_animation = nil,
+			guard_stop_anim_data = { -- halt body (gameover)
+				_WIDTH = 32,				
+				_HEIGHT = 35,			
+				_FRAMES = 6,			
+				_FILENAME = "sheep_wave_x.png", 	
+				_ANIMATIONSPEED = 0.12	
+			},
+			guard_stop_image = nil,
+			guard_stop_animation = nil
 		},
 		{ -- 3
 			speed = 150,
 			expectedWave = "X",
-			guard_anim_data = {
+			guard_body_anim_data = { --default body
 				_WIDTH = 32,				
 				_HEIGHT = 35,			
 				_FRAMES = 12,			
 				_FILENAME = "sheepRun_BLUE.png", 	
 				_ANIMATIONSPEED = 0.12 		
 			},
-			guard_image = nil,
-			guard_animation = nil
+			guard_body_image = nil,
+			guard_body_animation = nil,
+			guard_head_anim_data = { --default head
+				_WIDTH = 32,				
+				_HEIGHT = 35,			
+				_FRAMES = 12,			
+				_FILENAME = "sheepRun_BLUE.png", 	
+				_ANIMATIONSPEED = 0.12	
+			},
+			guard_head_image = nil,
+			guard_head_animation = nil,
+			guard_stop_anim_data = { -- halt body (gameover)
+				_WIDTH = 32,				
+				_HEIGHT = 35,			
+				_FRAMES = 6,			
+				_FILENAME = "sheep_wave_x.png", 	
+				_ANIMATIONSPEED = 0.12	
+			},
+			guard_stop_image = nil,
+			guard_stop_animation = nil
 		},
 		{ -- 4
 			speed = 200,
 			expectedWave = "A",
-			guard_anim_data = {
+			guard_body_anim_data = {
 				_WIDTH = 32,				
 				_HEIGHT = 35,			
 				_FRAMES = 12,			
 				_FILENAME = "sheepRun_GREEN.png", 	
 				_ANIMATIONSPEED = 0.12 		
 			},
-			guard_image = nil,
-			guard_animation = nil
+			guard_body_image = nil,
+			guard_body_animation = nil,
+			guard_head_anim_data = { --default head
+				_WIDTH = 32,				
+				_HEIGHT = 35,			
+				_FRAMES = 12,			
+				_FILENAME = "sheepRun_GREEN.png", 	
+				_ANIMATIONSPEED = 0.12	
+			},
+			guard_head_image = nil,
+			guard_head_animation = nil,
+			guard_stop_anim_data = { -- halt body (gameover)
+				_WIDTH = 32,				
+				_HEIGHT = 35,			
+				_FRAMES = 6,			
+				_FILENAME = "sheep_wave_x.png", 	
+				_ANIMATIONSPEED = 0.12	
+			},
+			guard_stop_image = nil,
+			guard_stop_animation = nil
 
 		}
 	},
@@ -70,29 +142,76 @@ function guard_manager:newGuard(num)
 	end
 
 	local g = {
-		guard_image = love.graphics.newImage("assets/images/"..self.guard_types[num]["guard_anim_data"]._FILENAME),
+		guard_body_image = love.graphics.newImage("assets/images/"..self.guard_types[num]["guard_body_anim_data"]._FILENAME),
+		guard_head_image = love.graphics.newImage("assets/images/"..self.guard_types[num]["guard_head_anim_data"]._FILENAME),
+		guard_stop_image = love.graphics.newImage("assets/images/"..self.guard_types[num]["guard_stop_anim_data"]._FILENAME),
 		speed = self.guard_types[num]["speed"],
 		x = 240,
 		expectedWave = self.guard_types[num]["expectedWave"],
 		isWavedAt = false,
-		guard_anim_data = self.guard_types[num]["guard_anim_data"]
+		guard_body_anim_data = self.guard_types[num]["guard_body_anim_data"],
+		guard_head_anim_data = self.guard_types[num]["guard_head_anim_data"], 
+		guard_stop_anim_data = self.guard_types[num]["guard_stop_anim_data"],
+		state = "play" -- "play", "stop", "failed", "success"
 	}
-	g.guard_image:setFilter('nearest', 'nearest')
-	local guard_grid = anim8.newGrid(g.guard_anim_data._WIDTH, g.guard_anim_data._HEIGHT, g.guard_image:getWidth(), g.guard_image:getHeight())
-	g.animation = anim8.newAnimation(guard_grid('1-'..g.guard_anim_data._FRAMES,1), g.guard_anim_data._ANIMATIONSPEED)
+	g.guard_body_image:setFilter('nearest', 'nearest')
+	g.guard_head_image:setFilter('nearest', 'nearest')
+	g.guard_stop_image:setFilter('nearest', 'nearest')
+	local guard_body_grid = anim8.newGrid(g.guard_body_anim_data._WIDTH, g.guard_body_anim_data._HEIGHT, g.guard_body_image:getWidth(), g.guard_body_image:getHeight())
+	local guard_head_grid = anim8.newGrid(g.guard_head_anim_data._WIDTH, g.guard_head_anim_data._HEIGHT, g.guard_head_image:getWidth(), g.guard_head_image:getHeight())
+	local guard_stop_grid = anim8.newGrid(g.guard_stop_anim_data._WIDTH, g.guard_stop_anim_data._HEIGHT, g.guard_stop_image:getWidth(), g.guard_stop_image:getHeight())
+	g.animation = anim8.newAnimation(guard_body_grid('1-'..g.guard_body_anim_data._FRAMES,1), g.guard_body_anim_data._ANIMATIONSPEED)
+	g.head_animation = anim8.newAnimation(guard_head_grid('1-'..g.guard_head_anim_data._FRAMES,1), g.guard_head_anim_data._ANIMATIONSPEED)
 	
+	g.active_body_animation  = g.animation
+	g.active_body_spritemap = g.guard_body_image
+
+	g.active_head_animation = g.head_animation
+	g.active_head_spritemap = g.guard_head_image
+
+	-- halt anim state
+	g.stop_animation = anim8.newAnimation(guard_stop_grid('1-'..g.guard_stop_anim_data._FRAMES,1), g.guard_stop_anim_data._ANIMATIONSPEED, function()
+			--one anim ends go back to default
+			g.animation:gotoFrame(active_body_animation.position)
+			active_body_animation = g.animation
+			active_body_spritemap = g.guard_body_image
+
+		end)
+
 	function g:update(dt)
 
 		self.x = self.x - self.speed * dt
-		self.animation:update(dt)
+		-- self.animation:update(dt)
+		-- self.head_animation:update(dt)
+		self.active_head_animation:update(dt)
+		self.active_body_animation:update(dt)
 	end
 
 	function g:draw()
 		--draw test anim
 		love.graphics.setColor(255, 255, 255, 255)
-		self.animation:draw(self.guard_image, self.x, 70)
+		self.active_head_animation:draw(self.guard_head_image, self.x, 70)
+		self.active_body_animation:draw(self.guard_body_image, self.x, 70)
 	end
 	
+	function g:failWave()
+		--for triggering the particle effect for failing on a guard
+		self.state = "failed"
+		--print("set to failed")
+	end
+
+	function g:successWave()
+		--for triggering the particle effect for success on a guard
+		self.state = "success"
+		--print("set to success")
+	end
+
+	function g:stopGuard()
+		--used by gameover to stop the guard in place and halt animation
+		--self.active_head_animation:pause()
+		self.active_body_animation:pause()
+	end
+
 
 	table.insert(self.current_guards, g)
 end
@@ -114,7 +233,6 @@ function guard_manager:update(dt)
 	for _,guard in ipairs(self.current_guards) do
 		guard:update(dt)
 	end
-	print(table.getn(self.current_guards))
 	self:despawn()
 end
 
