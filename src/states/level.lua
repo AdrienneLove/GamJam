@@ -229,8 +229,8 @@ function level:update(dt)
 		return
 	end
 
-	-- Don't spawn at end of level.
-	if levels[cur_level]["backgrounds_left"] > 0 then
+	-- Don't spawn at end or during intro of level.
+	if levels[cur_level]["backgrounds_left"] > 0 and levels[cur_level]["status"] ~= "intro" then
 		level:spawner()
 	end
 
@@ -241,9 +241,8 @@ function level:update(dt)
 
 	local missed = guards:leavecheck(dt)
 	if missed == true then
-		--guards.current_guards[1]:failWave()
 		if hero.lives > 1 then
-			particle:spawn("what", guards.current_guards[1].x + 6, guards.current_guards[1].speed)
+			particle:spawn("fail", guards.current_guards[1].x + 6, guards.current_guards[1].speed)
 			hero:eatLife()
 		else
 			hero:eatLife()
@@ -530,21 +529,25 @@ function level:keypressed(key, unicode)
 		-- Y = 14
 		wave = "Y"
 		hero:saluteY()
+		colourPressed = "yellow"
 	end
 	if key == "a" then
 		-- X = 13
 		wave = "X"
 		hero:saluteX()
+		colourPressed = "blue"
 	end
 	if key == "d" then
 		-- B = 12
 		wave = "B"
 		hero:saluteB()
+		colourPressed = "red"
 	end
 	if key == "s" then
 		-- A = 11
 		wave = "A"
 		hero:saluteA()
+		colourPressed = "green"
 	end
 
 	if key == "p" then
@@ -564,11 +567,13 @@ function level:checkWave(wave)
 			waveCorrect = true
 			particle:spawn("pass", focusedGuard.x + 6, focusedGuard.speed)
 		else
-			focusedGuard:failWave()
-			focusedGuard.isWavedAt = true
-			waveCorrect = false
-			particle:spawn("fail", focusedGuard.x + 6, focusedGuard.speed)
-			hero:eatLife()
+			if focusedGuard.isWavedAt == false then
+				focusedGuard:failWave()
+				focusedGuard.isWavedAt = true
+				waveCorrect = false
+				particle:spawn("fail", focusedGuard.x + 6, focusedGuard.speed)
+				hero:eatLife()
+			end
 		end
 	else
 		--no guard in area, NOM LYF
@@ -581,7 +586,7 @@ end
 -- checks the detection area for a guard, returns true / false
 function level:checkArea()
 	for i=1,table.getn(guards.current_guards) do
-		if guards.current_guards[i]["x"] > 55 and guards.current_guards[i]["x"] < 95 then
+		if guards.current_guards[i]["x"] > 42 and guards.current_guards[i]["x"] < 95 then
 			focusedGuard = guards.current_guards[i]
 			return true
 		end
@@ -590,6 +595,11 @@ function level:checkArea()
 end
 
 function level:joystickreleased(joystick, button)
+	indicator = false
+	colourPressed = none
+end
+
+function level:keyreleased(key)
 	indicator = false
 	colourPressed = none
 end

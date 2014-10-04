@@ -255,7 +255,7 @@ end
 
 function guard_manager:leavecheck()
 	for _,guard in ipairs(self.current_guards) do
-		if (guard.x + 32) < 50 and guard.isWavedAt == false and guard.isTooSlow == false then
+		if (guard.x) < 42 and guard.isWavedAt == false and guard.isTooSlow == false then
 			guard.isTooSlow = true
 			return true
 		end
