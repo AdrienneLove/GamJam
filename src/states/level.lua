@@ -472,25 +472,40 @@ end
 
 
 function level:joystickpressed(joystick, button)
-
 	local wave
 
+	if button == 1 then
+		wave = "A"
+	elseif button == 2 then
+		wave = "B"
+	elseif button == 3 then
+		wave = "X"
+	elseif button == 4 then
+		wave = "Y"
+	end
+	
 	if joystick:isGamepadDown("y") then
 		wave = "Y"
-		hero:saluteY()
 	end
 	if joystick:isGamepadDown("x") then
 		wave = "X"
-		hero:saluteX()
 	end
 	if joystick:isGamepadDown("b") then
 		wave = "B"
-		hero:saluteB()
 	end
 	if joystick:isGamepadDown("a") then
 		wave = "A"
-		hero:saluteA()
 	end
+
+	if wave == "Y" then
+		hero:saluteY()
+	elseif wave == "X" then
+		hero:saluteX()
+	elseif wave == "B" then
+		hero:saluteB()
+	elseif wave == "A" then
+		hero:saluteA()
+	end		
 
 	if wave then level:checkWave(wave) end
 end
