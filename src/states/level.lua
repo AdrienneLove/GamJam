@@ -404,11 +404,11 @@ function level:checkWave(wave)
 			--flip this guards wavedAt to true.
 			focusedGuard:successWave()			
 			waveCorrect = true
-			guards:spawnParticle("pass", focusedGuard.x, focusedGuard.speed)
+			guards:spawnParticle("pass", focusedGuard.x + 6, focusedGuard.speed)
 		else
 			focusedGuard:failWave()
 			waveCorrect = false
-			guards:spawnParticle("fail", focusedGuard.x, focusedGuard.speed)
+			guards:spawnParticle("fail", focusedGuard.x + 6, focusedGuard.speed)
 			hero:eatLife()
 		end
 	else
@@ -496,6 +496,7 @@ function level:stopNearestGuard()
 			nearest.speed = 0
 			hero:stopHero() --only want the hero to stop once the guard has reached them.
 			nearest:stopGuard()
+			guards:particlePause()
 		end
 	end
 	--printTable(nearest)
