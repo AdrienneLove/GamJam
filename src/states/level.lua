@@ -7,6 +7,8 @@ local level_speed = 200
 local backgrounds_left = 4
 local foregrounds_left = backgrounds_left
 local status = "intro" -- other states are play, dead, outro and exit
+-- into_completed value in level:enter()
+
 
 --background stuff
 local level_speed = 100
@@ -48,6 +50,9 @@ local swishfont = love.graphics.newFont('assets/fonts/LovedbytheKing.ttf', 30)
 local staticprops = {}
 
 function level:enter(state)
+
+	-- Test for intro, set to true if into has finished not used otherwise.
+	intro_completed = false
 
 	love.graphics.setDefaultFilter('nearest')
 	--panel iterates at half screen
@@ -106,7 +111,7 @@ function level:enter(state)
 	exit_door.y = 0
 
 	-- set timer to go from intro to play
-	Timer.add(1, function() status = "play" end)
+	-- Timer.add(1, function() status = "play" end)
 	Timer.addPeriodic(spawnDelay, function() spawn = true end)
 
 	-- enemy spawn (testers)
@@ -132,6 +137,13 @@ end
 function level:update(dt)
 	--update all timers
 	Timer.update(dt)
+
+	-- For intro
+	if hero.x == 20 and not intro_completed then
+		status = "play"
+		hero.state = status
+		intro_completed = true
+	end
 
 	if status == "play" or status == "outro" then
 
