@@ -14,11 +14,11 @@ local propfactory = {
 		},
 		{
 			image = love.graphics.newImage('assets/images/mossmiddle.png'),
-			y = 36
+			y = 32
 		},
 		{
 			image = love.graphics.newImage('assets/images/mossground.png'),
-			y = 52
+			y = 80
 		},
 		{
 			image = love.graphics.newImage('assets/images/mask1.png'),
@@ -38,9 +38,9 @@ local propfactory = {
 			anim_data = {
 				_WIDTH = 13,				
 				_HEIGHT = 30,			
-				_FRAMES = 2,			
+				_FRAMES = 4,			
 				_FILENAME = "assets/animations/torch.png", 	
-				_ANIMATIONSPEED = 0.2
+				_ANIMATIONSPEED = 0.08
 			},
 			y = 14
 		}
@@ -102,7 +102,7 @@ function propfactory:collisionCheck(x1, w1, x2, w2)
 	end
 end
 
---given a width of a prop, it returns a 
+--given a width of a prop, it returns a safe x-coord or a 0
 function propfactory:findSpace(width, stage_width)
 
 	local stage_width = stage_width or 1440
@@ -131,7 +131,6 @@ function propfactory:findSpace(width, stage_width)
 			--print("collision check no."..i.." of "..static_size.." "..x1.." < "..(x1+w1).." < "..placement.." < "..(placement+width))
 
 			test = self:collisionCheck(x1, w1, placement, width)
-			test = self:collisionCheck(placement, width, x1, w1)
 
 			if test == false then
 				break
@@ -148,7 +147,7 @@ end
 
 function propfactory:populate()
 
-	for i = 1,40 do
+	for i = 1,20 do
 
 		local selected = math.random(table.getn(self.static_prop_types))
 
