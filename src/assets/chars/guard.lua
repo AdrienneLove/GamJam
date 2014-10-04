@@ -2,24 +2,58 @@ local guard_manager = {
 
 	guard_types = {
 		{ -- 1
-			walk = require 'assets.animations.guard_fox_walk',
-			speed = 1,
-			expectedWave = "B"
+			speed = 50,
+			expectedWave = "B",
+			guard_anim_data = {
+				_WIDTH = 32,				
+				_HEIGHT = 35,			
+				_FRAMES = 12,			
+				_FILENAME = "sheepRun_RED.png", 	
+				_ANIMATIONSPEED = 0.12 		
+			},
+			guard_image = nil,
+			guard_animation = nil
+
 		},
 		{ -- 2
-			walk = require 'assets.animations.guard_jaguar_walk',
-			speed = 2,
-			expectedWave = "Y"
+			
+			speed = 100,
+			expectedWave = "Y",
+			guard_anim_data = {
+				_WIDTH = 32,				
+				_HEIGHT = 35,			
+				_FRAMES = 12,			
+				_FILENAME = "sheepRun_YELLOW.png", 	
+				_ANIMATIONSPEED = 0.12 		
+			},
+			guard_image = nil,
+			guard_animation = nil
 		},
 		{ -- 3
-			walk = require 'assets.animations.guard_eagle_walk',
-			speed = 3,
-			expectedWave = "X"
+			speed = 150,
+			expectedWave = "X",
+			guard_anim_data = {
+				_WIDTH = 32,				
+				_HEIGHT = 35,			
+				_FRAMES = 12,			
+				_FILENAME = "sheepRun_BLUE.png", 	
+				_ANIMATIONSPEED = 0.12 		
+			},
+			guard_image = nil,
+			guard_animation = nil
 		},
 		{ -- 4
-			walk = require 'assets.animations.guard_snake_walk',
-			speed = 4,
-			expectedWave = "A"
+			speed = 200,
+			expectedWave = "A",
+			guard_anim_data = {
+				_WIDTH = 32,				
+				_HEIGHT = 35,			
+				_FRAMES = 12,			
+				_FILENAME = "sheepRun_GREEN.png", 	
+				_ANIMATIONSPEED = 0.12 		
+			},
+			guard_image = nil,
+			guard_animation = nil
 
 		}
 	},
@@ -36,23 +70,27 @@ function guard_manager:newGuard(num)
 	end
 
 	local g = {
-
-		walk = self.guard_types[num]["walk"],
+		guard_image = love.graphics.newImage("assets/images/"..self.guard_types[num]["guard_anim_data"]._FILENAME),
 		speed = self.guard_types[num]["speed"],
-		x = 240, --they're all going to start at the same point offscreen
+		x = 240,
 		expectedWave = self.guard_types[num]["expectedWave"],
-		isWavedAt = false
+		isWavedAt = false,
+		guard_anim_data = self.guard_types[num]["guard_anim_data"]
 	}
-
+	g.guard_image:setFilter('nearest', 'nearest')
+	local guard_grid = anim8.newGrid(g.guard_anim_data._WIDTH, g.guard_anim_data._HEIGHT, g.guard_image:getWidth(), g.guard_image:getHeight())
+	g.animation = anim8.newAnimation(guard_grid('1-'..g.guard_anim_data._FRAMES,1), g.guard_anim_data._ANIMATIONSPEED)
+	
 	function g:update(dt)
-		self.x = self.x - self.speed * 0.3
-		self.walk.animation:update(dt)
+
+		self.x = self.x - self.speed * dt
+		self.animation:update(dt)
 	end
 
 	function g:draw()
 		--draw test anim
 		love.graphics.setColor(255, 255, 255, 255)
-		self.walk.animation:draw(self.walk.rimon_walk_spritemap, self.x, 70)
+		self.animation:draw(self.guard_image, self.x, 70)
 	end
 	
 

@@ -7,6 +7,8 @@ local level_speed = 200
 local backgrounds_left = 4
 local foregrounds_left = backgrounds_left
 local status = "intro" -- other states are play, dead, outro and exit
+-- into_completed value in level:enter()
+
 
 --background stuff
 local level_speed = 100
@@ -45,9 +47,12 @@ local waveCorrect = false
 local cube = love.graphics.newImage('assets/animations/splash_cube.png')
 local swishfont = love.graphics.newFont('assets/fonts/LovedbytheKing.ttf', 30)
 
-local staticprops = {}
+local staticprops = require "assets.propfactory"
 
 function level:enter(state)
+
+	-- Test for intro, set to true if into has finished not used otherwise.
+	intro_completed = false
 
 	love.graphics.setDefaultFilter('nearest')
 	--panel iterates at half screen
@@ -74,12 +79,10 @@ function level:enter(state)
 	--build initial background panels
 	for key,value in pairs(background_panels) do 
 		value.x = background_imagedata_1:getWidth() * (key-1)
-
+		value.image = background_panel_images[math.random(table.getn(background_panel_images))]
    		if key == 1 then
-   			value.image = love.graphics.newImage(background_imagedata_1)
    			value.current = true
    		else 
-   			value.image = background_panel_images[math.random(0, table.getn(background_panel_images))]
    			value.current = false
    		end
 	end
@@ -106,17 +109,11 @@ function level:enter(state)
 	exit_door.y = 0
 
 	-- set timer to go from intro to play
-	Timer.add(1, function() status = "play" end)
+	-- Timer.add(1, function() status = "play" end)
 	Timer.addPeriodic(spawnDelay, function() spawn = true end)
 
 	--static props
-	for i = 1,10 do
-		staticprops[i] = {}
-		staticprops[i].image = love.graphics.newImage('assets/images/door1.png')
-		staticprops[i].x = math.random(2000)
-		staticprops[i].y = 34
-		staticprops[i].alive = true
-	end
+	staticprops:populate()
 end
 
 function level:leave()
@@ -126,6 +123,13 @@ end
 function level:update(dt)
 	--update all timers
 	Timer.update(dt)
+
+	-- For intro
+	if hero.x == 20 and not intro_completed then
+		status = "play"
+		hero.state = status
+		intro_completed = true
+	end
 
 	if status == "play" or status == "outro" then
 
@@ -139,15 +143,7 @@ function level:update(dt)
 		end
 
 		--static prop
-		for i, v in ipairs(staticprops) do
-			if v.alive then
-				v.x = v.x - level_speed * dt;
-				if v.x <= -200 then
-					v.alive = false
-					v.image = nil
-				end
-			end
-		end
+		staticprops:update(dt, level_speed)
 
 	end
 
@@ -261,9 +257,20 @@ function level:update(dt)
 			if exit_door.distance > 200 then 
 				exit_door.x = exit_door.x - level_speed * dt
 				exit_door.distance = exit_door.distance - level_speed * dt
-			else 
+			else
 				status = "exit"
 			end 
+		end
+	end
+
+	if status == "exit" then
+		if hero.state ~= "stand" and not hero.leaving then
+			hero.state = "stand"
+			Timer.add(1, function() hero.state = "exit"; hero.leaving = true end)
+		end
+
+		if hero.x > 250 then
+			status = "quit"
 		end
 	end
 end
@@ -292,11 +299,7 @@ function level:draw()
 	end
 
 	--static props
-	for i, v in ipairs(staticprops) do
-		if v.alive then
-			love.graphics.draw(v.image, v.x, v.y)
-		end
-	end
+	staticprops:draw()
 
 	-- draw life count
 	for i=1,hero.lives do
