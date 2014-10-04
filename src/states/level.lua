@@ -326,8 +326,25 @@ end
 
 function level:keypressed(key, unicode)
 	-- navigate menu
-	if key == "q" then
-		love.event.push("quit")
+	if key == "w" then
+		-- Y = 14
+		wave = "Y"
+		hero:saluteY()
+	end
+	if key == "a" then
+		-- X = 13
+		wave = "X"
+		hero:saluteX()
+	end
+	if key == "d" then
+		-- B = 12
+		wave = "B"
+		hero:saluteB()
+	end
+	if key == "s" then
+		-- A = 11
+		wave = "A"
+		hero:saluteA()
 	end
 
 end
