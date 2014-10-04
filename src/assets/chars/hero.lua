@@ -6,6 +6,8 @@ local hero = {
 	state = "intro", -- "play", "stand", "exit"
 	x = -100,
 	leaving = false,
+	life = love.graphics.newImage('assets/images/Life_full.png'),
+	empty = love.graphics.newImage('assets/images/Life_empty.png'),
 
 	hero_body = {			--default run body
 		_WIDTH = 32,
@@ -67,6 +69,9 @@ local hero = {
 	hero_body_wave_b_spritemap = nil,
 	hero_body_wave_b_animation = nil
 }
+
+hero.life:setFilter('nearest','nearest')
+hero.empty:setFilter('nearest','nearest')
 
 local y = 70
 
@@ -150,8 +155,15 @@ function hero:update(dt)
 
 end
 
-function hero:newLevel()
+function hero:init()
 	self.lives = 4
+	self.state = "intro" -- "play", "stand", "exit"
+	self.x = -100
+	self.leaving = false
+end
+
+function hero:newLevel()
+	-- self.lives = 4
 	self.state = "intro" -- "play", "stand", "exit"
 	self.x = -100
 	self.leaving = false
