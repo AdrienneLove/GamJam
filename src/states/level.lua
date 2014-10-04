@@ -429,6 +429,9 @@ end
 
 function level:spawner()
 	local roll = math.random(0,100)
+	if gameover then
+		spawn = false
+	end
 
 	if spawn and roll > 0 and roll < spawnChance then
 		guard = math.random(1,4)
@@ -442,6 +445,8 @@ function level:spawner()
 end
 
 function level:gameover()
+	spawnChance = 0
+	spawner = false
 	level:stopNearestGuard()	
 end
 
@@ -454,8 +459,8 @@ function level:stopNearestGuard()
 				nearest = guards.current_guards[i]
 			end
 		end
+		nearest.speed = 0
 	end
-
 	--printTable(nearest)
 end
 
