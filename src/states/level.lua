@@ -565,7 +565,7 @@ function level:gameover()
 	spawnChance = 0
 	spawner = false
 	particle:spawn("lose", hero.x + 6, 0)
-	particle:Pause()
+	particle:pause()
 	-- level:stopNearestGuard()
 	--levels[cur_level]["level_speed"] = 0
 	level:reInit()
