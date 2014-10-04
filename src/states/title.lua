@@ -6,16 +6,19 @@ function title:enter(state)
 	self.current = 1; 	-- currently selected menu element
 
 	self.actions = {
-		--{ name="play",    screen="play" },
-		{ name="level",    screen="level" },
-		{ name="exit",    screen="exit" }
+		{ name="Play",    screen="intro" },
+		{ name="Exit",    screen="exit" }
 	} 
 
 	self.data = {} 
+
+	title_music = love.audio.newSource( "assets/audio/did_i_lose.mp3", "stream" )
+	title_music:setLooping( true )
+	love.audio.play( title_music )
 end
 
 function title:leave()
-	
+	love.audio.stop( title_music )
 end
 
 function title:update(dt)
