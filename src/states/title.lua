@@ -7,6 +7,7 @@ function title:enter(state)
 
 	self.actions = {
 		{ name="Play",    screen="intro" },
+		{ name="Credits", screen="credits" },
 		{ name="Exit",    screen="exit" }
 	} 
 
@@ -34,7 +35,7 @@ function title:draw()
 	love.graphics.setBackgroundColor(33, 33, 33, 255)
 
 	-- draw menu
-	for i, v in ipairs(self.actions) do
+	for i,v in ipairs(self.actions) do
 		
 		--space between menu items
 		local spacing = 40
@@ -120,12 +121,16 @@ function title:joystickpressed(joystick, button)
 
 
 	if joystick:isGamepadDown("dpdown") then
+		self.current = self.current + 1
+		if self.current > 3 then
+			self.current = 1
+		end
+	elseif joystick:isGamepadDown("dpup") then
+		--self.current = (self.current % #self.actions) - 1
 		self.current = self.current - 1
 		if self.current < 1 then
 			self.current = #self.actions
 		end
-	elseif joystick:isGamepadDown("dpup") then
-		self.current = (self.current % #self.actions) + 1
 	end
 
 end
