@@ -158,7 +158,7 @@ function propfactory:populate()
 
 	end
 
-	print("Added "..table.getn(self.static_props))
+	--print("Added "..table.getn(self.static_props))
 
 	for i = 1, 4 do
 		self:addAnim()
