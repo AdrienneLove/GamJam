@@ -485,6 +485,7 @@ function level:checkWave(wave)
 			particle:spawn("pass", focusedGuard.x + 6, focusedGuard.speed)
 		else
 			focusedGuard:failWave()
+			focusedGuard.isWavedAt = true
 			waveCorrect = false
 			particle:spawn("fail", focusedGuard.x + 6, focusedGuard.speed)
 			hero:eatLife()
