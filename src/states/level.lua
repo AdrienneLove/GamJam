@@ -13,7 +13,7 @@ local levels = {
 
 local cur_level = 1
 
-print(levels[2]["name"])
+--print(levels[2]["name"])
 
 --print(levels[cur_level]["foregrounds_left"])
 
@@ -31,6 +31,10 @@ local cube = love.graphics.newImage('assets/animations/splash_cube.png')
 local swishfont = love.graphics.newFont('assets/fonts/LovedbytheKing.ttf', 20)
 
 local staticprops = require "assets.propfactory"
+
+local fading = true
+local game_music
+local bgm_params 
 
 function level:enter(state)
 
@@ -101,6 +105,25 @@ function level:enter(state)
 
 	--static props
 	staticprops:populate()
+
+	-- play music
+	game_music = love.audio.newSource( "assets/audio/cephelopod.mp3", "stream" )
+	game_music:setLooping( true )
+	game_music:setVolume(0.5)
+	love.audio.play( game_music )
+
+	-- fade in / out 
+	fading = true
+	self.fade_params = { opacity = 255 }
+	bgm_params = { volume = 0.5 }
+	Timer.add(1/60, function()
+		Timer.tween(0.25, self.fade_params, { opacity = 0 }, 'in-out-sine')
+		Timer.add(0.25, function()
+			fading = false
+		end)
+	end)
+	Timer.tween(0.25, bgm_params, { volume = 0.8 })
+
 end
 
 function level:leave()
@@ -263,6 +286,10 @@ function level:update(dt)
 			status = "quit"
 		end
 	end
+
+	if self.fading then
+		game_music:setVolume(self.bgm_params.volume)
+	end
 end
 
 function level:draw()
@@ -323,9 +350,16 @@ function level:draw()
 	hero:draw(dt)
 	
 	love.graphics.pop()
+
+	if fading then
+		love.graphics.setColor(33, 33, 33, self.fade_params.opacity)
+		love.graphics.rectangle("fill", 0, 0, love.graphics.getWidth(), love.graphics.getHeight())
+	end
 end
 
 function level:keypressed(key, unicode)
+	local wave
+
 	-- navigate menu
 	if key == "w" then
 		-- Y = 14
@@ -347,6 +381,8 @@ function level:keypressed(key, unicode)
 		wave = "A"
 		hero:saluteA()
 	end
+
+	if wave then level:checkWave(wave) end
 
 end
 
