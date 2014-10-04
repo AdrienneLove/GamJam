@@ -1,12 +1,11 @@
 local l = {
 
-	name = "one",
-
 	status = "intro", -- other states are play, dead, outro
+	pre_intro = false,
 	intro_completed = false,
 
 	-- Difficulty/pacing stuff
-	level_speed = 50,
+	level_speed = 300,
 	spawnChance = 5, -- out of 100; chance on a spawn tick that enemy will spawn
 	spawnDelay = 2, -- spawn tick. on tick enemies will have a chance to spawn
 
