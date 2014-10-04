@@ -5,47 +5,17 @@ local Timer = require "lib.hump.timer"
 hero = require "assets.chars.hero"
 
 --level vars
-local level_one = { level_speed = 200,
-	backgrounds_left = 4,
-	foregrounds_left = 4,
-	status = "intro", -- other states are play, dead, outro and exit
-	-- into_completed value in level:enter()
-
-
-	--background stuff
-	level_speed = 100, -- ????? set twice in 10 lines???
-	panels_left = 6,
-	status = "intro", -- other states are play, dead and outro
-
-	-- hot swap between panel 1, 2 and 3
-	background_panels = {
-		{ x = 0, image = nil, current = false, furthest = false},
-		{ x = 0, image = nil, current = false, furthest = false},
-		{ x = 0, image = nil, current = false, furthest = true}
-	},
-
-	foreground_panels = {
-		{ x = 0, image = nil, current = false, furthest = false},
-		{ x = 0, image = nil, current = false, furthest = false},
-		{ x = 0, image = nil, current = false, furthest = true}
-	},
-
-	--doors and stuff
-	entry_door = {image = nil, x = nil, y = nil, alive = true},
-	exit_door = {image = nil, x = nil, y = nil, alive = false, distance = 0},
-
-	spawnChance = 10, -- out of 100; chance on a spawn tick that enemy will spawn
-	spawnDelay = .5 -- spawn tick. on tick enemies will have a chance to spawn
-
-}
 
 local levels = {
-	level_one
+	require 'states.levels.level_one',
+	require 'states.levels.level_two'
 }
 
 local cur_level = 1
 
-print(levels[cur_level]["foregrounds_left"])
+print(levels[2]["name"])
+
+--print(levels[cur_level]["foregrounds_left"])
 
 -- player / enemy stuff
 local guards = require "assets.chars.guard"
@@ -122,7 +92,6 @@ function level:enter(state)
 		v.exit_door.image = love.graphics.newImage('assets/images/end_door.png')
 		v.exit_door.x = 197
 		v.exit_door.y = 0
-		print("Level: ".._)
 	end
 
 	-- set timer to go from intro to play
@@ -141,11 +110,13 @@ function level:update(dt)
 	--update all timers
 	Timer.update(dt)
 
+	if not intro_completed then
 	-- For intro
-	if hero.x == 20 and not intro_completed then
-		status = "play"
-		hero.state = status
-		intro_completed = true
+		if hero.x == 20 and not intro_completed then
+			status = "play"
+			hero.state = status
+			intro_completed = true
+		end
 	end
 
 	if status == "play" or status == "outro" then
