@@ -92,6 +92,7 @@ function guard_manager:newGuard(num)
 		love.graphics.setColor(255, 255, 255, 255)
 		self.animation:draw(self.guard_image, self.x, 70)
 	end
+	
 
 	table.insert(self.current_guards, g)
 end

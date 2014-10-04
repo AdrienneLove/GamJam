@@ -2,6 +2,28 @@ local level = {}
 
 local Timer = require "lib.hump.timer"
 
+-- Controller support, auto detects across OSX and win
+local cur_os
+
+if love._os == "OS X" then cur_os = "mac"
+elseif love._os == "Windows" then cur_os = "win"
+end
+
+local schema = {
+	mac = {
+		Y = 4,
+		X = 3,
+		B = 2,
+		A = 1
+	},
+	win = {
+		Y = 14,
+		X = 13,
+		B = 12,
+		A = 11
+	}
+}
+
 --level vars
 local level_speed = 200
 local backgrounds_left = 4
@@ -38,7 +60,7 @@ local guards = require "assets.chars.guard"
 local focusedGuard --this is being used by the wave checking
 local spawnChance = 10 -- out of 100; chance on a spawn tick that enemy will spawn
 local spawn = false -- when true, chance for a spawn is triggered.
-local spawnDelay = 1 -- spawn tick. on tick enemies will have a chance to spawn
+local spawnDelay = 2 -- spawn tick. on tick enemies will have a chance to spawn
 
 -- ui stuff
 local gameover = false
@@ -74,7 +96,9 @@ function level:enter(state)
 		love.graphics.newImage(foreground_imagedata_1)
 	}
 
-
+	-- set timer to go from intro to play
+	-- Timer.add(1, function() status = "play" end)
+	Timer.addPeriodic(spawnDelay, function() spawn = true end)
 
 	--build initial background panels
 	for key,value in pairs(background_panels) do 
@@ -112,18 +136,12 @@ function level:enter(state)
 	-- Timer.add(1, function() status = "play" end)
 	Timer.addPeriodic(spawnDelay, function() spawn = true end)
 
-	-- enemy spawn (testers)
-	guards:newGuard(2)
-	guards:newGuard(1)
-	guards:newGuard(3)
-	guards:newGuard(4)
-
 	--static props
 	staticprops:populate()
 end
 
 function level:leave()
-	
+
 end
 
 function level:update(dt)
@@ -154,6 +172,12 @@ function level:update(dt)
 	end
 
 	--update player/enemys
+	if hero.lives == 0 then
+		gameover = true
+	end
+	if gameover then
+		level:gameover()
+	end
 	level:spawner()
 	guards:update(dt)
 	hero:update(dt)
@@ -257,9 +281,20 @@ function level:update(dt)
 			if exit_door.distance > 200 then 
 				exit_door.x = exit_door.x - level_speed * dt
 				exit_door.distance = exit_door.distance - level_speed * dt
-			else 
+			else
 				status = "exit"
 			end 
+		end
+	end
+
+	if status == "exit" then
+		if hero.state ~= "stand" and not hero.leaving then
+			hero.state = "stand"
+			Timer.add(1, function() hero.state = "exit"; hero.leaving = true end)
+		end
+
+		if hero.x > 250 then
+			status = "quit"
 		end
 	end
 end
@@ -384,23 +419,23 @@ end
 
 
 function level:joystickpressed(joystick, button)
-	
-	if button == 4 then
+
+	if button == schema[cur_os]["Y"] then
 		-- Y = 14
 		wave = "Y"
 		hero:saluteY()
 	end
-	if button == 3 then
+	if button == schema[cur_os]["X"] then
 		-- X = 13
 		wave = "X"
 		hero:saluteX()
 	end
-	if button == 2 then
+	if button == schema[cur_os]["B"] then
 		-- B = 12
 		wave = "B"
 		hero:saluteB()
 	end
-	if button == 1 then
+	if button == schema[cur_os]["A"] then
 		-- A = 11
 		wave = "A"
 		hero:saluteA()
@@ -422,5 +457,24 @@ function level:spawner()
 	end
 	-- timer that has a x% chance to trigger spawn.
 end
+
+function level:gameover()
+	level:stopNearestGuard()	
+end
+
+function level:stopNearestGuard()
+	if #guards.current_guards > 0 then
+		local lowest = guards.current_guards[1].x
+		local nearest = guards.current_guards[1]
+		for i,v in ipairs(guards.current_guards) do
+			if v.x > 90 and v.x < lowest then
+				nearest = guards.current_guards[i]
+			end
+		end
+	end
+
+	--printTable(nearest)
+end
+
 
 return level

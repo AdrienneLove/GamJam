@@ -1,7 +1,8 @@
 local hero = {	
 	lives = 4,
-	state = "intro",
-	x = -50, 
+	state = "intro", -- "play", "stand", "exit"
+	x = -50,
+	leaving = false,
 	hero_body = {			--default run body
 		_WIDTH = 32,
 		_HEIGHT = 35,
@@ -83,6 +84,9 @@ function hero:update(dt)
 	active_body_animation:update(dt)
 	active_legs_animation:update(dt)
 
+	if hero.state == "exit" then
+		hero.x = hero.x + 3
+	end
 end
 
 function hero:saluteX()
