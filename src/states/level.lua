@@ -31,7 +31,8 @@ local spawn = false -- when true, chance for a spawn is triggered.
 local gameover = false
 local indicator = false
 local waveCorrect = false
-local cube = love.graphics.newImage('assets/animations/splash_cube.png')
+--local cube = love.graphics.newImage('assets/animations/splash_cube.png')
+local colorPressed = "none"
 local swishfont = love.graphics.newFont('assets/fonts/LovedbytheKing.ttf', 20)
 
 local props = require "assets.propfactory"
@@ -63,6 +64,12 @@ function level:enter(state)
 	foreground_panel_images = {
 		love.graphics.newImage(foreground_imagedata_1)
 	}
+
+	--images needed for ui button display
+	green = love.graphics.newImage('assets/images/colourGreen.png')
+	blue = love.graphics.newImage('assets/images/colourBlue.png')
+	yellow = love.graphics.newImage('assets/images/colourYellow.png')
+	red = love.graphics.newImage('assets/images/colourRed.png')
 
 	--panel iterates at half screen
 
@@ -404,22 +411,66 @@ function level:draw()
 		love.graphics.setColor(255, 255, 255, 255)
 		love.graphics.setFont(swishfont)
 		love.graphics.printf("YOU DIED :'(", 30, 30, 100, 'center')
-
-
-
 	end
+
 
 	-- wave detect / indicator for the zone that enemies can receive waves in
-	if indicator then
-		if waveCorrect then
-			love.graphics.setColor(0, 220, 50, 255)
-		else
-			love.graphics.setColor(240, 30, 30, 255)
+	-- LEAVING THIS IN as it will kind of become the light effect
+	if level:isGuardInRange() then
+		love.graphics.setColor(220, 220, 220, 140)
+		if colourPressed == "blue" then
+			love.graphics.setColor(55, 121, 205, 140)
+		elseif colourPressed == "yellow" then
+			love.graphics.setColor(226, 200, 52, 140)
+		elseif colourPressed == "red" then
+			love.graphics.setColor(220, 52, 52, 140)
+		elseif colourPressed == "green" then
+			love.graphics.setColor(30, 165, 29, 140)
 		end
-	else
-		love.graphics.setColor(45, 45, 45, 255)
+
+		love.graphics.ellipse("fill", 75, 103, 20, 4, math.rad(0), 30)
+
+		-- if indicator then
+		-- 	if waveCorrect then -- this needs to change to show the color pressed instead of correct / incorrect.
+		-- 		love.graphics.setColor(65, 222, , 80)
+		-- 	else
+		-- 		love.graphics.setColor(240, 30, 30, 80)
+		-- 	end
+		-- else
+		-- 	love.graphics.setColor(220, 220, 220, 255)
+		-- end
+		--love.graphics.rectangle("fill", 55, 110, 40, 5)
 	end
-	love.graphics.rectangle("fill", 50, 120, 40, 5)
+
+	--draw indicators.
+	--if colourPressed ==
+	if colourPressed == "blue" then
+		love.graphics.setColor(255, 255, 255, 255)
+	else
+		love.graphics.setColor(90, 90, 90, 255)
+	end
+	love.graphics.draw(blue, 55, 116)
+
+	if colourPressed == "yellow" then
+		love.graphics.setColor(255, 255, 255, 255)
+	else
+		love.graphics.setColor(90, 90, 90, 255)
+	end
+	love.graphics.draw(yellow, 66, 116)
+
+	if colourPressed == "green" then
+		love.graphics.setColor(255, 255, 255, 255)
+	else
+		love.graphics.setColor(90, 90, 90, 255)
+	end
+	love.graphics.draw(green, 77, 116)
+
+	if colourPressed == "red" then
+		love.graphics.setColor(255, 255, 255, 255)
+	else
+		love.graphics.setColor(90, 90, 90, 255)
+	end
+	love.graphics.draw(red, 88, 116)
 	
 	--draw particles
 	particle:draw()
@@ -501,7 +552,7 @@ end
 -- checks the detection area for a guard, returns true / false
 function level:checkArea()
 	for i=1,table.getn(guards.current_guards) do
-		if guards.current_guards[i]["x"] > 50 and guards.current_guards[i]["x"] < 90 then
+		if guards.current_guards[i]["x"] > 55 and guards.current_guards[i]["x"] < 95 then
 			focusedGuard = guards.current_guards[i]
 			return true
 		end
@@ -511,6 +562,7 @@ end
 
 function level:joystickreleased(joystick, button)
 	indicator = false
+	colourPressed = none
 end
 
 
@@ -529,15 +581,19 @@ function level:joystickpressed(joystick, button)
 	
 	if joystick:isGamepadDown("y") then
 		wave = "Y"
+		colourPressed = "yellow"
 	end
 	if joystick:isGamepadDown("x") then
 		wave = "X"
+		colourPressed = "blue"
 	end
 	if joystick:isGamepadDown("b") then
 		wave = "B"
+		colourPressed = "red"
 	end
 	if joystick:isGamepadDown("a") then
 		wave = "A"
+		colourPressed = "green"
 	end
 
 	if wave == "Y" then
@@ -598,5 +654,16 @@ function level:stopNearestGuard()
 	end
 	--printTable(nearest)
 end
+
+--checks if guard is nearby to show indicator.
+function level:isGuardInRange()
+	for i=1,table.getn(guards.current_guards) do
+		if guards.current_guards[i]["x"] > 45 and guards.current_guards[i]["x"] < 150 then
+			return true
+		end
+	end
+	return false
+end
+
 
 return level
