@@ -32,13 +32,18 @@ local exit_door = {image = nil, x = nil, y = nil, alive = false, distance = 0}
 
 -- player / enemy stuff
 hero = require "assets.chars.hero"
-local cube = love.graphics.newImage('assets/animations/splash_cube.png')
-local gameover = false
 local guards = require "assets.chars.guard"
-local swishfont = love.graphics.newFont('assets/fonts/LovedbytheKing.ttf', 30) 
 local focusedGuard --this is being used by the wave checking
+local spawnChance = 10 -- out of 100; chance on a spawn tick that enemy will spawn
+local spawn = false -- when true, chance for a spawn is triggered.
+local spawnDelay = 1 -- spawn tick. on tick enemies will have a chance to spawn
+
+-- ui stuff
+local gameover = false
 local indicator = false
 local waveCorrect = false
+local cube = love.graphics.newImage('assets/animations/splash_cube.png')
+local swishfont = love.graphics.newFont('assets/fonts/LovedbytheKing.ttf', 30)
 
 function level:enter(state)
 
@@ -100,12 +105,7 @@ function level:enter(state)
 
 	-- set timer to go from intro to play
 	Timer.add(1, function() status = "play" end)
-
-	-- enemy spawn (testers)
-	guards:newGuard(2)
-	guards:newGuard(1)
-	guards:newGuard(3)
-	guards:newGuard(4)
+	Timer.addPeriodic(spawnDelay, function() spawn = true end)
 end
 
 function level:leave()
@@ -129,6 +129,7 @@ function level:update(dt)
 	end
 
 	--update player/enemys
+	level:spawner()
 	guards:update(dt)
 	hero:update(dt)
 
@@ -364,6 +365,21 @@ function level:joystickpressed(joystick, button)
 	end
 
 	level:checkWave(wave)
+end
+
+function level:spawner()
+	local roll = math.random(0,100)
+	print(spawn)
+	if spawn and roll > 0 and roll < spawnChance then
+		print("spawn triggered")
+		guard = math.random(1,4)
+		guards:newGuard(guard)
+		spawn = false
+	elseif spawn then
+		-- if the spawn was true and no spawn happened, still flip spawn back to false.
+		--spawn = false
+	end
+	-- timer that has a x% chance to trigger spawn.
 end
 
 return level
