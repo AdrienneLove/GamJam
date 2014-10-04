@@ -33,7 +33,7 @@ local waveCorrect = false
 local cube = love.graphics.newImage('assets/animations/splash_cube.png')
 local swishfont = love.graphics.newFont('assets/fonts/LovedbytheKing.ttf', 20)
 
-local staticprops = require "assets.propfactory"
+local props = require "assets.propfactory"
 
 local fading = true
 local game_music
@@ -72,7 +72,7 @@ function level:enter(state)
 	Timer.addPeriodic(levels[cur_level]["spawnDelay"], function() spawn = true end)
 
 	--static props
-	staticprops:populate()
+	--props:populate()
 
 	-- play music
 	game_music = love.audio.newSource( "assets/audio/cephelopod.mp3", "stream" )
@@ -151,10 +151,10 @@ function level:reInit()
 	cur_level = 1
 	hero:init()
 	purge(guards.current_guards)
-	guards:particlePurge()
-	staticprops:purge()
 
-	staticprops:populate()
+	guards:particlePurge()
+
+	props:populate()
 
 	gameover = false
 
@@ -196,8 +196,7 @@ function level:update(dt)
 			end
 		end
 
-		--static prop
-		staticprops:update(dt, levels[cur_level]["level_speed"])
+		props:update(dt, levels[cur_level]["level_speed"])
 
 	end
 
@@ -354,6 +353,7 @@ function level:newLevel()
 	else
 		cur_level = cur_level + 1
 		hero:newLevel()
+		props:populate()
 		fading = false
 	end
 end
@@ -373,16 +373,16 @@ function level:draw()
 		love.graphics.draw(value.image, value.x, 0)
 	end
 
-	if levels[cur_level]["entry_door"]["alive"] then
-		love.graphics.draw(levels[cur_level]["entry_door"]["image"], levels[cur_level]["entry_door"]["x"], levels[cur_level]["entry_door"]["y"])
-	end
+	--if levels[cur_level]["entry_door"]["alive"] then
+	--	love.graphics.draw(levels[cur_level]["entry_door"]["image"], levels[cur_level]["entry_door"]["x"], levels[cur_level]["entry_door"]["y"])
+	--end
 
 	if levels[cur_level]["exit_door"]["alive"] then
 		love.graphics.draw(levels[cur_level]["exit_door"]["image"], levels[cur_level]["exit_door"]["x"], levels[cur_level]["exit_door"]["y"])
 	end
 
 	--static props
-	staticprops:draw()
+	props:draw()
 
 	-- draw life count
 	for i=1,hero.lives do
@@ -417,6 +417,10 @@ function level:draw()
 
 	--draw hero
 	hero:draw(dt)
+
+	if levels[cur_level]["entry_door"]["alive"] then
+		love.graphics.draw(levels[cur_level]["entry_door"]["image"], levels[cur_level]["entry_door"]["x"], levels[cur_level]["entry_door"]["y"])
+	end
 
 	love.graphics.pop()
 
