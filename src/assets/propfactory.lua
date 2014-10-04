@@ -2,35 +2,43 @@ local propfactory = {
 	static_prop_types = {
 		{
 			image = love.graphics.newImage('assets/images/door1.png'),
-			y = 34
+			y = 34,
+			door = true
 		},
 		{
 			image = love.graphics.newImage('assets/images/door2.png'),
-			y = 34
+			y = 34,
+			door = true
 		},
 		{
 			image = love.graphics.newImage('assets/images/mosstop.png'),
-			y = 12
+			y = 12,
+			door = false
 		},
 		{
 			image = love.graphics.newImage('assets/images/mossmiddle.png'),
-			y = 32
+			y = 32,
+			door = false
 		},
 		{
 			image = love.graphics.newImage('assets/images/mossground.png'),
-			y = 80
+			y = 80,
+			door = false
 		},
 		{
 			image = love.graphics.newImage('assets/images/mask1.png'),
-			y = 20
+			y = 20,
+			door = true
 		},
 		{
 			image = love.graphics.newImage('assets/images/palmtree1.png'),
-			y = 22
+			y = 22,
+			door = false
 		},
 		{
 			image = love.graphics.newImage('assets/images/vine.png'),
-			y = 6
+			y = 6,
+			door = false
 		}
 	},
 	anim_prop_types = {
@@ -46,18 +54,21 @@ local propfactory = {
 		}
 	},
 
+	torchpoints = {},
+
 	static_props = {},
-	anim_props = {}
+	anim_props = {},
+	offset = 36
 }
 
 
-function propfactory:addAnim()
+function propfactory:addAnim(position)
 
 	local selected = math.random(table.getn(self.anim_prop_types))
 
 	local temp = {
 		image = love.graphics.newImage(self.anim_prop_types[selected]["anim_data"]._FILENAME),
-		x = math.random(1000),
+		x = position,
 		y = self.anim_prop_types[selected].y,
 		anim_data = self.anim_prop_types[selected]["anim_data"]
 	}
@@ -91,6 +102,16 @@ function propfactory:addStatic(selected, placement)
 	temp.alive = true
 
 	table.insert(self.static_props, temp)
+
+	self.offset = placement + temp.image:getWidth()
+	print("width + "..temp.image:getWidth())
+
+	if (self.static_prop_types[selected].door == true) then
+		local templeft = placement - 14
+		local tempright = self.offset
+		table.insert(self.torchpoints, templeft)
+		table.insert(self.torchpoints, tempright)
+	end
 end
 
 function propfactory:collisionCheck(x1, w1, x2, w2)
@@ -105,7 +126,7 @@ end
 --given a width of a prop, it returns a safe x-coord or a 0
 function propfactory:findSpace(width, stage_width)
 
-	local stage_width = stage_width or 1440
+	local stage_width = stage_width or 720
 
 	local static_size = table.getn(self.static_props)
 
@@ -113,7 +134,7 @@ function propfactory:findSpace(width, stage_width)
 		return ( math.random(stage_width - 64) + 36 )
 	end
 
-	for attempt = 1, 5 do
+	for attempt = 1, 3 do
 
 		local placement = ( math.random(stage_width - 64) + 36 )
 
@@ -150,28 +171,26 @@ function propfactory:populate()
 	for i = 1,20 do
 
 		local selected = math.random(table.getn(self.static_prop_types))
+		local placement = self.offset + math.random(24) + 12
 
-		--print(selected)
-		self.static_props[i] = {}
-		self.static_props[i].image = self.static_prop_types[selected].image
-		self.static_props[i].image:setFilter('nearest','nearest')
-		self.static_props[i].x = math.random(2000)
-		self.static_props[i].y = self.static_prop_types[selected].y
-		self.static_props[i].alive = true
+		propfactory:addStatic(selected, placement)
+		print("offset: "..self.offset)
 
-		local width = self.static_prop_types[selected].image:getWidth()
+		--local width = self.static_prop_types[selected].image:getWidth()
 
-		local placement = self:findSpace(width, 1440)
-
-		if placement == 0 then
+		if (self.offset - 96) > 1280 then
 			break
-		else
-			propfactory:addStatic(selected, placement)
 		end
 	end
 
-	for i = 1, 4 do
-		self:addAnim()
+	print("torchpoints")
+
+	for i, v in ipairs(self.torchpoints) do
+		print(v)
+		local flip = math.random()
+		if flip < 0.5 then
+			self:addAnim(v)
+		end
 	end
 end
 
