@@ -40,6 +40,8 @@ local focusedGuard --this is being used by the wave checking
 local indicator = false
 local waveCorrect = false
 
+local staticprops = {}
+
 function level:enter(state)
 
 	love.graphics.setDefaultFilter('nearest')
@@ -106,6 +108,16 @@ function level:enter(state)
 	guards:newGuard(1)
 	guards:newGuard(3)
 	guards:newGuard(4)
+
+	--static props
+	for i = 1,10 do
+		staticprops[i] = {}
+		staticprops[i].image = love.graphics.newImage('assets/images/door1.png')
+		staticprops[i].x = math.random(2000)
+		staticprops[i].y = 34
+		staticprops[i].alive = true
+	end
+	
 end
 
 function level:leave()
@@ -126,6 +138,18 @@ function level:update(dt)
 				entry_door.image = nil
 			end
 		end
+
+		--static prop
+		for i, v in ipairs(staticprops) do
+			if v.alive then
+				v.x = v.x - level_speed * dt;
+				if v.x <= -200 then
+					v.alive = false
+					v.image = nil
+				end
+			end
+		end
+
 	end
 
 	--update player/enemys
@@ -259,6 +283,13 @@ function level:draw()
 
 	if exit_door.alive then
 		love.graphics.draw(exit_door.image, exit_door.x, exit_door.y)
+	end
+
+	--static props
+	for i, v in ipairs(staticprops) do
+		if v.alive then
+			love.graphics.draw(v.image, v.x, v.y)
+		end
 	end
 
 	-- draw life count
