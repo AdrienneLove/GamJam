@@ -1,5 +1,7 @@
 local hero = {	
-	lives = 4
+	lives = 4,
+	state = "intro",
+	x = -50
 }
 
 local walk = require 'assets.animations.hero_walk'
@@ -13,7 +15,13 @@ local saluteB = require 'assets.animations.hero_saluteB'
 local active = walk
 --local lives = 4
 
+local y = 70
+
 function hero:update(dt)
+	if hero.state == "intro" then
+		hero.x = hero.x + 1
+	end
+
 	walk.animation:update(dt)
 	-- if active == walk then
 	-- 	if walk.done == true then		
@@ -56,14 +64,13 @@ end
 function hero:draw()
 	--draw test anim
 	love.graphics.setColor(255, 255, 255, 255)
-	active.animation:draw(active.spritemap, 20, 70)
+	active.animation:draw(active.spritemap, hero.x, 70)
 end
 
 function hero:eatLife()
 	if hero.lives > 0 then
 		hero.lives = hero.lives - 1
 	end
-	print("ate a life")
 end
 
 return hero

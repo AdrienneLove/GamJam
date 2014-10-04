@@ -82,7 +82,7 @@ function guard_manager:newGuard(num)
 	g.animation = anim8.newAnimation(guard_grid('1-'..g.guard_anim_data._FRAMES,1), g.guard_anim_data._ANIMATIONSPEED)
 	
 	function g:update(dt)
-		-- print("boop")
+
 		self.x = self.x - self.speed * dt
 		self.animation:update(dt)
 	end

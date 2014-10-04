@@ -7,6 +7,8 @@ local level_speed = 200
 local backgrounds_left = 4
 local foregrounds_left = backgrounds_left
 local status = "intro" -- other states are play, dead, outro and exit
+-- into_completed value in level:enter()
+
 
 --background stuff
 local level_speed = 100
@@ -45,9 +47,12 @@ local waveCorrect = false
 local cube = love.graphics.newImage('assets/animations/splash_cube.png')
 local swishfont = love.graphics.newFont('assets/fonts/LovedbytheKing.ttf', 30)
 
-local staticprops = {}
+local staticprops = require "assets.propfactory"
 
 function level:enter(state)
+
+	-- Test for intro, set to true if into has finished not used otherwise.
+	intro_completed = false
 
 	love.graphics.setDefaultFilter('nearest')
 	--panel iterates at half screen
@@ -106,7 +111,7 @@ function level:enter(state)
 	exit_door.y = 0
 
 	-- set timer to go from intro to play
-	Timer.add(1, function() status = "play" end)
+	-- Timer.add(1, function() status = "play" end)
 	Timer.addPeriodic(spawnDelay, function() spawn = true end)
 
 	-- enemy spawn (testers)
@@ -116,13 +121,7 @@ function level:enter(state)
 	guards:newGuard(4)
 
 	--static props
-	for i = 1,10 do
-		staticprops[i] = {}
-		staticprops[i].image = love.graphics.newImage('assets/images/door1.png')
-		staticprops[i].x = math.random(2000)
-		staticprops[i].y = 34
-		staticprops[i].alive = true
-	end
+	staticprops:populate()
 end
 
 function level:leave()
@@ -132,6 +131,13 @@ end
 function level:update(dt)
 	--update all timers
 	Timer.update(dt)
+
+	-- For intro
+	if hero.x == 20 and not intro_completed then
+		status = "play"
+		hero.state = status
+		intro_completed = true
+	end
 
 	if status == "play" or status == "outro" then
 
@@ -145,15 +151,7 @@ function level:update(dt)
 		end
 
 		--static prop
-		for i, v in ipairs(staticprops) do
-			if v.alive then
-				v.x = v.x - level_speed * dt;
-				if v.x <= -200 then
-					v.alive = false
-					v.image = nil
-				end
-			end
-		end
+		staticprops:update(dt, level_speed)
 
 	end
 
@@ -292,11 +290,7 @@ function level:draw()
 	end
 
 	--static props
-	for i, v in ipairs(staticprops) do
-		if v.alive then
-			love.graphics.draw(v.image, v.x, v.y)
-		end
-	end
+	staticprops:draw()
 
 	-- draw life count
 	for i=1,hero.lives do
@@ -346,16 +340,13 @@ function level:checkWave(wave)
 		if wave == focusedGuard.expectedWave then
 			--flip this guards wavedAt to true.
 			waveCorrect = true
-			print("CORRECT- guard happy")
 		else
 			waveCorrect = false
-			print("WRONG - et life")
 			hero:eatLife()
 		end
 	else
 		--no guard in area, NOM LYF
 		waveCorrect = false
-		print("nothing in zone. torso bleed. lose one life.")
 		hero:eatLife()
 	end
 	indicator = true
@@ -378,7 +369,7 @@ end
 
 
 function level:joystickpressed(joystick, button)
-	--print(hero.lives)
+	
 	if button == 4 then
 		-- Y = 14
 		wave = "Y"
