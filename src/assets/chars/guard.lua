@@ -114,7 +114,6 @@ function guard_manager:update(dt)
 	for _,guard in ipairs(self.current_guards) do
 		guard:update(dt)
 	end
-	print(table.getn(self.current_guards))
 	self:despawn()
 end
 
