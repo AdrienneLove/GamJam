@@ -78,18 +78,86 @@ function propfactory:addAnim()
 	table.insert(self.anim_props, temp)
 end
 
+function propfactory:addStatic(selected, placement)
+	temp = {}
+	temp.image = self.static_prop_types[selected].image
+	temp.image:setFilter('nearest','nearest')
+	temp.x = placement
+	temp.y = self.static_prop_types[selected].y
+	temp.alive = true
+
+	table.insert(self.static_props, temp)
+end
+
+function propfactory:collisionCheck(x1, w1, x2, w2)
+
+	if ((x2 + w2) > x1) and ((x2 + w2) < (x1 + w1)) then
+		return false
+	elseif (x2 > x1 ) and (x2 < (x1 + w1)) then
+		return false
+	else
+		return true -- no collision
+	end
+end
+
+function propfactory:findSpace(width, stage_width)
+
+	local stage_width = stage_width or 2000
+
+	local static_size = table.getn(self.static_props)
+
+	if static_size == 0 then
+		return math.random(2000)
+	end
+
+	for attempt = 1, 10 do
+
+		local placement = math.random(2000)
+
+		local test = false
+
+		for i = 1, static_size do
+
+			if (self.static_props[i].x == nil) then
+				print("i ("..i..") is missing")
+			end
+
+			local x1 = self.static_props[i].x
+			local w1 = self.static_props[i].image:getWidth()
+
+			test = self:collisionCheck(x1, w1, placement, width)
+
+			if test == false then
+				break
+			end
+		end
+
+		if test == true then
+			return placement
+		end
+	end
+
+	return 0 -- failure
+end
+
 function propfactory:populate()
 
-	for i = 1,14 do
+	for i = 1,40 do
+
 		local selected = math.random(table.getn(self.static_prop_types))
-		print(selected)
-		self.static_props[i] = {}
-		self.static_props[i].image = self.static_prop_types[selected].image
-		self.static_props[i].image:setFilter('nearest','nearest')
-		self.static_props[i].x = math.random(2000)
-		self.static_props[i].y = self.static_prop_types[selected].y
-		self.static_props[i].alive = true
+
+		local width = self.static_prop_types[selected].image:getWidth()
+
+		local placement = self:findSpace(width, 2000)
+
+		if placement == 0 then
+			break
+		else
+			propfactory:addStatic(selected, placement)
+		end
 	end
+
+	print("Added "..table.getn(self.static_props))
 
 	for i = 1, 4 do
 		self:addAnim()
