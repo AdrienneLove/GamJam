@@ -147,6 +147,7 @@ function hero:update(dt)
 	if hero.state == "exit" then
 		hero.x = hero.x + 3
 	end
+
 end
 
 function hero:newLevel()

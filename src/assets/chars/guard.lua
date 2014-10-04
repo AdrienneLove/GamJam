@@ -2,31 +2,31 @@ local guard_manager = {
 
 	guard_types = {
 		{ -- 1
-			speed = 50,
+			speed = 80,
 			expectedWave = "B",
 			guard_body_anim_data = { --default body
 				_WIDTH = 32,				
-				_HEIGHT = 35,			
-				_FRAMES = 12,			
-				_FILENAME = "sheepRun_RED.png", 	
+				_HEIGHT = 39,			
+				_FRAMES = 8,			
+				_FILENAME = "fox_body.png", 	
 				_ANIMATIONSPEED = 0.12 		
 			},
 			guard_body_image = nil,
 			guard_body_animation = nil,
 			guard_head_anim_data = { --default head
 				_WIDTH = 32,				
-				_HEIGHT = 35,			
-				_FRAMES = 12,			
-				_FILENAME = "sheepRun_RED.png", 	
+				_HEIGHT = 39,			
+				_FRAMES = 8,			
+				_FILENAME = "fox_head.png", 	
 				_ANIMATIONSPEED = 0.12	
 			},
 			guard_head_image = nil,
 			guard_head_animation = nil,
 			guard_stop_anim_data = { -- halt body (gameover)
 				_WIDTH = 32,				
-				_HEIGHT = 35,			
-				_FRAMES = 6,			
-				_FILENAME = "sheep_wave_x.png", 	
+				_HEIGHT = 39,			
+				_FRAMES = 8,			
+				_FILENAME = "fox_head_expressions.png", 	
 				_ANIMATIONSPEED = 0.12	
 			},
 			guard_stop_image = nil,
@@ -35,93 +35,93 @@ local guard_manager = {
 		},
 		{ -- 2
 			
-			speed = 100,
+			speed = 90,
 			expectedWave = "Y",
 			guard_body_anim_data = { --default body
 				_WIDTH = 32,				
-				_HEIGHT = 35,			
-				_FRAMES = 12,			
-				_FILENAME = "sheepRun_YELLOW.png", 	
+				_HEIGHT = 39,			
+				_FRAMES = 8,			
+				_FILENAME = "jaguar_body.png", 	
 				_ANIMATIONSPEED = 0.12 		
 			},
 			guard_body_image = nil,
 			guard_body_animation = nil,
 			guard_head_anim_data = { --default head
 				_WIDTH = 32,				
-				_HEIGHT = 35,			
-				_FRAMES = 12,			
-				_FILENAME = "sheepRun_YELLOW.png", 	
+				_HEIGHT = 39,			
+				_FRAMES = 8,			
+				_FILENAME = "jaguar_head.png", 	
 				_ANIMATIONSPEED = 0.12	
 			},
 			guard_head_image = nil,
 			guard_head_animation = nil,
 			guard_stop_anim_data = { -- halt body (gameover)
 				_WIDTH = 32,				
-				_HEIGHT = 35,			
-				_FRAMES = 6,			
-				_FILENAME = "sheep_wave_x.png", 	
+				_HEIGHT = 39,			
+				_FRAMES = 8,			
+				_FILENAME = "jaguar_head_expressions.png", 	
 				_ANIMATIONSPEED = 0.12	
 			},
 			guard_stop_image = nil,
 			guard_stop_animation = nil
 		},
 		{ -- 3
-			speed = 150,
+			speed = 100,
 			expectedWave = "X",
 			guard_body_anim_data = { --default body
 				_WIDTH = 32,				
-				_HEIGHT = 35,			
-				_FRAMES = 12,			
-				_FILENAME = "sheepRun_BLUE.png", 	
+				_HEIGHT = 39,			
+				_FRAMES = 8,			
+				_FILENAME = "eagle_body.png", 	
 				_ANIMATIONSPEED = 0.12 		
 			},
 			guard_body_image = nil,
 			guard_body_animation = nil,
 			guard_head_anim_data = { --default head
 				_WIDTH = 32,				
-				_HEIGHT = 35,			
-				_FRAMES = 12,			
-				_FILENAME = "sheepRun_BLUE.png", 	
+				_HEIGHT = 39,			
+				_FRAMES = 8,			
+				_FILENAME = "eagle_head.png", 	
 				_ANIMATIONSPEED = 0.12	
 			},
 			guard_head_image = nil,
 			guard_head_animation = nil,
 			guard_stop_anim_data = { -- halt body (gameover)
 				_WIDTH = 32,				
-				_HEIGHT = 35,			
-				_FRAMES = 6,			
-				_FILENAME = "sheep_wave_x.png", 	
+				_HEIGHT = 39,			
+				_FRAMES = 8,			
+				_FILENAME = "eagle_head_expressions.png", 	
 				_ANIMATIONSPEED = 0.12	
 			},
 			guard_stop_image = nil,
 			guard_stop_animation = nil
 		},
 		{ -- 4
-			speed = 200,
+			speed = 110,
 			expectedWave = "A",
 			guard_body_anim_data = {
 				_WIDTH = 32,				
-				_HEIGHT = 35,			
-				_FRAMES = 12,			
-				_FILENAME = "sheepRun_GREEN.png", 	
+				_HEIGHT = 39,			
+				_FRAMES = 8,			
+				_FILENAME = "snake_body.png", 	
 				_ANIMATIONSPEED = 0.12 		
 			},
 			guard_body_image = nil,
 			guard_body_animation = nil,
 			guard_head_anim_data = { --default head
 				_WIDTH = 32,				
-				_HEIGHT = 35,			
-				_FRAMES = 12,			
-				_FILENAME = "sheepRun_GREEN.png", 	
+				_HEIGHT = 39,			
+				_FRAMES = 8,			
+				_FILENAME = "snake_head.png", 	
 				_ANIMATIONSPEED = 0.12	
 			},
 			guard_head_image = nil,
 			guard_head_animation = nil,
 			guard_stop_anim_data = { -- halt body (gameover)
 				_WIDTH = 32,				
-				_HEIGHT = 35,			
-				_FRAMES = 6,			
-				_FILENAME = "sheep_wave_x.png", 	
+				_HEIGHT = 39,			
+				_FRAMES = 8,			
+				_FILENAME = "snake_body.png", 	
 				_ANIMATIONSPEED = 0.12	
 			},
 			guard_stop_image = nil,
@@ -133,6 +133,18 @@ local guard_manager = {
 	current_guards = {}
 
 }
+
+
+local tween = require 'lib.tween'
+
+local particles = {}
+local particle_types = {
+	pass = {image = love.graphics.newImage('assets/images/pass.png')},
+	fail = {image = love.graphics.newImage('assets/images/fail.png')}
+}
+
+guard_manager.particles = particles
+guard_manager.particle_types = particle_types
 
 function guard_manager:newGuard(num)
 
@@ -190,8 +202,8 @@ function guard_manager:newGuard(num)
 	function g:draw()
 		--draw test anim
 		love.graphics.setColor(255, 255, 255, 255)
-		self.active_head_animation:draw(self.guard_head_image, self.x, 70)
-		self.active_body_animation:draw(self.guard_body_image, self.x, 70)
+		self.active_body_animation:draw(self.guard_body_image, self.x, 65)
+		self.active_head_animation:draw(self.guard_head_image, self.x, 65)
 	end
 	
 	function g:failWave()
@@ -230,6 +242,9 @@ function guard_manager:despawn()
 end
 
 function guard_manager:update(dt)
+
+	self:particleUpdate(dt)
+
 	for _,guard in ipairs(self.current_guards) do
 		guard:update(dt)
 	end
@@ -238,8 +253,54 @@ end
 
 function guard_manager:draw()
 
+	self:particleDraw()
+
 	for _,guard in ipairs(self.current_guards) do
 		guard:draw()
+	end
+end
+
+function guard_manager:spawnParticle(type, _x, _speed)
+	
+	temp = {}
+	temp.image = self.particle_types["pass"].image
+	temp.image:setFilter('nearest','nearest')
+	temp.x = _x
+	temp.y = 100
+	temp.speed = _speed
+
+	if type == "pass" then
+		temp.image = self.particle_types["pass"].image
+	elseif type == "fail" then
+		temp.image = self.particle_types["fail"].image
+	else
+		print("Unrecognized particle type")
+		return
+	end
+
+	temp.tween = tween.new(1, temp, {y = 0}, "outInElastic")
+
+	table.insert(self.particles, temp)
+end
+
+function guard_manager:particleUpdate(dt)
+	for i, v in ipairs(self.particles) do
+		complete = v.tween:update(dt)
+
+		v.x = v.x - v.speed * dt
+
+		if (complete == true) then
+			table.remove(self.particles, i)
+		end
+	end
+end
+
+function guard_manager:particleDraw()
+	love.graphics.setColor(255, 255, 255, 255)
+	for i, v in ipairs(self.particles) do
+		if v.y < 72 then
+			love.graphics.draw(v.image, v.x, v.y)
+		end
 	end
 end
 
