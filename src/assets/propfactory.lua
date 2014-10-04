@@ -27,6 +27,10 @@ local propfactory = {
 		{
 			image = love.graphics.newImage('assets/images/palmtree1.png'),
 			y = 22
+		},
+		{
+			image = love.graphics.newImage('assets/images/vine.png'),
+			y = 6
 		}
 	},
 	anim_prop_types = {
@@ -91,41 +95,43 @@ end
 
 function propfactory:collisionCheck(x1, w1, x2, w2)
 
-	if ((x2 + w2) > x1) and ((x2 + w2) < (x1 + w1)) then
-		return false
-	elseif (x2 > x1 ) and (x2 < (x1 + w1)) then
+	if (x1 < (x2+w2)) and ((x1+w1)>x2) then
 		return false
 	else
 		return true -- no collision
 	end
 end
 
+--given a width of a prop, it returns a 
 function propfactory:findSpace(width, stage_width)
 
-	local stage_width = stage_width or 2000
+	local stage_width = stage_width or 1440
 
 	local static_size = table.getn(self.static_props)
 
 	if static_size == 0 then
-		return math.random(2000)
+		return ( math.random(stage_width - 64) + 36 )
 	end
 
-	for attempt = 1, 10 do
+	for attempt = 1, 5 do
 
-		local placement = math.random(2000)
+		local placement = ( math.random(stage_width - 64) + 36 )
 
 		local test = false
 
 		for i = 1, static_size do
 
 			if (self.static_props[i].x == nil) then
-				print("i ("..i..") is missing")
+
 			end
 
 			local x1 = self.static_props[i].x
 			local w1 = self.static_props[i].image:getWidth()
 
+			--print("collision check no."..i.." of "..static_size.." "..x1.." < "..(x1+w1).." < "..placement.." < "..(placement+width))
+
 			test = self:collisionCheck(x1, w1, placement, width)
+			test = self:collisionCheck(placement, width, x1, w1)
 
 			if test == false then
 				break
@@ -148,7 +154,7 @@ function propfactory:populate()
 
 		local width = self.static_prop_types[selected].image:getWidth()
 
-		local placement = self:findSpace(width, 2000)
+		local placement = self:findSpace(width, 1440)
 
 		if placement == 0 then
 			break
@@ -157,8 +163,6 @@ function propfactory:populate()
 		end
 
 	end
-
-	--print("Added "..table.getn(self.static_props))
 
 	for i = 1, 4 do
 		self:addAnim()
@@ -190,6 +194,7 @@ function propfactory:draw()
 	for i, v in ipairs(self.static_props) do
 		if v.alive then
 			love.graphics.draw(v.image, v.x, v.y)
+			--love.graphics.printf(i, v.x, v.y, 128, "left")
 		end
 	end
 
