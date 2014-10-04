@@ -229,8 +229,8 @@ function level:update(dt)
 		return
 	end
 
-	-- Don't spawn at end of level.
-	if levels[cur_level]["backgrounds_left"] > 0 then
+	-- Don't spawn at end or during intro of level.
+	if levels[cur_level]["backgrounds_left"] > 0 and levels[cur_level]["status"] ~= "intro" then
 		level:spawner()
 	end
 

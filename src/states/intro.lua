@@ -19,8 +19,9 @@ function intro:enter(state)
 	love.audio.play( intro_music )
 
 	intro_scroll.image = love.graphics.newImage("assets/images/intro.png")
-	width_scale = intro_scroll.image:getHeight() / love.graphics.getHeight()
-	height_scale = 1 - ((intro_scroll.image:getHeight() - love.graphics.getHeight() ) / love.graphics.getHeight() )
+	width_scale = 0.84
+	--height_scale = 1 - ((intro_scroll.image:getHeight() - love.graphics.getHeight() ) / love.graphics.getHeight() )
+	height_scale = 0.84
 
 	self.fading = true
 	self.timer = Timer.new()
