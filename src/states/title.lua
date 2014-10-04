@@ -4,7 +4,6 @@ hero = require "assets.chars.hero"
 function title:enter(state)
 	--hero:reset() --reset the player (SO FRESH)
 	self.current = 1; 	-- currently selected menu element
-	print(love._os)
 
 	self.actions = {
 		--{ name="play",    screen="play" },

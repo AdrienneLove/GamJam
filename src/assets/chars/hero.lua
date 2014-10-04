@@ -63,7 +63,6 @@ function hero:eatLife()
 	if hero.lives > 0 then
 		hero.lives = hero.lives - 1
 	end
-	print("ate a life")
 end
 
 return hero
