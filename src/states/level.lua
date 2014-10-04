@@ -2,6 +2,28 @@ local level = {}
 
 local Timer = require "lib.hump.timer"
 
+-- Controller support, auto detects across OSX and win
+local cur_os
+
+if love._os == "OS X" then cur_os = "mac"
+elseif love._os == "Windows" then cur_os = "win"
+end
+
+local schema = {
+	mac = {
+		Y = 4,
+		X = 3,
+		B = 2,
+		A = 1
+	},
+	win = {
+		Y = 14,
+		X = 13,
+		B = 12,
+		A = 11
+	}
+}
+
 --level vars
 local level_speed = 200
 local backgrounds_left = 4
@@ -110,6 +132,9 @@ function level:enter(state)
 	exit_door.x = 197
 	exit_door.y = 0
 
+	-- set timer to go from intro to play
+	-- Timer.add(1, function() status = "play" end)
+	Timer.addPeriodic(spawnDelay, function() spawn = true end)
 
 	--static props
 	staticprops:populate()
@@ -147,6 +172,12 @@ function level:update(dt)
 	end
 
 	--update player/enemys
+	if hero.lives == 0 then
+		gameover = true
+	end
+	if gameover then
+		level:gameover()
+	end
 	level:spawner()
 	guards:update(dt)
 	hero:update(dt)
@@ -372,30 +403,6 @@ end
 
 function level:joystickpressed(joystick, button)
 
-	local cur_os
-
-	local schema = {
-	mac = {
-		Y = 4,
-		X = 3,
-		B = 2,
-		A = 1
-	},
-	win = {
-		Y = 14,
-		X = 13,
-		B = 12,
-		A = 11
-	}
-}
-
-	if love._os == "OS X" then
-		cur_os = "mac"
-	elseif love._os == "Windows" then
-		cur_os = "win"
-	end
-	print(cur_os)
-
 	if button == schema[cur_os]["Y"] then
 		-- Y = 14
 		wave = "Y"
@@ -433,5 +440,21 @@ function level:spawner()
 	end
 	-- timer that has a x% chance to trigger spawn.
 end
+
+function level:gameover()
+	level:stopNearestGuard()	
+end
+
+function level:stopNearestGuard()
+	local lowest = guards.current_guards[1].x
+	local nearest = guards.current_guards[1]
+	for i,v in ipairs(guards.current_guards) do
+		if v.x > 90 and v.x < lowest then
+			nearest = guards.current_guards[i]
+		end
+	end
+	--printTable(nearest)
+end
+
 
 return level
