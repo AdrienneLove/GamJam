@@ -9,3 +9,22 @@ function love.load()
 	Gamestate.switch(splash)
 	Gamestate.registerEvents()
 end
+
+-- Deep clean to set all values on each level to nil.
+function purge(_table)
+	for k,v in pairs(_table) do
+		if type(v) == table then
+			purge(v)
+		else
+			_table[k] = nil
+		end
+	end
+
+	for i,v in pairs(_table) do
+		if type(v) == table then
+			purge(v)
+		else
+			_table[i] = nil
+		end
+	end
+end
