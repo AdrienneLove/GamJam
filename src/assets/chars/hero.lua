@@ -31,16 +31,38 @@ local hero = {
 		_ANIMATIONSPEED = 0.08
 	},
 	hero_body_wave_x_spritemap = nil,
-	hero_body_wave_x_animation = nil
+	hero_body_wave_x_animation = nil,
+
+	hero_body_wave_y = {	
+		_WIDTH = 32,
+		_HEIGHT = 35,
+		_FRAMES = 6,
+		_FILENAME = "sheep_wave_y.png",
+		_ANIMATIONSPEED = 0.08
+	},
+	hero_body_wave_y_spritemap = nil,
+	hero_body_wave_y_animation = nil,
+
+	hero_body_wave_a = {	
+		_WIDTH = 32,
+		_HEIGHT = 35,
+		_FRAMES = 6,
+		_FILENAME = "sheep_wave_a.png",
+		_ANIMATIONSPEED = 0.08
+	},
+	hero_body_wave_a_spritemap = nil,
+	hero_body_wave_a_animation = nil,
+
+	hero_body_wave_b = {	
+		_WIDTH = 32,
+		_HEIGHT = 35,
+		_FRAMES = 6,
+		_FILENAME = "sheep_wave_b.png",
+		_ANIMATIONSPEED = 0.08
+	},
+	hero_body_wave_b_spritemap = nil,
+	hero_body_wave_b_animation = nil
 }
-
--- local walk = require 'assets.animations.hero_walk'
--- local retreat = require 'assets.animations.hero_retreat'
-
--- local saluteX = require 'assets.animations.hero_saluteX'
--- local saluteY = require 'assets.animations.hero_salutey'
--- local saluteA = require 'assets.animations.hero_saluteA'
--- local saluteB = require 'assets.animations.hero_saluteB'
 
 local y = 70
 
@@ -75,7 +97,41 @@ hero.hero_body_wave_x_animation = anim8.newAnimation(hero_body_wave_x_grid('1-'.
 
 	end)
 
+-- salute Y
+hero.hero_body_wave_y_spritemap = love.graphics.newImage("assets/images/"..hero.hero_body_wave_y._FILENAME);
+hero.hero_body_wave_y_spritemap:setFilter('nearest', 'nearest')
+local hero_body_wave_y_grid = anim8.newGrid(hero.hero_body_wave_y._WIDTH, hero.hero_body_wave_y._HEIGHT, hero.hero_body_wave_y_spritemap:getWidth(), hero.hero_body_wave_y_spritemap:getHeight())
+hero.hero_body_wave_y_animation = anim8.newAnimation(hero_body_wave_y_grid('1-'..hero.hero_body_wave_y._FRAMES,1), hero.hero_body_wave_y._ANIMATIONSPEED, function()
+		--one anim ends go back to default
+		hero.hero_body_animation:gotoFrame(active_legs_animation.position)
+		active_body_animation = hero.hero_body_animation
+		active_body_spritemap = hero.hero_body_spritemap
 
+	end)
+
+-- salute A
+hero.hero_body_wave_a_spritemap = love.graphics.newImage("assets/images/"..hero.hero_body_wave_a._FILENAME);
+hero.hero_body_wave_a_spritemap:setFilter('nearest', 'nearest')
+local hero_body_wave_a_grid = anim8.newGrid(hero.hero_body_wave_a._WIDTH, hero.hero_body_wave_a._HEIGHT, hero.hero_body_wave_a_spritemap:getWidth(), hero.hero_body_wave_a_spritemap:getHeight())
+hero.hero_body_wave_a_animation = anim8.newAnimation(hero_body_wave_a_grid('1-'..hero.hero_body_wave_a._FRAMES,1), hero.hero_body_wave_a._ANIMATIONSPEED, function()
+		--one anim ends go back to default
+		hero.hero_body_animation:gotoFrame(active_legs_animation.position)
+		active_body_animation = hero.hero_body_animation
+		active_body_spritemap = hero.hero_body_spritemap
+
+	end)
+
+-- salute B
+hero.hero_body_wave_b_spritemap = love.graphics.newImage("assets/images/"..hero.hero_body_wave_b._FILENAME);
+hero.hero_body_wave_b_spritemap:setFilter('nearest', 'nearest')
+local hero_body_wave_b_grid = anim8.newGrid(hero.hero_body_wave_b._WIDTH, hero.hero_body_wave_b._HEIGHT, hero.hero_body_wave_b_spritemap:getWidth(), hero.hero_body_wave_b_spritemap:getHeight())
+hero.hero_body_wave_b_animation = anim8.newAnimation(hero_body_wave_b_grid('1-'..hero.hero_body_wave_b._FRAMES,1), hero.hero_body_wave_b._ANIMATIONSPEED, function()
+		--one anim ends go back to default
+		hero.hero_body_animation:gotoFrame(active_legs_animation.position)
+		active_body_animation = hero.hero_body_animation
+		active_body_spritemap = hero.hero_body_spritemap
+
+	end)
 function hero:update(dt)
 	if hero.state == "intro" then
 		hero.x = hero.x + 1
@@ -95,13 +151,19 @@ function hero:saluteX()
 	active_body_animation:resume()
 end
 function hero:saluteY()
-	--active = saluteY
+	active_body_animation = hero.hero_body_wave_y_animation
+	active_body_spritemap = hero.hero_body_wave_y_spritemap
+	active_body_animation:resume()
 end
 function hero:saluteA()
-	--active = saluteA
+	active_body_animation = hero.hero_body_wave_a_animation
+	active_body_spritemap = hero.hero_body_wave_a_spritemap
+	active_body_animation:resume()
 end
 function hero:saluteB()
-	--active = saluteB
+	active_body_animation = hero.hero_body_wave_b_animation
+	active_body_spritemap = hero.hero_body_wave_b_spritemap
+	active_body_animation:resume()
 end
 
 

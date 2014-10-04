@@ -2,43 +2,26 @@ local level = {}
 
 local Timer = require "lib.hump.timer"
 
+hero = require "assets.chars.hero"
+
 --level vars
-local level_speed = 200
-local backgrounds_left = 4
-local foregrounds_left = backgrounds_left
-local status = "intro" -- other states are play, dead, outro and exit
--- into_completed value in level:enter()
 
-
---background stuff
-local level_speed = 100
-local panels_left = 6
-local status = "intro" -- other states are play, dead and outro
-
--- hot swap between panel 1, 2 and 3
-local background_panels = {
-	{ x = 0, image = nil, current = false, furthest = false},
-	{ x = 0, image = nil, current = false, furthest = false},
-	{ x = 0, image = nil, current = false, furthest = true}
+local levels = {
+	require 'states.levels.level_one',
+	require 'states.levels.level_two'
 }
 
-local foreground_panels = {
-	{ x = 0, image = nil, current = false, furthest = false},
-	{ x = 0, image = nil, current = false, furthest = false},
-	{ x = 0, image = nil, current = false, furthest = true}
-}
+local cur_level = 1
 
---doors and stuff
-local entry_door = {image = nil, x = nil, y = nil, alive = true}
-local exit_door = {image = nil, x = nil, y = nil, alive = false, distance = 0}
+print(levels[2]["name"])
+
+--print(levels[cur_level]["foregrounds_left"])
 
 -- player / enemy stuff
-hero = require "assets.chars.hero"
 local guards = require "assets.chars.guard"
 local focusedGuard --this is being used by the wave checking
-local spawnChance = 10 -- out of 100; chance on a spawn tick that enemy will spawn
 local spawn = false -- when true, chance for a spawn is triggered.
-local spawnDelay = .5 -- spawn tick. on tick enemies will have a chance to spawn
+
 
 -- ui stuff
 local gameover = false
@@ -79,40 +62,42 @@ function level:enter(state)
 	Timer.addPeriodic(spawnDelay, function() spawn = true end)
 
 	--build initial background panels
-	for key,value in pairs(background_panels) do 
+	for key,value in pairs(levels[cur_level]["background_panels"]) do 
 		value.x = background_imagedata_1:getWidth() * (key-1)
 		value.image = background_panel_images[math.random(table.getn(background_panel_images))]
-   		if key == 1 then
-   			value.current = true
-   		else 
-   			value.current = false
-   		end
+		if key == 1 then
+			value.current = true
+		else 
+			value.current = false
+		end
 	end
 
 	--build initial foreground panels
-	for key,value in pairs(foreground_panels) do 
+	for key,value in pairs(levels[cur_level]["foreground_panels"]) do 
 		value.x = foreground_imagedata_1:getWidth() * (key-1)
 		value.image = foreground_panel_images[math.random(table.getn(foreground_panel_images))]
-   		
-   		if key == 1 then
-   			value.current = true
-   		else 
-   			value.current = false
-   		end
+
+		if key == 1 then
+			value.current = true
+		else 
+			value.current = false
+		end
 	end
 
-	--build entry door
-	entry_door.image = love.graphics.newImage('assets/images/start_door.png')
-	entry_door.x = 0
-	entry_door.y = 0
+	--build entry doors
+	for _,v in pairs(levels) do
+		v.entry_door.image = love.graphics.newImage('assets/images/start_door.png')
+		v.entry_door.x = 0
+		v.entry_door.y = 0
 
-	exit_door.image = love.graphics.newImage('assets/images/end_door.png')
-	exit_door.x = 197
-	exit_door.y = 0
+		v.exit_door.image = love.graphics.newImage('assets/images/end_door.png')
+		v.exit_door.x = 197
+		v.exit_door.y = 0
+	end
 
 	-- set timer to go from intro to play
 	-- Timer.add(1, function() status = "play" end)
-	Timer.addPeriodic(spawnDelay, function() spawn = true end)
+	Timer.addPeriodic(levels[cur_level]["spawnDelay"], function() spawn = true end)
 
 	--static props
 	staticprops:populate()
@@ -126,26 +111,28 @@ function level:update(dt)
 	--update all timers
 	Timer.update(dt)
 
+	if not intro_completed then
 	-- For intro
-	if hero.x == 20 and not intro_completed then
-		status = "play"
-		hero.state = status
-		intro_completed = true
+		if hero.x == 20 and not intro_completed then
+			status = "play"
+			hero.state = status
+			intro_completed = true
+		end
 	end
 
 	if status == "play" or status == "outro" then
 
 		--move entry door 
-		if entry_door.alive then
-			entry_door.x = entry_door.x - level_speed * dt;
-			if entry_door.x <= -200 then
-				entry_door.alive = false
-				entry_door.image = nil
+		if levels[cur_level]["entry_door"]["alive"] then
+			levels[cur_level]["entry_door"]["x"] = levels[cur_level]["entry_door"]["x"] - levels[cur_level]["level_speed"] * dt;
+			if levels[cur_level]["entry_door"]["x"] <= -200 then
+				levels[cur_level]["entry_door"]["alive"] = false
+				levels[cur_level]["entry_door"]["image"] = nil
 			end
 		end
 
 		--static prop
-		staticprops:update(dt, level_speed)
+		staticprops:update(dt, levels[cur_level]["level_speed"])
 
 	end
 
@@ -163,11 +150,11 @@ function level:update(dt)
 	if status == "play" or status == "outro" then
 
 		-- move background panels
-		for key, value in pairs(background_panels) do 
+		for key, value in pairs(levels[cur_level]["background_panels"]) do 
 			-- move panels
-			value.x = value.x - level_speed * dt
+			value.x = value.x - levels[cur_level]["level_speed"] * dt
 
-			if value.x <  background_imagedata_1:getWidth()*-1 and backgrounds_left > 0 then
+			if value.x <  background_imagedata_1:getWidth()*-1 and levels[cur_level]["backgrounds_left"] > 0 then
 
 				-- set item values and assign a new random image 
 				-- I swear to god this is random 
@@ -176,18 +163,18 @@ function level:update(dt)
 				value.current = false
 
 				-- set current panel
-				if key+1 > table.getn(background_panels) then
-					background_panels[1].current = true
+				if key+1 > table.getn(levels[cur_level]["background_panels"]) then
+					levels[cur_level]["background_panels"][1].current = true
 				else 
-					background_panels[key+1].current = false
+					levels[cur_level]["background_panels"][key+1].current = false
 				end
 
 				--search furthest and replace it, set this x to new furthest location
-				for furthest_key, furthest_value in pairs(background_panels) do 
+				for furthest_key, furthest_value in pairs(levels[cur_level]["background_panels"]) do 
 					if furthest_value.furthest then 
 						-- don't touch this. wizardy ahead. (can't touch this)
 						if key == 1 then
-							value.x = furthest_value.x + furthest_value.image:getWidth()	 - level_speed * dt
+							value.x = furthest_value.x + furthest_value.image:getWidth() - levels[cur_level]["level_speed"] * dt
 						else
 							value.x = furthest_value.x + furthest_value.image:getWidth()
 						end
@@ -198,16 +185,16 @@ function level:update(dt)
 					end
 				end
 
-				backgrounds_left = backgrounds_left -1
+				levels[cur_level]["backgrounds_left"] = levels[cur_level]["backgrounds_left"] -1
 			end
 		end
 
 		-- move foreground panels
-		for key, value in pairs(foreground_panels) do 
+		for key, value in pairs(levels[cur_level]["foreground_panels"]) do 
 			-- move panels
-			value.x = value.x - level_speed * dt
+			value.x = value.x - levels[cur_level]["level_speed"] * dt
 
-			if value.x <  foreground_imagedata_1:getWidth()*-1 and foregrounds_left > 0 then
+			if value.x <  foreground_imagedata_1:getWidth()*-1 and levels[cur_level]["foregrounds_left"] > 0 then
 
 				-- set item values and assign a new random image
 				value.image = foreground_panel_images[math.random(table.getn(foreground_panel_images))]
@@ -215,18 +202,18 @@ function level:update(dt)
 				value.current = false
 
 				-- set current panel
-				if key+1 > table.getn(foreground_panels) then
-					foreground_panels[1].current = true
+				if key+1 > table.getn(levels[cur_level]["foreground_panels"]) then
+					levels[cur_level]["foreground_panels"][1].current = true
 				else 
-					foreground_panels[key+1].current = false
+					levels[cur_level]["foreground_panels"][key+1].current = false
 				end
 
 				--search furthest and replace it, set this x to new furthest location
-				for furthest_key, furthest_value in pairs(foreground_panels) do 
+				for furthest_key, furthest_value in pairs(levels[cur_level]["foreground_panels"]) do 
 					if furthest_value.furthest then 
 						-- don't touch this. wizardy ahead. (can't touch this)
 						if key == 1 then
-							value.x = furthest_value.x + furthest_value.image:getWidth()	 - level_speed * dt
+							value.x = furthest_value.x + furthest_value.image:getWidth()	 - levels[cur_level]["level_speed"] * dt
 						else
 							value.x = furthest_value.x + furthest_value.image:getWidth()
 						end
@@ -237,18 +224,19 @@ function level:update(dt)
 					end
 				end
 
-				foregrounds_left = foregrounds_left - 1
+				levels[cur_level]["foregrounds_left"] = levels[cur_level]["foregrounds_left"] - 1
+				print(levels[cur_level]["foregrounds_left"])
 			end
 		end
 
-		if status == "play" and foregrounds_left == 0 and backgrounds_left == 0 then
+		if status == "play" and levels[cur_level]["foregrounds_left"] == 0 and levels[cur_level]["backgrounds_left"] == 0 then
 			
 			--search furthest background and put a door there
-			for furthest_key, furthest_value in pairs(foreground_panels) do 
+			for furthest_key, furthest_value in pairs(levels[cur_level]["foreground_panels"]) do 
 				if furthest_value.furthest then
-					exit_door.x = furthest_value.x + exit_door.x
-					exit_door.alive = true
-					exit_door.distance = exit_door.x
+					levels[cur_level]["exit_door"]["x"] = furthest_value.x + levels[cur_level]["exit_door"]["x"]
+					levels[cur_level]["exit_door"]["alive"] = true
+					levels[cur_level]["exit_door"]["distance"] = levels[cur_level]["exit_door"]["x"]
 					status = "outro"
 					break
 				end
@@ -256,9 +244,9 @@ function level:update(dt)
 		end
 
 		if status == "outro" then
-			if exit_door.distance > 200 then 
-				exit_door.x = exit_door.x - level_speed * dt
-				exit_door.distance = exit_door.distance - level_speed * dt
+			if levels[cur_level]["exit_door"]["distance"] > 200 then 
+				levels[cur_level]["exit_door"]["x"] = levels[cur_level]["exit_door"]["x"] - levels[cur_level]["level_speed"] * dt
+				levels[cur_level]["exit_door"]["distance"] = levels[cur_level]["exit_door"]["distance"] - levels[cur_level]["level_speed"] * dt
 			else
 				status = "exit"
 			end 
@@ -283,21 +271,21 @@ function level:draw()
 	love.graphics.scale( SCALE )
 
 	--draw background panels 1, 2 and 3
-	for key, value in pairs(background_panels) do 
+	for key, value in pairs(levels[cur_level]["background_panels"]) do 
 		love.graphics.draw(value.image, value.x, 0)
 	end
 
 	--draw foreground panels 1, 2 and 3
-	for key, value in pairs(foreground_panels) do 
+	for key, value in pairs(levels[cur_level]["foreground_panels"]) do 
 		love.graphics.draw(value.image, value.x, 0)
 	end
 
-	if entry_door.alive then
-		love.graphics.draw(entry_door.image, entry_door.x, entry_door.y)
+	if levels[cur_level]["entry_door"]["alive"] then
+		love.graphics.draw(levels[cur_level]["entry_door"]["image"], levels[cur_level]["entry_door"]["x"], levels[cur_level]["entry_door"]["y"])
 	end
 
-	if exit_door.alive then
-		love.graphics.draw(exit_door.image, exit_door.x, exit_door.y)
+	if levels[cur_level]["exit_door"]["alive"] then
+		love.graphics.draw(levels[cur_level]["exit_door"]["image"], levels[cur_level]["exit_door"]["x"], levels[cur_level]["exit_door"]["y"])
 	end
 
 	--static props
@@ -428,7 +416,7 @@ function level:spawner()
 		spawn = false
 	end
 
-	if spawn and roll > 0 and roll < spawnChance then
+	if spawn and roll > 0 and roll < levels[cur_level]["spawnChance"] then
 		guard = math.random(1,4)
 		guards:newGuard(guard)
 		spawn = false
@@ -443,7 +431,7 @@ function level:gameover()
 	spawnChance = 0
 	spawner = false
 	level:stopNearestGuard()
-	level_speed = 0	
+	level_speed = 0
 end
 
 function level:stopNearestGuard()
@@ -463,6 +451,5 @@ function level:stopNearestGuard()
 	end
 	--printTable(nearest)
 end
-
 
 return level
