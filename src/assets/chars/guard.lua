@@ -2,31 +2,31 @@ local guard_manager = {
 
 	guard_types = {
 		{ -- 1
-			speed = 50,
+			speed = 80,
 			expectedWave = "B",
 			guard_body_anim_data = { --default body
 				_WIDTH = 32,				
-				_HEIGHT = 35,			
-				_FRAMES = 12,			
-				_FILENAME = "sheepRun_RED.png", 	
+				_HEIGHT = 39,			
+				_FRAMES = 8,			
+				_FILENAME = "fox_body.png", 	
 				_ANIMATIONSPEED = 0.12 		
 			},
 			guard_body_image = nil,
 			guard_body_animation = nil,
 			guard_head_anim_data = { --default head
 				_WIDTH = 32,				
-				_HEIGHT = 35,			
-				_FRAMES = 12,			
-				_FILENAME = "sheepRun_RED.png", 	
+				_HEIGHT = 39,			
+				_FRAMES = 8,			
+				_FILENAME = "fox_head.png", 	
 				_ANIMATIONSPEED = 0.12	
 			},
 			guard_head_image = nil,
 			guard_head_animation = nil,
 			guard_stop_anim_data = { -- halt body (gameover)
 				_WIDTH = 32,				
-				_HEIGHT = 35,			
-				_FRAMES = 6,			
-				_FILENAME = "sheep_wave_x.png", 	
+				_HEIGHT = 39,			
+				_FRAMES = 8,			
+				_FILENAME = "fox_head_expressions.png", 	
 				_ANIMATIONSPEED = 0.12	
 			},
 			guard_stop_image = nil,
@@ -35,93 +35,93 @@ local guard_manager = {
 		},
 		{ -- 2
 			
-			speed = 100,
+			speed = 90,
 			expectedWave = "Y",
 			guard_body_anim_data = { --default body
 				_WIDTH = 32,				
-				_HEIGHT = 35,			
-				_FRAMES = 12,			
-				_FILENAME = "sheepRun_YELLOW.png", 	
+				_HEIGHT = 39,			
+				_FRAMES = 8,			
+				_FILENAME = "jaguar_body.png", 	
 				_ANIMATIONSPEED = 0.12 		
 			},
 			guard_body_image = nil,
 			guard_body_animation = nil,
 			guard_head_anim_data = { --default head
 				_WIDTH = 32,				
-				_HEIGHT = 35,			
-				_FRAMES = 12,			
-				_FILENAME = "sheepRun_YELLOW.png", 	
+				_HEIGHT = 39,			
+				_FRAMES = 8,			
+				_FILENAME = "jaguar_head.png", 	
 				_ANIMATIONSPEED = 0.12	
 			},
 			guard_head_image = nil,
 			guard_head_animation = nil,
 			guard_stop_anim_data = { -- halt body (gameover)
 				_WIDTH = 32,				
-				_HEIGHT = 35,			
-				_FRAMES = 6,			
-				_FILENAME = "sheep_wave_x.png", 	
+				_HEIGHT = 39,			
+				_FRAMES = 8,			
+				_FILENAME = "jaguar_head_expressions.png", 	
 				_ANIMATIONSPEED = 0.12	
 			},
 			guard_stop_image = nil,
 			guard_stop_animation = nil
 		},
 		{ -- 3
-			speed = 150,
+			speed = 100,
 			expectedWave = "X",
 			guard_body_anim_data = { --default body
 				_WIDTH = 32,				
-				_HEIGHT = 35,			
-				_FRAMES = 12,			
-				_FILENAME = "sheepRun_BLUE.png", 	
+				_HEIGHT = 39,			
+				_FRAMES = 8,			
+				_FILENAME = "eagle_body.png", 	
 				_ANIMATIONSPEED = 0.12 		
 			},
 			guard_body_image = nil,
 			guard_body_animation = nil,
 			guard_head_anim_data = { --default head
 				_WIDTH = 32,				
-				_HEIGHT = 35,			
-				_FRAMES = 12,			
-				_FILENAME = "sheepRun_BLUE.png", 	
+				_HEIGHT = 39,			
+				_FRAMES = 8,			
+				_FILENAME = "eagle_head.png", 	
 				_ANIMATIONSPEED = 0.12	
 			},
 			guard_head_image = nil,
 			guard_head_animation = nil,
 			guard_stop_anim_data = { -- halt body (gameover)
 				_WIDTH = 32,				
-				_HEIGHT = 35,			
-				_FRAMES = 6,			
-				_FILENAME = "sheep_wave_x.png", 	
+				_HEIGHT = 39,			
+				_FRAMES = 8,			
+				_FILENAME = "eagle_head_expressions.png", 	
 				_ANIMATIONSPEED = 0.12	
 			},
 			guard_stop_image = nil,
 			guard_stop_animation = nil
 		},
 		{ -- 4
-			speed = 200,
+			speed = 110,
 			expectedWave = "A",
 			guard_body_anim_data = {
 				_WIDTH = 32,				
-				_HEIGHT = 35,			
-				_FRAMES = 12,			
-				_FILENAME = "sheepRun_GREEN.png", 	
+				_HEIGHT = 39,			
+				_FRAMES = 8,			
+				_FILENAME = "snake_body.png", 	
 				_ANIMATIONSPEED = 0.12 		
 			},
 			guard_body_image = nil,
 			guard_body_animation = nil,
 			guard_head_anim_data = { --default head
 				_WIDTH = 32,				
-				_HEIGHT = 35,			
-				_FRAMES = 12,			
-				_FILENAME = "sheepRun_GREEN.png", 	
+				_HEIGHT = 39,			
+				_FRAMES = 8,			
+				_FILENAME = "snake_head.png", 	
 				_ANIMATIONSPEED = 0.12	
 			},
 			guard_head_image = nil,
 			guard_head_animation = nil,
 			guard_stop_anim_data = { -- halt body (gameover)
 				_WIDTH = 32,				
-				_HEIGHT = 35,			
-				_FRAMES = 6,			
-				_FILENAME = "sheep_wave_x.png", 	
+				_HEIGHT = 39,			
+				_FRAMES = 8,			
+				_FILENAME = "snake_body.png", 	
 				_ANIMATIONSPEED = 0.12	
 			},
 			guard_stop_image = nil,
@@ -190,8 +190,8 @@ function guard_manager:newGuard(num)
 	function g:draw()
 		--draw test anim
 		love.graphics.setColor(255, 255, 255, 255)
-		self.active_head_animation:draw(self.guard_head_image, self.x, 70)
-		self.active_body_animation:draw(self.guard_body_image, self.x, 70)
+		self.active_body_animation:draw(self.guard_body_image, self.x, 65)
+		self.active_head_animation:draw(self.guard_head_image, self.x, 65)
 	end
 	
 	function g:failWave()
