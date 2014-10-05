@@ -184,7 +184,7 @@ local guard_manager = {
 
 }
 
-function guard_manager:newGuard(num)
+function guard_manager:newGuard(num, speedModifier)
 
 	if num < 0 or num > 4 then
 		print("newGuard: Invalid guard index.")

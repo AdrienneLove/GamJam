@@ -5,10 +5,10 @@ local particle = {}
 
 local particles = {}
 local particle_types = {
-	pass = {image = love.graphics.newImage('assets/images/BubbleStar.png')},
-	fail = {image = love.graphics.newImage('assets/images/BubbleX.png')},
-	lose = {image = love.graphics.newImage('assets/images/BubbleExclamation.png')},
-	what = {image = love.graphics.newImage('assets/images/BubbleQuestion.png')}
+	pass = {image = love.graphics.newImage('assets/images/bubbleStar.png')},
+	fail = {image = love.graphics.newImage('assets/images/bubbleX.png')},
+	lose = {image = love.graphics.newImage('assets/images/bubbleExclamation.png')},
+	what = {image = love.graphics.newImage('assets/images/bubbleQuestion.png')}
 }
 
 particle.allow_particles = true
