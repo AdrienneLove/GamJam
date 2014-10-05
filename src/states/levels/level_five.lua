@@ -5,14 +5,17 @@ local l = {
 	intro_completed = false,
 
 	-- Difficulty/pacing stuff
-	level_speed = 100,
-	spawnChance = 10, -- out of 100; chance on a spawn tick that enemy will spawn
+	guard_types = {1,2,3,4},
+
+	level_speed = 85,
+	spawnChance = 60, -- out of 100; chance on a spawn tick that enemy will spawn
 	spawnDelay = .5, -- spawn tick. on tick enemies will have a chance to spawn
+	enemySpeed = 1, -- modifier for enemy speeds
 
 	--background stuff
-	backgrounds_left = 4, -- these two values the same
-	foregrounds_left = 4,
-	panels_left = 6,
+	backgrounds_left = 8, -- these two values the same
+	foregrounds_left = 8,
+	panels_left = 10,
 	status = "intro", -- other states are play, dead and outro
 
 	-- hot swap between panel 1, 2 and 3
