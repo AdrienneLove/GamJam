@@ -198,7 +198,7 @@ function guard_manager:newGuard(num, speedModifier)
 		guard_happy_image = love.graphics.newImage("assets/images/"..self.guard_types[num]["guard_happy_anim_data"]._FILENAME),
 		guard_angry_image = love.graphics.newImage("assets/images/"..self.guard_types[num]["guard_angry_anim_data"]._FILENAME),
 		guard_fail_image = love.graphics.newImage("assets/images/"..self.guard_types[num]["guard_fail_image"]),
-		speed = self.guard_types[num]["speed"],
+		speed = self.guard_types[num]["speed"] * speedModifier,
 		x = 240,
 		expectedWave = self.guard_types[num]["expectedWave"],
 		isWavedAt = false,
@@ -220,10 +220,10 @@ function guard_manager:newGuard(num, speedModifier)
 	local guard_happy_grid = anim8.newGrid(g.guard_happy_anim_data._WIDTH, g.guard_happy_anim_data._HEIGHT, g.guard_happy_image:getWidth(), g.guard_happy_image:getHeight())
 	local guard_angry_grid = anim8.newGrid(g.guard_angry_anim_data._WIDTH, g.guard_angry_anim_data._HEIGHT, g.guard_angry_image:getWidth(), g.guard_angry_image:getHeight())
 
-	g.animation = anim8.newAnimation(guard_body_grid('1-'..g.guard_body_anim_data._FRAMES,1), g.guard_body_anim_data._ANIMATIONSPEED)
-	g.head_animation = anim8.newAnimation(guard_head_grid('1-'..g.guard_head_anim_data._FRAMES,1), g.guard_head_anim_data._ANIMATIONSPEED)
-	g.happy_animation = anim8.newAnimation(guard_happy_grid('1-8',1), g.guard_happy_anim_data._ANIMATIONSPEED)
-	g.angry_animation = anim8.newAnimation(guard_angry_grid('1-8',1), g.guard_angry_anim_data._ANIMATIONSPEED)
+	g.animation = anim8.newAnimation(guard_body_grid('1-'..g.guard_body_anim_data._FRAMES,1), g.guard_body_anim_data._ANIMATIONSPEED*speedModifier)
+	g.head_animation = anim8.newAnimation(guard_head_grid('1-'..g.guard_head_anim_data._FRAMES,1), g.guard_head_anim_data._ANIMATIONSPEED*speedModifier)
+	g.happy_animation = anim8.newAnimation(guard_happy_grid('1-8',1), g.guard_happy_anim_data._ANIMATIONSPEED*speedModifier)
+	g.angry_animation = anim8.newAnimation(guard_angry_grid('1-8',1), g.guard_angry_anim_data._ANIMATIONSPEED*speedModifier)
 	
 	g.active_body_animation  = g.animation
 	g.active_body_spritemap = g.guard_body_image
