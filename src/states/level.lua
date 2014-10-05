@@ -24,7 +24,7 @@ local spawn = false -- when true, chance for a spawn is triggered.
 
 
 -- ui stuff
-local hintfont = love.graphics.newFont('assets/fonts/ARCADECLASSIC.ttf', 10)
+local hintfont = love.graphics.newFont('assets/fonts/arcadeclassic.TTF', 10)
 hintfont:setFilter("nearest", "nearest", 1)
 
 
@@ -36,7 +36,7 @@ local indicator = false
 local waveCorrect = false
 --local cube = love.graphics.newImage('assets/animations/splash_cube.png')
 local colorPressed = "none"
-local swishfont = love.graphics.newFont('assets/fonts/ARCADECLASSIC.ttf', 20)
+local swishfont = love.graphics.newFont('assets/fonts/arcadeclassic.TTF', 20)
 
 local props = require "assets.propfactory"
 

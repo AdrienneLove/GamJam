@@ -1,6 +1,6 @@
 local title = {}
 hero = require "assets.chars.hero"
-local swishfont = love.graphics.newFont('assets/fonts/ARCADECLASSIC.ttf', 60)
+local swishfont = love.graphics.newFont('assets/fonts/arcadeclassic.TTF', 60)
 
 function title:enter(state)
 	--hero:reset() --reset the player (SO FRESH)

@@ -32,11 +32,11 @@ copy /b love.exe+main.zip game.exe > NUL
 @popd
 
 :: clean up
-echo Cleaning up
+::echo Cleaning up
 @pushd ..\release
 del /s /f /q temp > NUL
 rmdir /s /q temp > NUL
-del /f /q main.zip > NUL
+::del /f /q main.zip > NUL
 del /f /q love.exe > NUL
 @popd
 
