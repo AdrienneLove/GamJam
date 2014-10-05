@@ -524,37 +524,42 @@ end
 function level:keypressed(key, unicode)
 	local wave
 
-	-- navigate menu
-	if key == "w" or key == "up" then
-		-- Y = 14
-		wave = "Y"
-		hero:saluteY()
-		colourPressed = "yellow"
-	end
-	if key == "a" or key == "left" then
-		-- X = 13
-		wave = "X"
-		hero:saluteX()
-		colourPressed = "blue"
-	end
-	if key == "d" or key == "right" then
-		-- B = 12
-		wave = "B"
-		hero:saluteB()
-		colourPressed = "red"
-	end
-	if key == "s" or key == "down" then
-		-- A = 11
-		wave = "A"
-		hero:saluteA()
-		colourPressed = "green"
-	end
+	if not gameover then
 
-	if key == "p" then
-		particle:spawn("pass", 128, 80)
-	end
+		if key == "w" or key == "up" then
+			-- Y = 14
+			wave = "Y"
+			hero:saluteY()
+			colourPressed = "yellow"
+		end
+		if key == "a" or key == "left" then
+			-- X = 13
+			wave = "X"
+			hero:saluteX()
+			colourPressed = "blue"
+		end
+		if key == "d" or key == "right" then
+			-- B = 12
+			wave = "B"
+			hero:saluteB()
+			colourPressed = "red"
+		end
+		if key == "s" or key == "down" then
+			-- A = 11
+			wave = "A"
+			hero:saluteA()
+			colourPressed = "green"
+		end
 
-	if wave then level:checkWave(wave) end
+		if key == "p" then
+			particle:spawn("pass", 128, 80)
+		end
+
+		if wave then level:checkWave(wave) end
+
+	else
+		-- ??
+	end
 end
 
 function level:checkWave(wave)
@@ -608,44 +613,54 @@ end
 function level:joystickpressed(joystick, button)
 	local wave
 
-	if button == 1 then
-		wave = "A"
-	elseif button == 2 then
-		wave = "B"
-	elseif button == 3 then
-		wave = "X"
-	elseif button == 4 then
-		wave = "Y"
-	end
-	
-	if joystick:isGamepadDown("y") then
-		wave = "Y"
-		colourPressed = "yellow"
-	end
-	if joystick:isGamepadDown("x") then
-		wave = "X"
-		colourPressed = "blue"
-	end
-	if joystick:isGamepadDown("b") then
-		wave = "B"
-		colourPressed = "red"
-	end
-	if joystick:isGamepadDown("a") then
-		wave = "A"
-		colourPressed = "green"
-	end
+	if not gameover then
 
-	if wave == "Y" then
-		hero:saluteY()
-	elseif wave == "X" then
-		hero:saluteX()
-	elseif wave == "B" then
-		hero:saluteB()
-	elseif wave == "A" then
-		hero:saluteA()
-	end		
+		if button == 1 then
+			wave = "A"
+			colourPressed = "green"
+		elseif button == 2 then
+			wave = "B"
+			colourPressed = "red"
+		elseif button == 3 then
+			wave = "X"
+			colourPressed = "blue"
+		elseif button == 4 then
+			wave = "Y"
+			colourPressed = "yellow"
+		end
+		
+		if joystick:isGamepadDown("y") then
+			wave = "Y"
+			colourPressed = "yellow"
+		end
+		if joystick:isGamepadDown("x") then
+			wave = "X"
+			colourPressed = "blue"
+		end
+		if joystick:isGamepadDown("b") then
+			wave = "B"
+			colourPressed = "red"
+		end
+		if joystick:isGamepadDown("a") then
+			wave = "A"
+			colourPressed = "green"
+		end
 
-	if wave then level:checkWave(wave) end
+		if wave == "Y" then
+			hero:saluteY()
+		elseif wave == "X" then
+			hero:saluteX()
+		elseif wave == "B" then
+			hero:saluteB()
+		elseif wave == "A" then
+			hero:saluteA()
+		end
+
+		if wave then level:checkWave(wave) end
+
+	else -- if gameover
+		-- ???????
+	end
 end
 
 function level:spawner()
