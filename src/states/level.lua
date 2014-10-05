@@ -402,7 +402,7 @@ function level:newLevel()
 		show_loading = true
 		Timer.tween(0.25, self.bgm_params, { volume = 0.0 }, 'linear')
 		Timer.tween(0.5, self.fade_params, { opacity = 0 }, 'in-out-sine', function ()
-			Timer.add(1, function()
+			Timer.add(2, function()
 				Timer.tween(0.25, self.bgm_params, { volume = 0.5 }, 'in-out-sine')
 				Timer.tween(0.5, self.fade_params, { opacity = 255 }, 'in-out-sine', function () 
 					show_loading = false
@@ -420,7 +420,6 @@ function level:newLevel()
 end
 
 function level:draw()
-	love.graphics.setBackgroundColor(33, 33, 33, 255)
 	love.graphics.push()
 
 	love.graphics.scale( SCALE )
@@ -478,30 +477,28 @@ function level:draw()
 	else
 		love.graphics.setColor(90, 90, 90, 255)
 	end
-	love.graphics.draw(blue, 55, 116)
+	love.graphics.draw(blue, 9, 110)
 
 	if colourPressed == "yellow" then
 		love.graphics.setColor(255, 255, 255, 255)
 	else
 		love.graphics.setColor(90, 90, 90, 255)
 	end
-	love.graphics.draw(yellow, 66, 116)
+	love.graphics.draw(yellow, 15, 104)
 
 	if colourPressed == "green" then
 		love.graphics.setColor(255, 255, 255, 255)
 	else
 		love.graphics.setColor(90, 90, 90, 255)
 	end
-	love.graphics.draw(green, 77, 116)
+	love.graphics.draw(green, 15, 116)
 
 	if colourPressed == "red" then
 		love.graphics.setColor(255, 255, 255, 255)
 	else
 		love.graphics.setColor(90, 90, 90, 255)
 	end
-	love.graphics.draw(red, 88, 116)
-
-
+	love.graphics.draw(red, 21, 110)
 	
 	--draw particles
 	particle:draw()
@@ -521,8 +518,10 @@ function level:draw()
 		love.graphics.draw(levels[cur_level]["entry_door"]["image"], levels[cur_level]["entry_door"]["x"], levels[cur_level]["entry_door"]["y"])
 	end
 
+	
+
 	-- gameover text / fade
-	if gameover and self.fading ~= false then
+	if gameover then
 		love.graphics.setColor(33, 33, 33, 80)
 		love.graphics.rectangle("fill", 0, 0, love.graphics.getWidth(), love.graphics.getHeight())
 		--draw text
@@ -747,7 +746,7 @@ function level:gameover()
 	levels[cur_level]["level_speed"] = 0
 
 	love.audio.play(gameover_sound)
-	hero.x = 58
+	guards.current_guards[1].x = 58
 end
 
 function level:stopNearestGuard()

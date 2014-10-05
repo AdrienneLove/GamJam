@@ -126,6 +126,8 @@ end
 
 function propFactory:populate()
 
+	local temp = self.level_width
+
 	self:purge()
 
 	for i = 1,40 do
@@ -146,6 +148,8 @@ function propFactory:populate()
 			self:addAnim(v)
 		end
 	end
+
+	self.level_width = self.level_width + 120
 end
 
 function propFactory:update(dt, level_speed)

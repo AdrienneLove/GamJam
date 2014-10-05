@@ -1,6 +1,5 @@
 local credits = {}
-local swishfont = love.graphics.newFont('assets/fonts/ARIAL ROUNDED MT.ttf', 20)
-local swishfont_bold = love.graphics.newFont('assets/fonts/ARLRDBD.TTF', 26)
+local swishfont = love.graphics.newFont('assets/fonts/ARCADECLASSIC.ttf', 30)
 
 function credits:enter(state)
 	--hero:reset() --reset the player (SO FRESH)
@@ -11,15 +10,9 @@ function credits:enter(state)
 		{ name="Exit",    screen="exit" }
 	} 
 	self.items = { --credit text sections
-		{ title = "On The Lamb by Oopa Chaloopa! (48hr Game Making Challenge 2014)", info = {""}},
-		{ title = "Artists", info =  {"Rimon Bar", "Camila Duran Espinosa" } },
-		{ title = "Programmers", info =  {"Cameron Bland", "Adrian Love", "Racheal Smith", "Michael Whitman" } },
-		{ title = "Attributions", info =  { "Music licenced by Creative Commons 3.0 (non-commercial, share-alike, attribuation)\n\n"..
-			"Heavens Trial by WingoWinston (http://www.newgrounds.com/audio/listen/519155 accessed 5th Oct 2014) \n"..
-			"did i lose? by jambrother2 (http://www.newgrounds.com/audio/listen/580941 accessed 5th Oct 2014) \n"..
-			"Cephelopod by Kevin MacLeod (http://incompetech.com accessed 5th Oct 2014) \n"
-			}
-		}
+		{ title = "artists", info =  {"Rimon Bar", "Camila Duran Espinosa" } },
+		{ title = "programmers", info =  {"Cameron Bland", "Adrian Love", "Racheal Smith", "Michael Whitman" } },
+		{ title = "attributions", info =  { "Music info." } }
 	}
 
 	self.data = {} 
@@ -49,19 +42,17 @@ function credits:draw()
 	for i, v in ipairs(self.items) do
 		--print(i)
 		--space between menu items
-		local spacing = 40
-		local positionToDrawCredits = { x = 50, y = 0}
+		local spacing = 25
+		local positionToDrawCredits = { x = 50, y = love.graphics.getHeight()/2 - 100 }
 		
 		-- default menu item style
 		love.graphics.setColor(255, 0, 255, 200)
 		
 		-- draw menu item name
-		love.graphics.setFont(swishfont_bold)
-		love.graphics.printf(v.title, positionToDrawCredits.x, positionToDrawCredits.y + (spacing_index*spacing), love.graphics.getWidth()-100, 'left')
+		love.graphics.printf(v.title, positionToDrawCredits.x, positionToDrawCredits.y + (spacing_index*spacing), 200, 'left')
 		spacing_index = spacing_index + 1
 		for ind=1,#v.info do
-			love.graphics.setFont(swishfont)
-			love.graphics.printf(v.info[ind], positionToDrawCredits.x, positionToDrawCredits.y + (spacing_index*spacing), love.graphics.getWidth()-100, 'left')
+			love.graphics.printf(v.info[ind], positionToDrawCredits.x, positionToDrawCredits.y + (spacing_index*spacing), 200, 'left')
 			spacing_index = spacing_index + 1
 		end
 	end

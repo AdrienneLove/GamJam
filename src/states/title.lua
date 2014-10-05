@@ -1,7 +1,6 @@
 local title = {}
 hero = require "assets.chars.hero"
 local swishfont = love.graphics.newFont('assets/fonts/ARCADECLASSIC.ttf', 60)
-local swishfont_big = love.graphics.newFont('assets/fonts/ARCADECLASSIC.ttf', 60)
 
 function title:enter(state)
 	--hero:reset() --reset the player (SO FRESH)
@@ -18,8 +17,6 @@ function title:enter(state)
 	title_music = love.audio.newSource( "assets/audio/did_i_lose.mp3", "stream" )
 	title_music:setLooping( true )
 	love.audio.play( title_music )
-
-	self.NBSP = "\194\160"
 end
 
 function title:leave()
@@ -38,12 +35,8 @@ function title:draw()
 	--set background & font
 	love.graphics.setBackgroundColor(255, 255, 255, 255)
 	love.graphics.draw(bg, 0, 0, 0, 1.08, 1.08, 0, 0 )
-
-	-- draw title 
-	love.graphics.setFont(swishfont_big)
-	love.graphics.printf('On The Lamb!', 0, 75, love.graphics.getWidth(), "center" )
-
 	love.graphics.setFont(swishfont)
+
 	-- draw menu
 	for i,v in ipairs(self.actions) do
 		
