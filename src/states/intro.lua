@@ -120,8 +120,8 @@ function intro:draw()
 		love.graphics.draw(tute_buttons.a, love.graphics.getWidth()/2, 400, 0, 6, 6)
 		love.graphics.draw(tute_buttons.b, love.graphics.getWidth()/2+80, 400, 0, 6, 6)
 
-		love.graphics.printf("ESCAPE  THE  TEMPLE  BY  KEEPING  THE  GUARDS  FOOLED", love.graphics.getWidth()/2-300, 50, 600, "center")
-		love.graphics.printf("INPUTS  MATCH  COLORS  OF  THE  GUARDS\n WAVE  AT  THEM  IN  TIME  TO  KEEP  UP  YOUR  RUSE", love.graphics.getWidth()/2-300, 500, 600, "center")
+		love.graphics.printf("Fool the guards by waving correctly", love.graphics.getWidth()/2-300, 50, 600, "center")
+		love.graphics.printf("Match your wave to the guards colour", love.graphics.getWidth()/2-300, 500, 600, "center")
 	end
 
 	if self.fading then
