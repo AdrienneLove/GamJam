@@ -30,6 +30,7 @@ local spawn = false -- when true, chance for a spawn is triggered.
 -- ui stuff
 local gameover = false
 local gameoverY = 40 --inital position of gameover text
+local gameover_locked = true
 local indicator = false
 local waveCorrect = false
 --local cube = love.graphics.newImage('assets/animations/splash_cube.png')
@@ -526,6 +527,7 @@ function level:draw()
 			love.graphics.printf("Game over", 62, 32, 100, 'center')
 			love.graphics.setColor(255, 255, 255, 255)
 			love.graphics.printf("Game over", 60, 30, 100, 'center')
+			gameover_locked = false
 		end
 	end
 
@@ -591,7 +593,9 @@ function level:keypressed(key, unicode)
 		if wave then level:checkWave(wave) end
 
 	else
-		-- ??
+		if not gameover_locked then
+			level:reInit()
+		end
 	end
 end
 
@@ -691,8 +695,10 @@ function level:joystickpressed(joystick, button)
 
 		if wave then level:checkWave(wave) end
 
-	else -- if gameover
-		-- ???????
+	else
+		if not gameover_locked then
+			level:reInit()
+		end
 	end
 end
 
