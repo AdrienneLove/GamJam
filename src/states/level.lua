@@ -180,7 +180,7 @@ function level:reInit()
 	Timer.tween(0.25, self.fade_params, { opacity = 0, opacity_door = 255 }, 'in-out-sine')
 	Timer.tween(0.5, self.bgm_params, { volume = 0.5 })
 
-	props:populate()
+	props:populate(cur_level)
 
 
 	gameover = false
@@ -408,7 +408,7 @@ function level:newLevel()
 					show_loading = false
 					cur_level = cur_level + 1
 					hero:newLevel()
-					props:populate()
+					props:populate(cur_level)
 					fading = false
 				end)
 				
