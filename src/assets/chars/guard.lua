@@ -1,15 +1,15 @@
 local guard_manager = {
 
 	guard_types = {
-		{ -- 1
-			speed = 80,
+		{ -- 1 RED FOX
+			speed = 90,
 			expectedWave = "B",
 			guard_body_anim_data = { --default body
 				_WIDTH = 32,				
 				_HEIGHT = 39,			
 				_FRAMES = 8,			
 				_FILENAME = "fox_body.png", 	
-				_ANIMATIONSPEED = 0.12 		
+				_ANIMATIONSPEED = 0.1	
 			},
 			guard_body_image = nil,
 			guard_body_animation = nil,
@@ -18,7 +18,7 @@ local guard_manager = {
 				_HEIGHT = 39,			
 				_FRAMES = 8,			
 				_FILENAME = "fox_head.png", 	
-				_ANIMATIONSPEED = 0.12	
+				_ANIMATIONSPEED = 0.1	
 			},
 			guard_head_image = nil,
 			guard_head_animation = nil,
@@ -27,22 +27,23 @@ local guard_manager = {
 				_HEIGHT = 39,			
 				_FRAMES = 8,			
 				_FILENAME = "fox_head_expressions.png", 	
-				_ANIMATIONSPEED = 0.12	
+				_ANIMATIONSPEED = 0.1	
 			},
 			guard_stop_image = nil,
-			guard_stop_animation = nil
+			guard_stop_animation = nil,
+			guard_fail_image = "fox_fail.png"	
 
 		},
-		{ -- 2
+		{ -- 2 YELLOW JAG
 			
-			speed = 90,
+			speed = 95,
 			expectedWave = "Y",
 			guard_body_anim_data = { --default body
 				_WIDTH = 32,				
 				_HEIGHT = 39,			
 				_FRAMES = 8,			
 				_FILENAME = "jaguar_body.png", 	
-				_ANIMATIONSPEED = 0.12 		
+				_ANIMATIONSPEED = 0.11		
 			},
 			guard_body_image = nil,
 			guard_body_animation = nil,
@@ -51,7 +52,7 @@ local guard_manager = {
 				_HEIGHT = 39,			
 				_FRAMES = 8,			
 				_FILENAME = "jaguar_head.png", 	
-				_ANIMATIONSPEED = 0.12	
+				_ANIMATIONSPEED = 0.11	
 			},
 			guard_head_image = nil,
 			guard_head_animation = nil,
@@ -60,20 +61,21 @@ local guard_manager = {
 				_HEIGHT = 39,			
 				_FRAMES = 8,			
 				_FILENAME = "jaguar_head_expressions.png", 	
-				_ANIMATIONSPEED = 0.12	
+				_ANIMATIONSPEED = 0.99
 			},
 			guard_stop_image = nil,
-			guard_stop_animation = nil
+			guard_stop_animation = nil,
+			guard_fail_image = "jaguar_fail.png"	
 		},
-		{ -- 3
-			speed = 100,
+		{ -- 3 BLUE EAGLE
+			speed = 102,
 			expectedWave = "X",
 			guard_body_anim_data = { --default body
 				_WIDTH = 32,				
 				_HEIGHT = 39,			
 				_FRAMES = 8,			
 				_FILENAME = "eagle_body.png", 	
-				_ANIMATIONSPEED = 0.12 		
+				_ANIMATIONSPEED = 0.11 		
 			},
 			guard_body_image = nil,
 			guard_body_animation = nil,
@@ -82,7 +84,7 @@ local guard_manager = {
 				_HEIGHT = 39,			
 				_FRAMES = 8,			
 				_FILENAME = "eagle_head.png", 	
-				_ANIMATIONSPEED = 0.12	
+				_ANIMATIONSPEED = 0.11	
 			},
 			guard_head_image = nil,
 			guard_head_animation = nil,
@@ -91,12 +93,13 @@ local guard_manager = {
 				_HEIGHT = 39,			
 				_FRAMES = 8,			
 				_FILENAME = "eagle_head_expressions.png", 	
-				_ANIMATIONSPEED = 0.12	
+				_ANIMATIONSPEED = 0.11	
 			},
 			guard_stop_image = nil,
-			guard_stop_animation = nil
+			guard_stop_animation = nil,
+			guard_fail_image = "eagle_fail.png"	
 		},
-		{ -- 4
+		{ -- 4 GREEN SNAKE SNAAAAKE SNAAAAAAAKKKE!? 
 			speed = 110,
 			expectedWave = "A",
 			guard_body_anim_data = {
@@ -125,7 +128,8 @@ local guard_manager = {
 				_ANIMATIONSPEED = 0.12	
 			},
 			guard_stop_image = nil,
-			guard_stop_animation = nil
+			guard_stop_animation = nil,
+			guard_fail_image = "snake_fail.png"	
 
 		}
 	},
@@ -133,20 +137,6 @@ local guard_manager = {
 	current_guards = {}
 
 }
-
-
-local tween = require 'lib.tween'
-
-local particles = {}
-local particle_types = {
-	pass = {image = love.graphics.newImage('assets/images/BubbleStar.png')},
-	fail = {image = love.graphics.newImage('assets/images/BubbleX.png')},
-	lose = {image = love.graphics.newImage('assets/images/BubbleExclamation.png')}
-}
-
-guard_manager.allow_particles = true
-guard_manager.particles = particles
-guard_manager.particle_types = particle_types
 
 function guard_manager:newGuard(num)
 
@@ -159,10 +149,12 @@ function guard_manager:newGuard(num)
 		guard_body_image = love.graphics.newImage("assets/images/"..self.guard_types[num]["guard_body_anim_data"]._FILENAME),
 		guard_head_image = love.graphics.newImage("assets/images/"..self.guard_types[num]["guard_head_anim_data"]._FILENAME),
 		guard_stop_image = love.graphics.newImage("assets/images/"..self.guard_types[num]["guard_stop_anim_data"]._FILENAME),
+		guard_fail_image = love.graphics.newImage("assets/images/"..self.guard_types[num]["guard_fail_image"]),
 		speed = self.guard_types[num]["speed"],
 		x = 240,
 		expectedWave = self.guard_types[num]["expectedWave"],
 		isWavedAt = false,
+		isTooSlow = false,
 		guard_body_anim_data = self.guard_types[num]["guard_body_anim_data"],
 		guard_head_anim_data = self.guard_types[num]["guard_head_anim_data"], 
 		guard_stop_anim_data = self.guard_types[num]["guard_stop_anim_data"],
@@ -204,8 +196,12 @@ function guard_manager:newGuard(num)
 	function g:draw()
 		--draw test anim
 		love.graphics.setColor(255, 255, 255, 255)
-		self.active_body_animation:draw(self.guard_body_image, self.x, 65)
-		self.active_head_animation:draw(self.guard_head_image, self.x, 65)
+		if self.state ~= "stop" then
+			self.active_body_animation:draw(self.guard_body_image, self.x, 65)
+			self.active_head_animation:draw(self.guard_head_image, self.x, 65)
+		else
+			love.graphics.draw(self.guard_fail_image, self.x, 64 )
+		end
 	end
 	
 	function g:failWave()
@@ -223,7 +219,7 @@ function guard_manager:newGuard(num)
 	function g:stopGuard()
 		--used by gameover to stop the guard in place and halt animation
 		--self.active_head_animation:pause()
-		self.active_body_animation:pause()
+		self.state = "stop"
 	end
 
 
@@ -244,8 +240,6 @@ end
 
 function guard_manager:update(dt)
 
-	self:particleUpdate(dt)
-
 	for _,guard in ipairs(self.current_guards) do
 		guard:update(dt)
 	end
@@ -254,74 +248,20 @@ end
 
 function guard_manager:draw()
 
-	self:particleDraw()
-
 	for _,guard in ipairs(self.current_guards) do
 		guard:draw()
 	end
 end
 
-function guard_manager:spawnParticle(type, _x, _speed)
-
-	if self.allow_particles == false then
-		return
-	end
-	
-	temp = {}
-	temp.x = _x
-	temp.y = 88
-	temp.speed = _speed
-
-	if type == "pass" then
-		temp.image = self.particle_types["pass"].image
-	elseif type == "fail" then
-		temp.image = self.particle_types["fail"].image
-	elseif type == "lose" then
-		temp.image = self.particle_types["lose"].image
-	else
-		print("Unrecognized particle type")
-		return
-	end
-
-	temp.image:setFilter('nearest','nearest')
-
-	temp.tween = tween.new(1, temp, {y = 0}, "outInElastic")
-
-	table.insert(self.particles, temp)
-end
-
-function guard_manager:particleUpdate(dt)
-	for i, v in ipairs(self.particles) do
-		complete = v.tween:update(dt)
-
-		v.x = v.x - v.speed * dt
-
-		if (complete == true) then
-			table.remove(self.particles, i)
+function guard_manager:leavecheck()
+	for _,guard in ipairs(self.current_guards) do
+		if (guard.x) < 42 and guard.isWavedAt == false and guard.isTooSlow == false then
+			guard.isTooSlow = true
+			return true
 		end
 	end
+
+	return false
 end
 
-function guard_manager:particleDraw()
-	love.graphics.setColor(255, 255, 255, 255)
-	for i, v in ipairs(self.particles) do
-		if v.y < 72 then
-			love.graphics.draw(v.image, v.x, v.y)
-		end
-	end
-end
-
-function guard_manager:particlePause()
-	self.allow_particles = false
-	for i, v in ipairs(self.particles) do
-			v.speed = 0
-	end
-end
-
-function guard_manager:particlePurge()
-	self.allow_particles = false
-	for i, v in ipairs(self.particles) do
-		table.remove(self.particles, i)
-	end
-end
 return guard_manager

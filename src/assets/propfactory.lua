@@ -1,4 +1,4 @@
-local propfactory = {
+local propFactory = {
 	static_prop_types = {
 		{
 			image = love.graphics.newImage('assets/images/door1.png'),
@@ -28,7 +28,7 @@ local propfactory = {
 		{
 			image = love.graphics.newImage('assets/images/mask1.png'),
 			y = 20,
-			door = true
+			door = false
 		},
 		{
 			image = love.graphics.newImage('assets/images/palmtree1.png'),
@@ -43,7 +43,7 @@ local propfactory = {
 		{
 			image = love.graphics.newImage('assets/images/altar.png'),
 			y = 48,
-			door = false
+			door = true
 		},
 		{
 			image = love.graphics.newImage('assets/images/painting.png'),
@@ -69,11 +69,11 @@ local propfactory = {
 	static_props = {},
 	anim_props = {},
 	offset = 64,
-	level_width = 1008
+	level_width = 1444
 }
 
 
-function propfactory:addAnim(position)
+function propFactory:addAnim(position)
 
 	local selected = math.random(table.getn(self.anim_prop_types))
 
@@ -104,7 +104,7 @@ function propfactory:addAnim(position)
 	table.insert(self.anim_props, temp)
 end
 
-function propfactory:addStatic(selected, placement)
+function propFactory:addStatic(selected, placement)
 	temp = {}
 	temp.image = self.static_prop_types[selected].image
 	temp.image:setFilter('nearest','nearest')
@@ -124,36 +124,39 @@ function propfactory:addStatic(selected, placement)
 	end
 end
 
-function propfactory:populate()
+function propFactory:populate()
 
-	for i = 1,20 do
+	self:purge()
+
+	for i = 1,40 do
 
 		local selected = math.random(table.getn(self.static_prop_types))
 		local placement = self.offset + math.random(24) + 12
 
-		propfactory:addStatic(selected, placement)
+		propFactory:addStatic(selected, placement)
 
-		if (self.offset - 96) > self.level_width then
+		if (self.offset) > self.level_width then
 			break
 		end
 	end
 
 	for i, v in ipairs(self.torchpoints) do
 		local flip = math.random()
-		if flip < 0.5 then
+		if flip < 0.33 then
 			self:addAnim(v)
 		end
 	end
 end
 
-function propfactory:update(dt, level_speed)
+function propFactory:update(dt, level_speed)
 
 	for i, v in ipairs(self.static_props) do
 		if v.alive then
 			v.x = v.x - level_speed * dt;
 			if v.x <= -200 then
-				v.alive = false
-				v.image = nil
+				--v.alive = false
+				--v.image = nil
+				table.remove(self.static_props, i)
 			end
 		end
 	end
@@ -161,18 +164,24 @@ function propfactory:update(dt, level_speed)
 	for i, v in ipairs(self.anim_props) do
 		if v.alive then
 			v:update(dt, level_speed)
+			if v.x <= -200 then
+				--v.alive = false
+				--v.image = nil
+				table.remove(self.anim_props, i)
+			end
 		end
 	end
 
 end
 
-function propfactory:draw()
+function propFactory:draw()
 
 	for i, v in ipairs(self.static_props) do
 		if v.alive then
 			love.graphics.draw(v.image, v.x, v.y)
-			--love.graphics.printf(i, v.x, v.y, 128, "left")
 			--decomment to show indexes onscreen
+			--love.graphics.printf(i, v.x, v.y, 128, "left")
+			
 		end
 	end
 
@@ -183,21 +192,25 @@ function propfactory:draw()
 	end
 end
 
-function propfactory:purge()
+function propFactory:purge()
 
 	for i, v in ipairs(self.static_props) do
 		table.remove(self.static_props, i)
 	end
+	self.static_props = {}
 
 	for i, v in ipairs(self.anim_props) do
 		table.remove(self.anim_props, i)
 	end
+	self.anim_props = {}
 
 	for i, v in ipairs(self.torchpoints) do
 		table.remove(self.torchpoints, i)
 	end
+	self.torchpoints = {}
 
-	offset = 64
+	self.offset = 64
+	
 end
 
-return propfactory
+return propFactory
