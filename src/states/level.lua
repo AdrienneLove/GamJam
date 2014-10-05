@@ -446,6 +446,8 @@ function level:draw()
 	--static props
 	props:draw()
 
+
+
 	-- draw life count
 	for i=1,hero.lives do
 		--love.graphics.draw(cube, 40*i, 50)
@@ -550,6 +552,10 @@ function level:draw()
 
 	--show loading screen and end screen outside of graphics scaling 
 	love.graphics.scale(1)
+
+	love.graphics.setColor(255,255,255,255)
+	love.graphics.setFont(swishfont, 20)
+	love.graphics.printf("Level "..cur_level, 5, 5, love.graphics.getWidth()-20, "right" )
 	
 	if show_loading then
 		love.graphics.draw(loading_screens[cur_level], 0, 0, 0, love.graphics.getWidth() / loading_screens[cur_level]:getWidth(), love.graphics.getHeight() / loading_screens[cur_level]:getHeight())

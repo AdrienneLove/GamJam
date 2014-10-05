@@ -180,22 +180,6 @@ function intro:joystickpressed(joystick, button)
 		if joystick:isGamepadDown("a") then
 			intro_scroll.speed = 400
 		end
-		
-		if joystick:isGamepadDown("start") then
-			if intro_scroll.scrolling  then 
-				intro_scroll.x = -1*intro_scroll.image:getWidth()*width_scale + love.graphics.getWidth()
-			else 	
-				input_locked = true
-				self.fading = true
-
-				self.timer:add(1/60, function()
-					self.timer:tween(0.25, self.fade_params, { opacity = 255 }, 'in-out-sine')
-					self.timer:add(2, function()
-						Gamestate.switch(require("states.level"))
-					end)
-				end)
-			end
-		end
 	end
 end
 
@@ -215,10 +199,22 @@ function intro:joystickreleased(joystick, button)
 				self.fading = true
 
 				self.timer:add(1/60, function()
-					self.timer:tween(0.25, self.fade_params, { opacity = 255 }, 'in-out-sine')
-					self.timer:add(2, function()
-						Gamestate.switch(require("states.level"))
+					--fade music
+					self.timer:tween(0.5, self.bgm_params, { volume = 0.0 }, 'in-out-sine')
+
+					self.timer:tween(0.25, self.fade_params, { opacity = 255 }, 'in-out-sine', function ()
+						show_tutorial = true
+						self.timer:tween(0.25, self.fade_params, { opacity = 0 }, 'in-out-sine', function ()
+							self.timer:add(3, function()
+								self.timer:tween(0.25, self.fade_params, { opacity = 255 }, 'in-out-sine', function ()
+									self.timer:add(1, function()
+										Gamestate.switch(require("states.level"))
+									end)
+								end)
+							end)
+						end)
 					end)
+					
 				end)
 			end
 		end
