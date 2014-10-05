@@ -738,6 +738,7 @@ function level:gameover()
 	levels[cur_level]["level_speed"] = 0
 
 	love.audio.play(gameover_sound)
+	hero.x = 58
 end
 
 function level:stopNearestGuard()
