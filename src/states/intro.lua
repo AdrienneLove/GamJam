@@ -6,7 +6,8 @@ local intro_scroll = {
 	image = nil, 
 	x = 0,
 	speed = 180, 
-	scrolling = false
+	scrolling = false,
+	scrolling_finished = false
 }
 local width_scale = nil
 local height_scale = nil
@@ -79,6 +80,7 @@ function intro:update(dt)
 			intro_scroll.x = intro_scroll.x - intro_scroll.speed * dt 
 		else 
 			intro_scroll.scrolling = false
+			intro_scroll.finished_scrolling = true
 		end
 	end
 
@@ -89,7 +91,7 @@ end
 
 function intro:draw()
 
-	 love.graphics.setFont(tute_font)
+	love.graphics.setFont(tute_font)
 
 	-- push graphics stack
 	love.graphics.push()
@@ -99,6 +101,10 @@ function intro:draw()
 
 	--pop graphics stack
 	love.graphics.pop()
+
+	if intro_scroll.finished_scrolling and not show_tutorial then
+		love.graphics.printf("PRESS   ANY   BUTTON   TO   CONTINUE", 0, 460, love.graphics.getWidth(), "center")
+	end
 
 
 	if show_tutorial then 
