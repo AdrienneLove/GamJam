@@ -150,7 +150,6 @@ function intro:keyreleased(key, unicode)
 					--fade music
 					self.timer:tween(0.5, self.bgm_params, { volume = 0.0 }, 'in-out-sine')
 
-					
 					self.timer:tween(0.25, self.fade_params, { opacity = 255 }, 'in-out-sine', function ()
 						show_tutorial = true
 						self.timer:tween(0.25, self.fade_params, { opacity = 0 }, 'in-out-sine', function ()
