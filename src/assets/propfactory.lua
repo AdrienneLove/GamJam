@@ -124,7 +124,7 @@ function propFactory:addStatic(selected, placement)
 	end
 end
 
-function propFactory:populate()
+function propFactory:populate(level)
 
 	local temp = self.level_width
 
@@ -149,7 +149,7 @@ function propFactory:populate()
 		end
 	end
 
-	self.level_width = self.level_width + 120
+	self.level_width = 1444 + 120 * level
 end
 
 function propFactory:update(dt, level_speed)
