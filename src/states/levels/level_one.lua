@@ -5,9 +5,10 @@ local l = {
 	intro_completed = false,
 
 	-- Difficulty/pacing stuff
-	level_speed = 100,
+	level_speed = 60,
 	spawnChance = 5, -- out of 100; chance on a spawn tick that enemy will spawn
 	spawnDelay = 2, -- spawn tick. on tick enemies will have a chance to spawn
+	enemySpeed = 1, -- modifier for enemy speeds
 
 	--background stuff
 	backgrounds_left = 4, -- these two values the same

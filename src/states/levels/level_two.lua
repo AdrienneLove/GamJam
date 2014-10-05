@@ -5,14 +5,15 @@ local l = {
 	intro_completed = false,
 
 	-- Difficulty/pacing stuff
-	level_speed = 100,
-	spawnChance = 10, -- out of 100; chance on a spawn tick that enemy will spawn
-	spawnDelay = .5, -- spawn tick. on tick enemies will have a chance to spawn
+	level_speed = 65,
+	spawnChance = 30, -- out of 100; chance on a spawn tick that enemy will spawn
+	spawnDelay = 1, -- spawn tick. on tick enemies will have a chance to spawn
+	enemySpeed = 1, -- modifier for enemy speeds
 
 	--background stuff
-	backgrounds_left = 4, -- these two values the same
-	foregrounds_left = 4,
-	panels_left = 6,
+	backgrounds_left = 5, -- these two values the same
+	foregrounds_left = 5,
+	panels_left = 7,
 	status = "intro", -- other states are play, dead and outro
 
 	-- hot swap between panel 1, 2 and 3
@@ -24,7 +25,7 @@ local l = {
 
 	foreground_panels = {
 		{ x = 0, image = nil, current = false, furthest = false},
-		{ x = 0, image = nil, current = false, furthest = false}	,
+		{ x = 0, image = nil, current = false, furthest = false},
 		{ x = 0, image = nil, current = false, furthest = true}
 	},
 
