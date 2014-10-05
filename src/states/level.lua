@@ -16,10 +16,6 @@ local levels = {
 
 local cur_level = 1
 
---print(levels[2]["name"])
-
---print(levels[cur_level]["foregrounds_left"])
-
 -- player / enemy stuff
 local guards = require "assets.chars.guard"
 local particle = require "assets.particles"
@@ -28,9 +24,14 @@ local spawn = false -- when true, chance for a spawn is triggered.
 
 
 -- ui stuff
+local hintfont = love.graphics.newFont('assets/fonts/ARCADECLASSIC.ttf', 10)
+hintfont:setFilter("nearest", "nearest", 1)
+
+
 local gameover = false
 local gameoverY = 40 --inital position of gameover text
 local gameover_locked = true
+local gameover_sound = love.audio.newSource("assets/audio/error_style_1_echo_001.ogg", "static")
 local indicator = false
 local waveCorrect = false
 --local cube = love.graphics.newImage('assets/animations/splash_cube.png')
@@ -529,6 +530,11 @@ function level:draw()
 			love.graphics.printf("Game over", 62, 32, 100, 'center')
 			love.graphics.setColor(255, 255, 255, 255)
 			love.graphics.printf("Game over", 60, 30, 100, 'center')
+
+			love.graphics.setFont(hintfont)
+			love.graphics.printf("press any button to restart level", 60, 48, 100, 'center')
+			love.graphics.setFont(swishfont)
+
 			gameover_locked = false
 		end
 	end
@@ -728,7 +734,8 @@ function level:gameover()
 	particle:pause()
 	level:stopNearestGuard()
 	levels[cur_level]["level_speed"] = 0
-	--level:reInit()
+
+	love.audio.play(gameover_sound)
 end
 
 function level:stopNearestGuard()

@@ -8,7 +8,7 @@ function love.conf(t)
 
     -- identity
     t.window.icon = "/assets/images/Life_full.png"
-    t.title = "Sacrificial Waving Lamb Simulator 2014 GreenLight Edition"                -- The title of the window the game is in (string)
+    t.title = "On The Lamb"                -- The title of the window the game is in (string)
     t.author = "Oopa Chaloopa"       -- The author of the game (string)
     t.url = ""                 -- The website of the game (string)
     t.identity = "save/"          -- The name of the save directory (string)
