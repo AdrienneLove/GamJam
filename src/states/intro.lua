@@ -120,8 +120,8 @@ function intro:draw()
 		love.graphics.draw(tute_buttons.a, love.graphics.getWidth()/2, 400, 0, 6, 6)
 		love.graphics.draw(tute_buttons.b, love.graphics.getWidth()/2+80, 400, 0, 6, 6)
 
-		love.graphics.printf("ESCAPE  THE  TEMPLE  BY  KEEPING  THE  GUARDS  FOOLED", love.graphics.getWidth()/2-300, 50, 600, "center")
-		love.graphics.printf("INPUTS  MATCH  COLORS  OF  THE  GUARDS\n WAVE  AT  THEM  IN  TIME  TO  KEEP  UP  YOUR  RUSE", love.graphics.getWidth()/2-300, 500, 600, "center")
+		love.graphics.printf("Fool the guards by waving correctly", love.graphics.getWidth()/2-300, 50, 600, "center")
+		love.graphics.printf("Match your wave to the guards colour", love.graphics.getWidth()/2-300, 500, 600, "center")
 	end
 
 	if self.fading then
@@ -182,11 +182,9 @@ end
 function intro:joystickpressed(joystick, button)
 
 	if input_locked == false then
-
 		if joystick:isGamepadDown("a") then
 			intro_scroll.speed = 400
 		end
-
 	end
 end
 
@@ -206,10 +204,22 @@ function intro:joystickreleased(joystick, button)
 				self.fading = true
 
 				self.timer:add(1/60, function()
-					self.timer:tween(0.25, self.fade_params, { opacity = 255 }, 'in-out-sine')
-					self.timer:add(2, function()
-						Gamestate.switch(require("states.level"))
+					--fade music
+					self.timer:tween(0.5, self.bgm_params, { volume = 0.0 }, 'in-out-sine')
+
+					self.timer:tween(0.25, self.fade_params, { opacity = 255 }, 'in-out-sine', function ()
+						show_tutorial = true
+						self.timer:tween(0.25, self.fade_params, { opacity = 0 }, 'in-out-sine', function ()
+							self.timer:add(3, function()
+								self.timer:tween(0.25, self.fade_params, { opacity = 255 }, 'in-out-sine', function ()
+									self.timer:add(1, function()
+										Gamestate.switch(require("states.level"))
+									end)
+								end)
+							end)
+						end)
 					end)
+					
 				end)
 			end
 		end
