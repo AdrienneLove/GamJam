@@ -180,31 +180,43 @@ local soundY = love.audio.newSource( "assets/audio/energy-2.wav", "static" )
 local soundA = love.audio.newSource( "assets/audio/energy-3.wav", "static" )
 local soundB = love.audio.newSource( "assets/audio/energy-4.wav", "static" )
 local soundEatLife = love.audio.newSource( "assets/audio/fail.wav", "static" )
-
+soundX:setVolume(0.6)
+soundY:setVolume(0.6)
+soundA:setVolume(0.6)
+soundB:setVolume(0.6)
+soundEatLife:setVolume(0.6)
 
 function hero:saluteX()
-	love.audio.play( soundX )
-	active_body_animation = hero.hero_body_wave_x_animation
-	active_body_spritemap = hero.hero_body_wave_x_spritemap
-	active_body_animation:resume()
+	if hero.state ~= "exit" then
+		love.audio.play( soundX )
+		active_body_animation = hero.hero_body_wave_x_animation
+		active_body_spritemap = hero.hero_body_wave_x_spritemap
+		active_body_animation:resume()
+	end
 end
 function hero:saluteY()
-	love.audio.play( soundY )
-	active_body_animation = hero.hero_body_wave_y_animation
-	active_body_spritemap = hero.hero_body_wave_y_spritemap
-	active_body_animation:resume()
+	if hero.state ~= "exit" then	
+		love.audio.play( soundY )
+		active_body_animation = hero.hero_body_wave_y_animation
+		active_body_spritemap = hero.hero_body_wave_y_spritemap
+		active_body_animation:resume()
+	end
 end
 function hero:saluteA()
-	love.audio.play( soundA )
-	active_body_animation = hero.hero_body_wave_a_animation
-	active_body_spritemap = hero.hero_body_wave_a_spritemap
-	active_body_animation:resume()
+	if hero.state ~= "exit" then
+		love.audio.play( soundA )
+		active_body_animation = hero.hero_body_wave_a_animation
+		active_body_spritemap = hero.hero_body_wave_a_spritemap
+		active_body_animation:resume()
+	end
 end
 function hero:saluteB()
-	love.audio.play( soundB )
-	active_body_animation = hero.hero_body_wave_b_animation
-	active_body_spritemap = hero.hero_body_wave_b_spritemap
-	active_body_animation:resume()
+	if hero.state ~= "exit" then
+		love.audio.play( soundB )
+		active_body_animation = hero.hero_body_wave_b_animation
+		active_body_spritemap = hero.hero_body_wave_b_spritemap
+		active_body_animation:resume()
+	end
 end
 
 

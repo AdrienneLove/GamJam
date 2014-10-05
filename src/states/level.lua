@@ -94,15 +94,15 @@ function level:enter(state)
 	--props:populate()
 
 	-- play music
-	game_music = love.audio.newSource( "assets/audio/cephelopod.mp3", "static" )
+	game_music = love.audio.newSource( "assets/audio/cephelopod.mp3", "stream" )
 	game_music:setLooping( true )
-	game_music:setVolume(0.5)
+	game_music:setVolume(0.0)
 	love.audio.play( game_music )
 
 	-- fade in / out 
 	self.fade_params = { opacity = 255 }
-	bgm_params = { volume = 0.5 }
-	Timer.tween(0.25, bgm_params, { volume = 0.8 })
+	self.bgm_params = { volume = 0.0 }
+	Timer.tween(0.5, self.bgm_params, { volume = 0.5 })
 
 
 
@@ -174,7 +174,7 @@ function level:reInit()
 	self.fade_params = { opacity = 255, opacity_door = 0 }
 	self.bgm_params = { volume = 0.5 }
 	Timer.tween(0.25, self.fade_params, { opacity = 0, opacity_door = 255 }, 'in-out-sine')
-	Timer.tween(0.25, self.bgm_params, { volume = 0.8 })
+	Timer.tween(0.5, self.bgm_params, { volume = 0.5 })
 
 	props:populate()
 
@@ -384,18 +384,20 @@ function level:newLevel()
 
 	fading = true
 	if cur_level == 5 then
+		hero.state = "exit"
+		show_end = true
 		Timer.tween(0.25, self.bgm_params, { volume = 0.0 }, 'linear')
 		Timer.tween(0.5, self.fade_params, { opacity = 0 }, 'in-out-sine', function ()
-			show_end = true
-			fading = false
+			--fading = false
 			-- send player to the shadow realm
 		end)
 	else
+		hero.state = "exit"
 		show_loading = true
 		Timer.tween(0.25, self.bgm_params, { volume = 0.0 }, 'linear')
 		Timer.tween(0.5, self.fade_params, { opacity = 0 }, 'in-out-sine', function ()
 			Timer.add(2, function()
-				Timer.tween(0.25, self.bgm_params, { volume = 0.8 }, 'in-out-sine')
+				Timer.tween(0.25, self.bgm_params, { volume = 0.5 }, 'in-out-sine')
 				Timer.tween(0.5, self.fade_params, { opacity = 255 }, 'in-out-sine', function () 
 					show_loading = false
 					cur_level = cur_level + 1
@@ -537,7 +539,7 @@ function level:draw()
 	end
 
 	if show_end then
-		love.graphics.draw(end_screen, 0, 0, 0, love.graphics.getWidth() / loading_screens[cur_level]:getWidth(), love.graphics.getHeight() / loading_screens[cur_level]:getHeight())
+		love.graphics.draw(end_screen, 0, 0, 0, love.graphics.getWidth() / end_screen:getWidth(), love.graphics.getHeight() / end_screen:getHeight())
 	end
 
 	if fading then

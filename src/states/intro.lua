@@ -16,6 +16,7 @@ local input_locked = true
 function intro:enter(state)
 	intro_music = love.audio.newSource( "assets/audio/heavens_trial.mp3", "stream" )
 	intro_music:setLooping( true )
+	intro_music:setVolume(0)
 	love.audio.play( intro_music )
 
 	intro_scroll.image = love.graphics.newImage("assets/images/intro.png")
@@ -26,8 +27,9 @@ function intro:enter(state)
 	self.fading = true
 	self.timer = Timer.new()
 	self.fade_params = { opacity = 255 }
-	self.bgm_params = { volume = 0.5 }
+	self.bgm_params = { volume = 0 }
 	self.timer:add(1/60, function()
+		self.timer:tween(0.5, self.bgm_params, { volume = 0.8 }, 'in-out-sine')
 		self.timer:tween(0.25, self.fade_params, { opacity = 0 }, 'in-out-sine')
 		self.timer:add(0.25, function()
 			self.fading = false
@@ -54,9 +56,7 @@ function intro:update(dt)
 		end
 	end
 
-	if self.fading then
-		intro_music:setVolume(self.bgm_params.volume)
-	end
+	intro_music:setVolume(self.bgm_params.volume)
 
 	self.timer:update(dt)
 end
@@ -101,8 +101,9 @@ function intro:keyreleased(key, unicode)
 				self.fading = true
 
 				self.timer:add(1/60, function()
+					self.timer:tween(0.5, self.bgm_params, { volume = 0.0 }, 'in-out-sine')
 					self.timer:tween(0.25, self.fade_params, { opacity = 255 }, 'in-out-sine')
-					self.timer:add(2, function()
+					self.timer:add(1.25, function()
 						Gamestate.switch(require("states.level"))
 					end)
 				end)
