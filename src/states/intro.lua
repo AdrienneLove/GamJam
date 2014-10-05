@@ -24,7 +24,7 @@ local tute_buttons = {
 	b = "colourRed.png"
 }
 
-local tute_font = love.graphics.newFont( "assets/fonts/ARCADECLASSIC.ttf", 32 )
+local tute_font = love.graphics.newFont( "assets/fonts/ARCADECLASSIC.ttf", 28 )
 
 function intro:enter(state)
 	intro_music = love.audio.newSource( "assets/audio/heavens_trial.mp3", "stream" )
