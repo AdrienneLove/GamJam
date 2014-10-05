@@ -475,28 +475,28 @@ function level:draw()
 	else
 		love.graphics.setColor(90, 90, 90, 255)
 	end
-	love.graphics.draw(blue, 55, 116)
+	love.graphics.draw(blue, 9, 110)
 
 	if colourPressed == "yellow" then
 		love.graphics.setColor(255, 255, 255, 255)
 	else
 		love.graphics.setColor(90, 90, 90, 255)
 	end
-	love.graphics.draw(yellow, 66, 116)
+	love.graphics.draw(yellow, 15, 104)
 
 	if colourPressed == "green" then
 		love.graphics.setColor(255, 255, 255, 255)
 	else
 		love.graphics.setColor(90, 90, 90, 255)
 	end
-	love.graphics.draw(green, 77, 116)
+	love.graphics.draw(green, 15, 116)
 
 	if colourPressed == "red" then
 		love.graphics.setColor(255, 255, 255, 255)
 	else
 		love.graphics.setColor(90, 90, 90, 255)
 	end
-	love.graphics.draw(red, 88, 116)
+	love.graphics.draw(red, 21, 110)
 	
 	--draw particles
 	particle:draw()
@@ -515,6 +515,8 @@ function level:draw()
 	if levels[cur_level]["entry_door"]["alive"] then
 		love.graphics.draw(levels[cur_level]["entry_door"]["image"], levels[cur_level]["entry_door"]["x"], levels[cur_level]["entry_door"]["y"])
 	end
+
+	
 
 	-- gameover text / fade
 	if gameover then
