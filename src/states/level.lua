@@ -29,15 +29,18 @@ local spawn = false -- when true, chance for a spawn is triggered.
 
 -- ui stuff
 local gameover = false
+local gameoverY = 40 --inital position of gameover text
 local indicator = false
 local waveCorrect = false
 --local cube = love.graphics.newImage('assets/animations/splash_cube.png')
 local colorPressed = "none"
-local swishfont = love.graphics.newFont('assets/fonts/LovedbytheKing.ttf', 20)
+local swishfont = love.graphics.newFont('assets/fonts/ARCADECLASSIC.ttf', 20)
 
 local props = require "assets.propfactory"
 
 local fading = true
+local show_loading = false
+local show_end = false
 local game_music
 local bgm_params 
 
@@ -47,6 +50,7 @@ function level:enter(state)
 	-- intro_completed = false
 
 	love.graphics.setDefaultFilter('nearest')
+	swishfont:setFilter("nearest", "nearest", 1)
 
 	--load in panel data for foreground and background
 	background_imagedata_start = love.image.newImageData('assets/images/start.gif')
@@ -71,6 +75,15 @@ function level:enter(state)
 	yellow = love.graphics.newImage('assets/images/colourYellow.png')
 	red = love.graphics.newImage('assets/images/colourRed.png')
 
+	loading_screens = {
+		love.graphics.newImage('assets/images/level2.png'),
+		love.graphics.newImage('assets/images/level3.png'),
+		love.graphics.newImage('assets/images/level4.png'),
+		love.graphics.newImage('assets/images/level5.png')
+	}
+
+	end_screen = love.graphics.newImage('assets/images/end_screen.png'),
+
 	--panel iterates at half screen
 
 	level:reInit()
@@ -83,22 +96,17 @@ function level:enter(state)
 	--props:populate()
 
 	-- play music
-	game_music = love.audio.newSource( "assets/audio/cephelopod.mp3", "stream" )
+	game_music = love.audio.newSource( "assets/audio/cephelopod.mp3", "static" )
 	game_music:setLooping( true )
 	game_music:setVolume(0.5)
 	love.audio.play( game_music )
 
 	-- fade in / out 
-	-- fading = true
 	self.fade_params = { opacity = 255 }
 	bgm_params = { volume = 0.5 }
-	-- Timer.add(1/60, function()
-	-- 	Timer.tween(0.25, self.fade_params, { opacity = 0 }, 'in-out-sine')
-	-- 	Timer.add(0.25, function()
-	-- 		fading = false
-	-- 	end)
-	-- end)
 	Timer.tween(0.25, bgm_params, { volume = 0.8 })
+
+
 
 end
 
@@ -163,18 +171,12 @@ function level:reInit()
 	particle:purge()
 	particle:start()
 
-	-- play music
-	game_music = love.audio.newSource( "assets/audio/cephelopod.mp3", "stream" )
-	game_music:setLooping( true )
-	game_music:setVolume(0.5)
-	love.audio.play( game_music )
-
 	-- fade in / out 
 	-- fading = true
 	self.fade_params = { opacity = 255, opacity_door = 0 }
-	bgm_params = { volume = 0.5 }
+	self.bgm_params = { volume = 0.5 }
 	Timer.tween(0.25, self.fade_params, { opacity = 0, opacity_door = 255 }, 'in-out-sine')
-	Timer.tween(0.25, bgm_params, { volume = 0.8 })
+	Timer.tween(0.25, self.bgm_params, { volume = 0.8 })
 
 	props:populate()
 
@@ -190,6 +192,8 @@ end
 function level:update(dt)
 	--update all timers
 	Timer.update(dt)
+	
+	game_music:setVolume(self.bgm_params.volume)
 
 	if levels[cur_level]["pre_intro"] == false then
 
@@ -233,7 +237,6 @@ function level:update(dt)
 	if levels[cur_level]["backgrounds_left"] > 0 and levels[cur_level]["status"] ~= "intro" then
 		level:spawner()
 	end
-
 
 	hero:update(dt)
 	guards:update(dt)
@@ -372,26 +375,42 @@ function level:update(dt)
 
 		if not fading then
 			fading = true
-			Timer.tween(0.5, self.fade_params, { opacity = 255 }, 'in-out-sine',
-			            function () level:newLevel() end)
+			Timer.tween(0.5, self.fade_params, { opacity = 255 }, 'in-out-sine', function () 
+				level:newLevel() 
+			end)
 		end
-	end
-
-	if self.fading then
-		game_music:setVolume(self.bgm_params.volume)
 	end
 end
 
 function level:newLevel()
 
+	fading = true
 	if cur_level == 5 then
-		--??
+		Timer.tween(0.25, self.bgm_params, { volume = 0.0 }, 'linear')
+		Timer.tween(0.5, self.fade_params, { opacity = 0 }, 'in-out-sine', function ()
+			show_end = true
+			fading = false
+			-- send player to the shadow realm
+		end)
 	else
-		cur_level = cur_level + 1
-		hero:newLevel()
-		props:populate()
-		fading = false
+		show_loading = true
+		Timer.tween(0.25, self.bgm_params, { volume = 0.0 }, 'linear')
+		Timer.tween(0.5, self.fade_params, { opacity = 0 }, 'in-out-sine', function ()
+			Timer.add(2, function()
+				Timer.tween(0.25, self.bgm_params, { volume = 0.8 }, 'in-out-sine')
+				Timer.tween(0.5, self.fade_params, { opacity = 255 }, 'in-out-sine', function () 
+					show_loading = false
+					cur_level = cur_level + 1
+					hero:newLevel()
+					props:populate()
+					fading = false
+				end)
+				
+			end)
+		end)
 	end
+
+
 end
 
 function level:draw()
@@ -426,14 +445,6 @@ function level:draw()
 		love.graphics.draw(hero.life, 15*i, 10)
 	end
 
-	if gameover then
-		--draw text
-		love.graphics.setColor(255, 255, 255, 255)
-		love.graphics.setFont(swishfont)
-		love.graphics.printf("YOU DIED :'(", 30, 30, 100, 'center')
-	end
-
-
 	-- wave detect / indicator for the zone that enemies can receive waves in
 	-- LEAVING THIS IN as it will kind of become the light effect
 	if level:isGuardInRange() then
@@ -449,17 +460,6 @@ function level:draw()
 		end
 
 		love.graphics.ellipse("fill", 75, 103, 20, 4, math.rad(0), 30)
-
-		-- if indicator then
-		-- 	if waveCorrect then -- this needs to change to show the color pressed instead of correct / incorrect.
-		-- 		love.graphics.setColor(65, 222, , 80)
-		-- 	else
-		-- 		love.graphics.setColor(240, 30, 30, 80)
-		-- 	end
-		-- else
-		-- 	love.graphics.setColor(220, 220, 220, 255)
-		-- end
-		--love.graphics.rectangle("fill", 55, 110, 40, 5)
 	end
 
 	--draw indicators.
@@ -510,13 +510,46 @@ function level:draw()
 		love.graphics.draw(levels[cur_level]["entry_door"]["image"], levels[cur_level]["entry_door"]["x"], levels[cur_level]["entry_door"]["y"])
 	end
 
+	-- gameover text / fade
+	if gameover then
+		love.graphics.setColor(33, 33, 33, 80)
+		love.graphics.rectangle("fill", 0, 0, love.graphics.getWidth(), love.graphics.getHeight())
+		--draw text
+		love.graphics.setColor(0, 0, 0, 150)
+		love.graphics.setFont(swishfont)
+		if gameoverY > 30 then		
+			love.graphics.printf("Game over", 62, gameoverY+2, 100, 'center')
+			love.graphics.setColor(255, 255, 255, 255)
+			love.graphics.printf("Game over", 60, gameoverY, 100, 'center')
+			gameoverY = gameoverY - .5
+		else
+			love.graphics.printf("Game over", 62, 32, 100, 'center')
+			love.graphics.setColor(255, 255, 255, 255)
+			love.graphics.printf("Game over", 60, 30, 100, 'center')
+		end
+	end
+
+
+
 	love.graphics.pop()
 
+	--show loading screen and end screen outside of graphics scaling 
+	love.graphics.scale(1)
+	
+	if show_loading then
+		love.graphics.draw(loading_screens[cur_level], 0, 0, 0, love.graphics.getWidth() / loading_screens[cur_level]:getWidth(), love.graphics.getHeight() / loading_screens[cur_level]:getHeight())
+	end
+
+	if show_end then
+		love.graphics.draw(end_screen, 0, 0, 0, love.graphics.getWidth() / loading_screens[cur_level]:getWidth(), love.graphics.getHeight() / loading_screens[cur_level]:getHeight())
+	end
 
 	if fading then
 		love.graphics.setColor(33, 33, 33, self.fade_params.opacity)
 		love.graphics.rectangle("fill", 0, 0, love.graphics.getWidth(), love.graphics.getHeight())
 	end
+
+
 
 
 end
@@ -671,7 +704,7 @@ function level:spawner()
 
 	if spawn and roll > 0 and roll < levels[cur_level]["spawnChance"] then
 		guard = math.random(1,table.getn(levels[cur_level]["guard_types"]))
-		guards:newGuard(guard)
+		guards:newGuard(guard, levels[cur_level]["enemySpeed"])
 		spawn = false
 	elseif spawn then
 		-- if the spawn was true and no spawn happened, still flip spawn back to false.
