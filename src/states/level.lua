@@ -402,7 +402,7 @@ function level:newLevel()
 		show_loading = true
 		Timer.tween(0.25, self.bgm_params, { volume = 0.0 }, 'linear')
 		Timer.tween(0.5, self.fade_params, { opacity = 0 }, 'in-out-sine', function ()
-			Timer.add(2, function()
+			Timer.add(1, function()
 				Timer.tween(0.25, self.bgm_params, { volume = 0.5 }, 'in-out-sine')
 				Timer.tween(0.5, self.fade_params, { opacity = 255 }, 'in-out-sine', function () 
 					show_loading = false
@@ -420,6 +420,7 @@ function level:newLevel()
 end
 
 function level:draw()
+	love.graphics.setBackgroundColor(33, 33, 33, 255)
 	love.graphics.push()
 
 	love.graphics.scale( SCALE )
@@ -497,6 +498,8 @@ function level:draw()
 		love.graphics.setColor(90, 90, 90, 255)
 	end
 	love.graphics.draw(red, 88, 116)
+
+
 	
 	--draw particles
 	particle:draw()
@@ -517,7 +520,7 @@ function level:draw()
 	end
 
 	-- gameover text / fade
-	if gameover then
+	if gameover and self.fading ~= false then
 		love.graphics.setColor(33, 33, 33, 80)
 		love.graphics.rectangle("fill", 0, 0, love.graphics.getWidth(), love.graphics.getHeight())
 		--draw text
