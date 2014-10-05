@@ -23,16 +23,34 @@ local guard_manager = {
 			},
 			guard_head_image = nil,
 			guard_head_animation = nil,
-			guard_stop_anim_data = { -- halt body (gameover)
+			guard_head_anim_data = { --default head
 				_WIDTH = 32,				
 				_HEIGHT = 39,			
 				_FRAMES = 8,			
-				_FILENAME = "fox_head_expressions.png", 	
+				_FILENAME = "fox_head.png", 	
 				_ANIMATIONSPEED = 0.105	
 			},
-			guard_stop_image = nil,
-			guard_stop_animation = nil,
-			guard_fail_image = "fox_fail.png"	
+			guard_head_image = nil,
+			guard_head_animation = nil,
+			guard_happy_anim_data = {
+				_WIDTH = 32,				
+				_HEIGHT = 39,			
+				_FRAMES = 8,			
+				_FILENAME = "fox_head_happy.png", 	
+				_ANIMATIONSPEED = 0.105	
+			},
+			guard_happy_image = nil,
+			guard_happy_animation = nil,
+			guard_angry_anim_data = {
+				_WIDTH = 32,				
+				_HEIGHT = 39,			
+				_FRAMES = 8,			
+				_FILENAME = "fox_head_angry.png", 	
+				_ANIMATIONSPEED = 0.105	
+			},
+			guard_angry_image = nil,
+			guard_angry_animation = nil,
+			guard_fail_image = "fox_fail.png"
 
 		},
 		{ -- 2 GREEN SNAKE SNAAAAKE SNAAAAAAAKKKE!? 
@@ -56,16 +74,25 @@ local guard_manager = {
 			},
 			guard_head_image = nil,
 			guard_head_animation = nil,
-			guard_stop_anim_data = { -- halt body (gameover)
+			guard_happy_anim_data = {
 				_WIDTH = 32,				
 				_HEIGHT = 39,			
 				_FRAMES = 8,			
-				_FILENAME = "snake_body.png", 	
-				_ANIMATIONSPEED = 0.12	
+				_FILENAME = "snake_head_happy.png", 	
+				_ANIMATIONSPEED = 0.12 	
 			},
-			guard_stop_image = nil,
-			guard_stop_animation = nil,
-			guard_fail_image = "snake_fail.png"	
+			guard_happy_image = nil,
+			guard_happy_animation = nil,
+			guard_angry_anim_data = {
+				_WIDTH = 32,				
+				_HEIGHT = 39,			
+				_FRAMES = 8,			
+				_FILENAME = "snake_head_angry.png", 	
+				_ANIMATIONSPEED = 0.12 	
+			},
+			guard_angry_image = nil,
+			guard_angry_animation = nil,
+			guard_fail_image = "snake_fail.png"
 
 		},
 		{ -- 3 YELLOW JAG
@@ -90,15 +117,24 @@ local guard_manager = {
 			},
 			guard_head_image = nil,
 			guard_head_animation = nil,
-			guard_stop_anim_data = { -- halt body (gameover)
+			guard_happy_anim_data = {
 				_WIDTH = 32,				
 				_HEIGHT = 39,			
 				_FRAMES = 8,			
-				_FILENAME = "jaguar_head_expressions.png", 	
-				_ANIMATIONSPEED = 0.11
+				_FILENAME = "jaguar_head_happy.png", 	
+				_ANIMATIONSPEED = 0.11	
 			},
-			guard_stop_image = nil,
-			guard_stop_animation = nil,
+			guard_happy_image = nil,
+			guard_happy_animation = nil,
+			guard_angry_anim_data = {
+				_WIDTH = 32,				
+				_HEIGHT = 39,			
+				_FRAMES = 8,			
+				_FILENAME = "jaguar_head_angry.png", 	
+				_ANIMATIONSPEED = 0.11	
+			},
+			guard_angry_image = nil,
+			guard_angry_animation = nil,
 			guard_fail_image = "jaguar_fail.png"	
 		},
 		{ -- 4 BLUE EAGLE
@@ -122,15 +158,24 @@ local guard_manager = {
 			},
 			guard_head_image = nil,
 			guard_head_animation = nil,
-			guard_stop_anim_data = { -- halt body (gameover)
+			guard_happy_anim_data = {
 				_WIDTH = 32,				
 				_HEIGHT = 39,			
 				_FRAMES = 8,			
-				_FILENAME = "eagle_head_expressions.png", 	
+				_FILENAME = "eagle_head_happy.png", 	
 				_ANIMATIONSPEED = 0.115	
 			},
-			guard_stop_image = nil,
-			guard_stop_animation = nil,
+			guard_happy_image = nil,
+			guard_happy_animation = nil,
+			guard_angry_anim_data = {
+				_WIDTH = 32,				
+				_HEIGHT = 39,			
+				_FRAMES = 8,			
+				_FILENAME = "eagle_head_angry.png", 	
+				_ANIMATIONSPEED = 0.115	
+			},
+			guard_angry_image = nil,
+			guard_angry_animation = nil,
 			guard_fail_image = "eagle_fail.png"	
 		}
 	},
@@ -149,7 +194,9 @@ function guard_manager:newGuard(num)
 	local g = {
 		guard_body_image = love.graphics.newImage("assets/images/"..self.guard_types[num]["guard_body_anim_data"]._FILENAME),
 		guard_head_image = love.graphics.newImage("assets/images/"..self.guard_types[num]["guard_head_anim_data"]._FILENAME),
-		guard_stop_image = love.graphics.newImage("assets/images/"..self.guard_types[num]["guard_stop_anim_data"]._FILENAME),
+		--guard_stop_image = love.graphics.newImage("assets/images/"..self.guard_types[num]["guard_stop_anim_data"]._FILENAME),
+		guard_happy_image = love.graphics.newImage("assets/images/"..self.guard_types[num]["guard_happy_anim_data"]._FILENAME),
+		guard_angry_image = love.graphics.newImage("assets/images/"..self.guard_types[num]["guard_angry_anim_data"]._FILENAME),
 		guard_fail_image = love.graphics.newImage("assets/images/"..self.guard_types[num]["guard_fail_image"]),
 		speed = self.guard_types[num]["speed"],
 		x = 240,
@@ -158,17 +205,25 @@ function guard_manager:newGuard(num)
 		isTooSlow = false,
 		guard_body_anim_data = self.guard_types[num]["guard_body_anim_data"],
 		guard_head_anim_data = self.guard_types[num]["guard_head_anim_data"], 
-		guard_stop_anim_data = self.guard_types[num]["guard_stop_anim_data"],
+		--guard_stop_anim_data = self.guard_types[num]["guard_stop_anim_data"],
+		guard_happy_anim_data = self.guard_types[num]["guard_happy_anim_data"],
+		guard_angry_anim_data = self.guard_types[num]["guard_angry_anim_data"],
 		state = "play" -- "play", "stop", "failed", "success"
 	}
 	g.guard_body_image:setFilter('nearest', 'nearest')
 	g.guard_head_image:setFilter('nearest', 'nearest')
-	g.guard_stop_image:setFilter('nearest', 'nearest')
+	--g.guard_stop_image:setFilter('nearest', 'nearest')
+	g.guard_happy_image:setFilter('nearest', 'nearest')
+	g.guard_angry_image:setFilter('nearest', 'nearest')
 	local guard_body_grid = anim8.newGrid(g.guard_body_anim_data._WIDTH, g.guard_body_anim_data._HEIGHT, g.guard_body_image:getWidth(), g.guard_body_image:getHeight())
 	local guard_head_grid = anim8.newGrid(g.guard_head_anim_data._WIDTH, g.guard_head_anim_data._HEIGHT, g.guard_head_image:getWidth(), g.guard_head_image:getHeight())
-	local guard_stop_grid = anim8.newGrid(g.guard_stop_anim_data._WIDTH, g.guard_stop_anim_data._HEIGHT, g.guard_stop_image:getWidth(), g.guard_stop_image:getHeight())
+	local guard_happy_grid = anim8.newGrid(g.guard_happy_anim_data._WIDTH, g.guard_happy_anim_data._HEIGHT, g.guard_happy_image:getWidth(), g.guard_happy_image:getHeight())
+	local guard_angry_grid = anim8.newGrid(g.guard_angry_anim_data._WIDTH, g.guard_angry_anim_data._HEIGHT, g.guard_angry_image:getWidth(), g.guard_angry_image:getHeight())
+
 	g.animation = anim8.newAnimation(guard_body_grid('1-'..g.guard_body_anim_data._FRAMES,1), g.guard_body_anim_data._ANIMATIONSPEED)
 	g.head_animation = anim8.newAnimation(guard_head_grid('1-'..g.guard_head_anim_data._FRAMES,1), g.guard_head_anim_data._ANIMATIONSPEED)
+	g.happy_animation = anim8.newAnimation(guard_happy_grid('1-8',1), g.guard_happy_anim_data._ANIMATIONSPEED)
+	g.angry_animation = anim8.newAnimation(guard_angry_grid('1-8',1), g.guard_angry_anim_data._ANIMATIONSPEED)
 	
 	g.active_body_animation  = g.animation
 	g.active_body_spritemap = g.guard_body_image
@@ -176,14 +231,14 @@ function guard_manager:newGuard(num)
 	g.active_head_animation = g.head_animation
 	g.active_head_spritemap = g.guard_head_image
 
-	-- halt anim state
+	--[[ halt anim state
 	g.stop_animation = anim8.newAnimation(guard_stop_grid('1-'..g.guard_stop_anim_data._FRAMES,1), g.guard_stop_anim_data._ANIMATIONSPEED, function()
 			--one anim ends go back to default
 			g.animation:gotoFrame(active_body_animation.position)
 			active_body_animation = g.animation
 			active_body_spritemap = g.guard_body_image
 
-		end)
+		end) ]]--
 
 	function g:update(dt)
 
@@ -199,7 +254,7 @@ function guard_manager:newGuard(num)
 		love.graphics.setColor(255, 255, 255, 255)
 		if self.state ~= "stop" then
 			self.active_body_animation:draw(self.guard_body_image, self.x, 65)
-			self.active_head_animation:draw(self.guard_head_image, self.x, 65)
+			self.active_head_animation:draw(self.active_head_spritemap, self.x, 65)
 		else
 			love.graphics.draw(self.guard_fail_image, self.x, 64 )
 		end
@@ -208,12 +263,18 @@ function guard_manager:newGuard(num)
 	local soundPass = love.audio.newSource( "assets/audio/pass.wav", "static" )
 	
 	function g:failWave()
+		self.angry_animation:gotoFrame(self.active_head_animation.position)
+		--self.active_head_animation = self.angry_animation
+		self.active_head_spritemap = self.guard_angry_image
 		--for triggering the particle effect for failing on a guard
 		self.state = "failed"
 		--print("set to failed")
 	end
 
 	function g:successWave()
+		self.happy_animation:gotoFrame(self.active_head_animation.position)
+		--self.active_head_animation = self.happy_animation
+		self.active_head_spritemap = self.guard_happy_image
 		love.audio.play( soundPass )
 		--for triggering the particle effect for success on a guard
 		self.state = "success"

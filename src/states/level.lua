@@ -241,12 +241,14 @@ function level:update(dt)
 
 	local missed = guards:leavecheck(dt)
 	if missed == true then
+		nearest = guards.current_guards[1]
+		nearest:failWave()
 		if hero.lives > 1 then
-			particle:spawn("fail", guards.current_guards[1].x + 6, guards.current_guards[1].speed)
+			particle:spawn("fail", nearest.x + 6, nearest.speed)
 			hero:eatLife()
 		else
 			hero:eatLife()
-			guards.current_guards[1].x  = guards.current_guards[1].x + 50
+			nearest.x  = nearest.x + 50
 		end
 	end
 
