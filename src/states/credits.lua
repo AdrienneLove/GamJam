@@ -1,7 +1,7 @@
 local credits = {}
 
-local swishfont = love.graphics.newFont('assets/fonts/ARIAL ROUNDED MT.ttf', 18)
-local swishfont_bold = love.graphics.newFont('assets/fonts/ARCADECLASSIC.TTF', 22)
+local swishfont = love.graphics.newFont('assets/fonts/ARIAL ROUNDED MT.TTF', 18)
+local swishfont_bold = love.graphics.newFont('assets/fonts/arcadeclassic.TTF', 22)
 
 function credits:enter(state)
 	--hero:reset() --reset the player (SO FRESH)
