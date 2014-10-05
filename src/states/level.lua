@@ -14,7 +14,7 @@ local levels = {
 	require 'states.levels.level_five'
 }
 
-local cur_level = 1
+local cur_level -- set in level:reInit()
 
 -- player / enemy stuff
 local guards = require "assets.chars.guard"
@@ -394,8 +394,8 @@ function level:newLevel()
 		show_end = true
 		Timer.tween(0.25, self.bgm_params, { volume = 0.0 }, 'linear')
 		Timer.tween(0.5, self.fade_params, { opacity = 0 }, 'in-out-sine', function ()
-			--fading = false
-			-- send player to the shadow realm
+			Timer.add(10,function() Gamestate.switch(require "states.credits")
+				end)
 		end)
 	else
 		hero.state = "exit"
