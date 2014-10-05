@@ -233,7 +233,9 @@ function hero:draw()
 end
 
 function hero:eatLife()
-	love.audio.play( soundEatLife )
+	if gameover then
+		love.audio.play( soundEatLife )
+	end
 	if hero.lives > 0 then
 		hero.lives = hero.lives - 1
 	end
