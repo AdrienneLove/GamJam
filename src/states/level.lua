@@ -29,11 +29,12 @@ local spawn = false -- when true, chance for a spawn is triggered.
 
 -- ui stuff
 local gameover = false
+local gameoverY = 40 --inital position of gameover text
 local indicator = false
 local waveCorrect = false
 --local cube = love.graphics.newImage('assets/animations/splash_cube.png')
 local colorPressed = "none"
-local swishfont = love.graphics.newFont('assets/fonts/LovedbytheKing.ttf', 20)
+local swishfont = love.graphics.newFont('assets/fonts/ARCADECLASSIC.ttf', 20)
 
 local props = require "assets.propfactory"
 
@@ -49,6 +50,7 @@ function level:enter(state)
 	-- intro_completed = false
 
 	love.graphics.setDefaultFilter('nearest')
+	swishfont:setFilter("nearest", "nearest", 1)
 
 	--load in panel data for foreground and background
 	background_imagedata_start = love.image.newImageData('assets/images/start.gif')
@@ -445,14 +447,6 @@ function level:draw()
 		love.graphics.draw(hero.life, 15*i, 10)
 	end
 
-	if gameover then
-		--draw text
-		love.graphics.setColor(255, 255, 255, 255)
-		love.graphics.setFont(swishfont)
-		love.graphics.printf("YOU DIED :'(", 30, 30, 100, 'center')
-	end
-
-
 	-- wave detect / indicator for the zone that enemies can receive waves in
 	-- LEAVING THIS IN as it will kind of become the light effect
 	if level:isGuardInRange() then
@@ -468,17 +462,6 @@ function level:draw()
 		end
 
 		love.graphics.ellipse("fill", 75, 103, 20, 4, math.rad(0), 30)
-
-		-- if indicator then
-		-- 	if waveCorrect then -- this needs to change to show the color pressed instead of correct / incorrect.
-		-- 		love.graphics.setColor(65, 222, , 80)
-		-- 	else
-		-- 		love.graphics.setColor(240, 30, 30, 80)
-		-- 	end
-		-- else
-		-- 	love.graphics.setColor(220, 220, 220, 255)
-		-- end
-		--love.graphics.rectangle("fill", 55, 110, 40, 5)
 	end
 
 	--draw indicators.
@@ -529,6 +512,27 @@ function level:draw()
 		love.graphics.draw(levels[cur_level]["entry_door"]["image"], levels[cur_level]["entry_door"]["x"], levels[cur_level]["entry_door"]["y"])
 	end
 
+	-- gameover text / fade
+	if gameover then
+		love.graphics.setColor(33, 33, 33, 80)
+		love.graphics.rectangle("fill", 0, 0, love.graphics.getWidth(), love.graphics.getHeight())
+		--draw text
+		love.graphics.setColor(0, 0, 0, 150)
+		love.graphics.setFont(swishfont)
+		if gameoverY > 30 then		
+			love.graphics.printf("Game over", 62, gameoverY+2, 100, 'center')
+			love.graphics.setColor(255, 255, 255, 255)
+			love.graphics.printf("Game over", 60, gameoverY, 100, 'center')
+			gameoverY = gameoverY - .5
+		else
+			love.graphics.printf("Game over", 62, 32, 100, 'center')
+			love.graphics.setColor(255, 255, 255, 255)
+			love.graphics.printf("Game over", 60, 30, 100, 'center')
+		end
+	end
+
+
+
 	love.graphics.pop()
 
 	--show loading screen and end screen outside of graphics scaling 
@@ -555,37 +559,42 @@ end
 function level:keypressed(key, unicode)
 	local wave
 
-	-- navigate menu
-	if key == "w" or key == "up" then
-		-- Y = 14
-		wave = "Y"
-		hero:saluteY()
-		colourPressed = "yellow"
-	end
-	if key == "a" or key == "left" then
-		-- X = 13
-		wave = "X"
-		hero:saluteX()
-		colourPressed = "blue"
-	end
-	if key == "d" or key == "right" then
-		-- B = 12
-		wave = "B"
-		hero:saluteB()
-		colourPressed = "red"
-	end
-	if key == "s" or key == "down" then
-		-- A = 11
-		wave = "A"
-		hero:saluteA()
-		colourPressed = "green"
-	end
+	if not gameover then
 
-	if key == "p" then
-		particle:spawn("pass", 128, 80)
-	end
+		if key == "w" or key == "up" then
+			-- Y = 14
+			wave = "Y"
+			hero:saluteY()
+			colourPressed = "yellow"
+		end
+		if key == "a" or key == "left" then
+			-- X = 13
+			wave = "X"
+			hero:saluteX()
+			colourPressed = "blue"
+		end
+		if key == "d" or key == "right" then
+			-- B = 12
+			wave = "B"
+			hero:saluteB()
+			colourPressed = "red"
+		end
+		if key == "s" or key == "down" then
+			-- A = 11
+			wave = "A"
+			hero:saluteA()
+			colourPressed = "green"
+		end
 
-	if wave then level:checkWave(wave) end
+		if key == "p" then
+			particle:spawn("pass", 128, 80)
+		end
+
+		if wave then level:checkWave(wave) end
+
+	else
+		-- ??
+	end
 end
 
 function level:checkWave(wave)
@@ -639,44 +648,54 @@ end
 function level:joystickpressed(joystick, button)
 	local wave
 
-	if button == 1 then
-		wave = "A"
-	elseif button == 2 then
-		wave = "B"
-	elseif button == 3 then
-		wave = "X"
-	elseif button == 4 then
-		wave = "Y"
-	end
-	
-	if joystick:isGamepadDown("y") then
-		wave = "Y"
-		colourPressed = "yellow"
-	end
-	if joystick:isGamepadDown("x") then
-		wave = "X"
-		colourPressed = "blue"
-	end
-	if joystick:isGamepadDown("b") then
-		wave = "B"
-		colourPressed = "red"
-	end
-	if joystick:isGamepadDown("a") then
-		wave = "A"
-		colourPressed = "green"
-	end
+	if not gameover then
 
-	if wave == "Y" then
-		hero:saluteY()
-	elseif wave == "X" then
-		hero:saluteX()
-	elseif wave == "B" then
-		hero:saluteB()
-	elseif wave == "A" then
-		hero:saluteA()
-	end		
+		if button == 1 then
+			wave = "A"
+			colourPressed = "green"
+		elseif button == 2 then
+			wave = "B"
+			colourPressed = "red"
+		elseif button == 3 then
+			wave = "X"
+			colourPressed = "blue"
+		elseif button == 4 then
+			wave = "Y"
+			colourPressed = "yellow"
+		end
+		
+		if joystick:isGamepadDown("y") then
+			wave = "Y"
+			colourPressed = "yellow"
+		end
+		if joystick:isGamepadDown("x") then
+			wave = "X"
+			colourPressed = "blue"
+		end
+		if joystick:isGamepadDown("b") then
+			wave = "B"
+			colourPressed = "red"
+		end
+		if joystick:isGamepadDown("a") then
+			wave = "A"
+			colourPressed = "green"
+		end
 
-	if wave then level:checkWave(wave) end
+		if wave == "Y" then
+			hero:saluteY()
+		elseif wave == "X" then
+			hero:saluteX()
+		elseif wave == "B" then
+			hero:saluteB()
+		elseif wave == "A" then
+			hero:saluteA()
+		end
+
+		if wave then level:checkWave(wave) end
+
+	else -- if gameover
+		-- ???????
+	end
 end
 
 function level:spawner()
@@ -687,7 +706,7 @@ function level:spawner()
 
 	if spawn and roll > 0 and roll < levels[cur_level]["spawnChance"] then
 		guard = math.random(1,table.getn(levels[cur_level]["guard_types"]))
-		guards:newGuard(guard)
+		guards:newGuard(guard, levels[cur_level]["enemySpeed"])
 		spawn = false
 	elseif spawn then
 		-- if the spawn was true and no spawn happened, still flip spawn back to false.
