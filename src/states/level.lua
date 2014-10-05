@@ -525,25 +525,25 @@ function level:keypressed(key, unicode)
 	local wave
 
 	-- navigate menu
-	if key == "w" then
+	if key == "w" or key == "up" then
 		-- Y = 14
 		wave = "Y"
 		hero:saluteY()
 		colourPressed = "yellow"
 	end
-	if key == "a" then
+	if key == "a" or key == "left" then
 		-- X = 13
 		wave = "X"
 		hero:saluteX()
 		colourPressed = "blue"
 	end
-	if key == "d" then
+	if key == "d" or key == "right" then
 		-- B = 12
 		wave = "B"
 		hero:saluteB()
 		colourPressed = "red"
 	end
-	if key == "s" then
+	if key == "s" or key == "down" then
 		-- A = 11
 		wave = "A"
 		hero:saluteA()
@@ -655,7 +655,7 @@ function level:spawner()
 	end
 
 	if spawn and roll > 0 and roll < levels[cur_level]["spawnChance"] then
-		guard = math.random(1,4)
+		guard = math.random(1,table.getn(levels[cur_level]["guard_types"]))
 		guards:newGuard(guard)
 		spawn = false
 	elseif spawn then
