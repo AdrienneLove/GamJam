@@ -1,14 +1,15 @@
 local title = {}
 hero = require "assets.chars.hero"
+local swishfont = love.graphics.newFont('assets/fonts/ARCADECLASSIC.ttf', 60)
 
 function title:enter(state)
 	--hero:reset() --reset the player (SO FRESH)
 	self.current = 1; 	-- currently selected menu element
-
+	bg = love.graphics.newImage('assets/images/title_bg.png')
 	self.actions = {
-		{ name="Play",    screen="intro" },
-		{ name="Credits", screen="credits" },
-		{ name="Exit",    screen="exit" }
+		{ name="Play",    screen="intro", rune = love.graphics.newImage('assets/images/title_top.png'), runeUp = love.graphics.newImage('assets/images/title_top_up.png') },
+		{ name="Credits", screen="credits", rune = love.graphics.newImage('assets/images/title_middle.png'), runeUp = love.graphics.newImage('assets/images/title_middle_up.png') },
+		{ name="Exit",    screen="exit", rune = love.graphics.newImage('assets/images/title_bottom.png'), runeUp = love.graphics.newImage('assets/images/title_bottom_up.png') }
 	} 
 
 	self.data = {} 
@@ -32,31 +33,29 @@ function title:draw()
 	love.graphics.push()
 
 	--set background & font
-	love.graphics.setBackgroundColor(33, 33, 33, 255)
+	love.graphics.setBackgroundColor(255, 255, 255, 255)
+	love.graphics.draw(bg, 0, 0, 0, 1.08, 1.08, 0, 0 )
+	love.graphics.setFont(swishfont)
 
 	-- draw menu
 	for i,v in ipairs(self.actions) do
 		
 		--space between menu items
-		local spacing = 40
-		local positionToDrawMenu = { x = 50, y = 50 }
-		
-		-- default menu item style
-		love.graphics.setColor(255, 0, 255, 200)
+		local spacing = 90
+		local positionToDrawMenu = { x = 300, y = 100 }
 
+		love.graphics.setColor(255, 255, 255, 255)
 		-- selected menu item style
 		if i == self.current then
-			love.graphics.setColor(255, 156, 255, 255)
 			-- draw pointer triangle
-			love.graphics.polygon("fill",
-				positionToDrawMenu.x -20, positionToDrawMenu.y + 3 + (i*spacing),
-				positionToDrawMenu.x -15, positionToDrawMenu.y + 8 + (i*spacing),
-				positionToDrawMenu.x -20, positionToDrawMenu.y + 13 + (i*spacing)
-			)
+			love.graphics.draw(v.runeUp, positionToDrawMenu.x, positionToDrawMenu.y + (i*spacing))
+		else
+			love.graphics.draw(v.rune, positionToDrawMenu.x, positionToDrawMenu.y+ (i*spacing))
+			love.graphics.setColor(255, 255, 255, 100) --font opacity
 		end
 		
 		-- draw menu item name
-		love.graphics.printf(v.name, positionToDrawMenu.x, positionToDrawMenu.y + (i*spacing), 100, 'left')
+		love.graphics.printf(v.name, positionToDrawMenu.x+100, positionToDrawMenu.y +10+ (i*spacing), 100, 'left')
 	end
 
 	--stupid flanders
