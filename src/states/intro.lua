@@ -24,7 +24,7 @@ local tute_buttons = {
 	b = "colourRed.png"
 }
 
-local tute_font = love.graphics.newFont( "assets/fonts/arcadeclassic.TTF", 32 )
+local tute_font = love.graphics.newFont( "assets/fonts/arcadeclassic.TTF", 28 )
 
 function intro:enter(state)
 	intro_music = love.audio.newSource( "assets/audio/heavens_trial.mp3", "stream" )
@@ -103,7 +103,7 @@ function intro:draw()
 	love.graphics.pop()
 
 	if intro_scroll.finished_scrolling and not show_tutorial then
-		love.graphics.printf("PRESS   ANY   BUTTON   TO   CONTINUE", 0, 460, love.graphics.getWidth(), "center")
+		love.graphics.printf("PRESS   START   BUTTON   TO   CONTINUE", 0, 460, love.graphics.getWidth(), "center")
 	end
 
 
