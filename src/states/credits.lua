@@ -1,4 +1,5 @@
 local credits = {}
+
 local swishfont = love.graphics.newFont('assets/fonts/ARIAL ROUNDED MT.ttf', 18)
 local swishfont_bold = love.graphics.newFont('assets/fonts/ARCADECLASSIC.TTF', 22)
 
@@ -12,6 +13,7 @@ function credits:enter(state)
 		{ name="Exit",    screen="exit" }
 	} 
 	self.items = { --credit text sections
+
 		{ title = "On The Lamb by Oopa Chaloopa!", info = {"48hr Game Making Challenge 2014"}},
 		{ title = "Artists", info =  {"Rimon Bar", "Camila Duran Espinosa" } },
 		{ title = "Programmers", info =  {"Cameron Bland", "Adrian Love", "Racheal Smith", "Michael Whitman" } },
@@ -51,6 +53,7 @@ function credits:draw()
 	for i, v in ipairs(self.items) do
 		--print(i)
 		--space between menu items
+
 		local spacing = 30
 		local positionToDrawCredits = { x = 50, y = 40}
 		
