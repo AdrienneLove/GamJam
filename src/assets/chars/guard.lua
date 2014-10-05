@@ -203,6 +203,8 @@ function guard_manager:newGuard(num)
 			love.graphics.draw(self.guard_fail_image, self.x, 64 )
 		end
 	end
+
+	local soundPass = love.audio.newSource( "assets/audio/pass.wav", "static" )
 	
 	function g:failWave()
 		--for triggering the particle effect for failing on a guard
@@ -211,6 +213,7 @@ function guard_manager:newGuard(num)
 	end
 
 	function g:successWave()
+		love.audio.play( soundPass )
 		--for triggering the particle effect for success on a guard
 		self.state = "success"
 		--print("set to success")
