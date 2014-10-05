@@ -1,6 +1,7 @@
 local guard_manager = {
 
 	guard_types = {
+		-- ORDER OF THESE IS IMPORTANT for staggering which colours spawn on early levels.
 		{ -- 1 RED FOX
 			speed = 90,
 			expectedWave = "B",
@@ -9,7 +10,7 @@ local guard_manager = {
 				_HEIGHT = 39,			
 				_FRAMES = 8,			
 				_FILENAME = "fox_body.png", 	
-				_ANIMATIONSPEED = 0.1	
+				_ANIMATIONSPEED = 0.105	
 			},
 			guard_body_image = nil,
 			guard_body_animation = nil,
@@ -18,7 +19,7 @@ local guard_manager = {
 				_HEIGHT = 39,			
 				_FRAMES = 8,			
 				_FILENAME = "fox_head.png", 	
-				_ANIMATIONSPEED = 0.1	
+				_ANIMATIONSPEED = 0.105	
 			},
 			guard_head_image = nil,
 			guard_head_animation = nil,
@@ -27,79 +28,14 @@ local guard_manager = {
 				_HEIGHT = 39,			
 				_FRAMES = 8,			
 				_FILENAME = "fox_head_expressions.png", 	
-				_ANIMATIONSPEED = 0.1	
+				_ANIMATIONSPEED = 0.105	
 			},
 			guard_stop_image = nil,
 			guard_stop_animation = nil,
 			guard_fail_image = "fox_fail.png"	
 
 		},
-		{ -- 2 YELLOW JAG
-			
-			speed = 95,
-			expectedWave = "Y",
-			guard_body_anim_data = { --default body
-				_WIDTH = 32,				
-				_HEIGHT = 39,			
-				_FRAMES = 8,			
-				_FILENAME = "jaguar_body.png", 	
-				_ANIMATIONSPEED = 0.11		
-			},
-			guard_body_image = nil,
-			guard_body_animation = nil,
-			guard_head_anim_data = { --default head
-				_WIDTH = 32,				
-				_HEIGHT = 39,			
-				_FRAMES = 8,			
-				_FILENAME = "jaguar_head.png", 	
-				_ANIMATIONSPEED = 0.11	
-			},
-			guard_head_image = nil,
-			guard_head_animation = nil,
-			guard_stop_anim_data = { -- halt body (gameover)
-				_WIDTH = 32,				
-				_HEIGHT = 39,			
-				_FRAMES = 8,			
-				_FILENAME = "jaguar_head_expressions.png", 	
-				_ANIMATIONSPEED = 0.99
-			},
-			guard_stop_image = nil,
-			guard_stop_animation = nil,
-			guard_fail_image = "jaguar_fail.png"	
-		},
-		{ -- 3 BLUE EAGLE
-			speed = 102,
-			expectedWave = "X",
-			guard_body_anim_data = { --default body
-				_WIDTH = 32,				
-				_HEIGHT = 39,			
-				_FRAMES = 8,			
-				_FILENAME = "eagle_body.png", 	
-				_ANIMATIONSPEED = 0.11 		
-			},
-			guard_body_image = nil,
-			guard_body_animation = nil,
-			guard_head_anim_data = { --default head
-				_WIDTH = 32,				
-				_HEIGHT = 39,			
-				_FRAMES = 8,			
-				_FILENAME = "eagle_head.png", 	
-				_ANIMATIONSPEED = 0.11	
-			},
-			guard_head_image = nil,
-			guard_head_animation = nil,
-			guard_stop_anim_data = { -- halt body (gameover)
-				_WIDTH = 32,				
-				_HEIGHT = 39,			
-				_FRAMES = 8,			
-				_FILENAME = "eagle_head_expressions.png", 	
-				_ANIMATIONSPEED = 0.11	
-			},
-			guard_stop_image = nil,
-			guard_stop_animation = nil,
-			guard_fail_image = "eagle_fail.png"	
-		},
-		{ -- 4 GREEN SNAKE SNAAAAKE SNAAAAAAAKKKE!? 
+		{ -- 2 GREEN SNAKE SNAAAAKE SNAAAAAAAKKKE!? 
 			speed = 110,
 			expectedWave = "A",
 			guard_body_anim_data = {
@@ -131,6 +67,71 @@ local guard_manager = {
 			guard_stop_animation = nil,
 			guard_fail_image = "snake_fail.png"	
 
+		},
+		{ -- 3 YELLOW JAG
+			
+			speed = 95,
+			expectedWave = "Y",
+			guard_body_anim_data = { --default body
+				_WIDTH = 32,				
+				_HEIGHT = 39,			
+				_FRAMES = 8,			
+				_FILENAME = "jaguar_body.png", 	
+				_ANIMATIONSPEED = 0.11		
+			},
+			guard_body_image = nil,
+			guard_body_animation = nil,
+			guard_head_anim_data = { --default head
+				_WIDTH = 32,				
+				_HEIGHT = 39,			
+				_FRAMES = 8,			
+				_FILENAME = "jaguar_head.png", 	
+				_ANIMATIONSPEED = 0.11	
+			},
+			guard_head_image = nil,
+			guard_head_animation = nil,
+			guard_stop_anim_data = { -- halt body (gameover)
+				_WIDTH = 32,				
+				_HEIGHT = 39,			
+				_FRAMES = 8,			
+				_FILENAME = "jaguar_head_expressions.png", 	
+				_ANIMATIONSPEED = 0.11
+			},
+			guard_stop_image = nil,
+			guard_stop_animation = nil,
+			guard_fail_image = "jaguar_fail.png"	
+		},
+		{ -- 4 BLUE EAGLE
+			speed = 103,
+			expectedWave = "X",
+			guard_body_anim_data = { --default body
+				_WIDTH = 32,				
+				_HEIGHT = 39,			
+				_FRAMES = 8,			
+				_FILENAME = "eagle_body.png", 	
+				_ANIMATIONSPEED = 0.115		
+			},
+			guard_body_image = nil,
+			guard_body_animation = nil,
+			guard_head_anim_data = { --default head
+				_WIDTH = 32,				
+				_HEIGHT = 39,			
+				_FRAMES = 8,			
+				_FILENAME = "eagle_head.png", 	
+				_ANIMATIONSPEED = 0.115	
+			},
+			guard_head_image = nil,
+			guard_head_animation = nil,
+			guard_stop_anim_data = { -- halt body (gameover)
+				_WIDTH = 32,				
+				_HEIGHT = 39,			
+				_FRAMES = 8,			
+				_FILENAME = "eagle_head_expressions.png", 	
+				_ANIMATIONSPEED = 0.115	
+			},
+			guard_stop_image = nil,
+			guard_stop_animation = nil,
+			guard_fail_image = "eagle_fail.png"	
 		}
 	},
 
