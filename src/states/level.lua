@@ -38,6 +38,8 @@ local swishfont = love.graphics.newFont('assets/fonts/LovedbytheKing.ttf', 20)
 local props = require "assets.propfactory"
 
 local fading = true
+local show_loading = false
+local show_end = false
 local game_music
 local bgm_params 
 
@@ -71,6 +73,15 @@ function level:enter(state)
 	yellow = love.graphics.newImage('assets/images/colourYellow.png')
 	red = love.graphics.newImage('assets/images/colourRed.png')
 
+	loading_screens = {
+		love.graphics.newImage('assets/images/level2.png'),
+		love.graphics.newImage('assets/images/level3.png'),
+		love.graphics.newImage('assets/images/level4.png'),
+		love.graphics.newImage('assets/images/level5.png')
+	}
+
+	end_screen = love.graphics.newImage('assets/images/end_screen.png'),
+
 	--panel iterates at half screen
 
 	level:reInit()
@@ -83,22 +94,17 @@ function level:enter(state)
 	--props:populate()
 
 	-- play music
-	game_music = love.audio.newSource( "assets/audio/cephelopod.mp3", "stream" )
+	game_music = love.audio.newSource( "assets/audio/cephelopod.mp3", "static" )
 	game_music:setLooping( true )
 	game_music:setVolume(0.5)
 	love.audio.play( game_music )
 
 	-- fade in / out 
-	-- fading = true
 	self.fade_params = { opacity = 255 }
 	bgm_params = { volume = 0.5 }
-	-- Timer.add(1/60, function()
-	-- 	Timer.tween(0.25, self.fade_params, { opacity = 0 }, 'in-out-sine')
-	-- 	Timer.add(0.25, function()
-	-- 		fading = false
-	-- 	end)
-	-- end)
 	Timer.tween(0.25, bgm_params, { volume = 0.8 })
+
+
 
 end
 
@@ -163,18 +169,12 @@ function level:reInit()
 	particle:purge()
 	particle:start()
 
-	-- play music
-	game_music = love.audio.newSource( "assets/audio/cephelopod.mp3", "stream" )
-	game_music:setLooping( true )
-	game_music:setVolume(0.5)
-	love.audio.play( game_music )
-
 	-- fade in / out 
 	-- fading = true
 	self.fade_params = { opacity = 255, opacity_door = 0 }
-	bgm_params = { volume = 0.5 }
+	self.bgm_params = { volume = 0.5 }
 	Timer.tween(0.25, self.fade_params, { opacity = 0, opacity_door = 255 }, 'in-out-sine')
-	Timer.tween(0.25, bgm_params, { volume = 0.8 })
+	Timer.tween(0.25, self.bgm_params, { volume = 0.8 })
 
 	props:populate()
 
@@ -190,6 +190,8 @@ end
 function level:update(dt)
 	--update all timers
 	Timer.update(dt)
+	
+	game_music:setVolume(self.bgm_params.volume)
 
 	if levels[cur_level]["pre_intro"] == false then
 
@@ -233,7 +235,6 @@ function level:update(dt)
 	if levels[cur_level]["backgrounds_left"] > 0 and levels[cur_level]["status"] ~= "intro" then
 		level:spawner()
 	end
-
 
 	hero:update(dt)
 	guards:update(dt)
@@ -372,26 +373,42 @@ function level:update(dt)
 
 		if not fading then
 			fading = true
-			Timer.tween(0.5, self.fade_params, { opacity = 255 }, 'in-out-sine',
-			            function () level:newLevel() end)
+			Timer.tween(0.5, self.fade_params, { opacity = 255 }, 'in-out-sine', function () 
+				level:newLevel() 
+			end)
 		end
-	end
-
-	if self.fading then
-		game_music:setVolume(self.bgm_params.volume)
 	end
 end
 
 function level:newLevel()
 
+	fading = true
 	if cur_level == 5 then
-		--??
+		Timer.tween(0.25, self.bgm_params, { volume = 0.0 }, 'linear')
+		Timer.tween(0.5, self.fade_params, { opacity = 0 }, 'in-out-sine', function ()
+			show_end = true
+			fading = false
+			-- send player to the shadow realm
+		end)
 	else
-		cur_level = cur_level + 1
-		hero:newLevel()
-		props:populate()
-		fading = false
+		show_loading = true
+		Timer.tween(0.25, self.bgm_params, { volume = 0.0 }, 'linear')
+		Timer.tween(0.5, self.fade_params, { opacity = 0 }, 'in-out-sine', function ()
+			Timer.add(2, function()
+				Timer.tween(0.25, self.bgm_params, { volume = 0.8 }, 'in-out-sine')
+				Timer.tween(0.5, self.fade_params, { opacity = 255 }, 'in-out-sine', function () 
+					show_loading = false
+					cur_level = cur_level + 1
+					hero:newLevel()
+					props:populate()
+					fading = false
+				end)
+				
+			end)
+		end)
 	end
+
+
 end
 
 function level:draw()
@@ -512,11 +529,23 @@ function level:draw()
 
 	love.graphics.pop()
 
+	--show loading screen and end screen outside of graphics scaling 
+	love.graphics.scale(1)
+	
+	if show_loading then
+		love.graphics.draw(loading_screens[cur_level], 0, 0, 0, love.graphics.getWidth() / loading_screens[cur_level]:getWidth(), love.graphics.getHeight() / loading_screens[cur_level]:getHeight())
+	end
+
+	if show_end then
+		love.graphics.draw(end_screen, 0, 0, 0, love.graphics.getWidth() / loading_screens[cur_level]:getWidth(), love.graphics.getHeight() / loading_screens[cur_level]:getHeight())
+	end
 
 	if fading then
 		love.graphics.setColor(33, 33, 33, self.fade_params.opacity)
 		love.graphics.rectangle("fill", 0, 0, love.graphics.getWidth(), love.graphics.getHeight())
 	end
+
+
 
 
 end

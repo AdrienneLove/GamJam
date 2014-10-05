@@ -5,7 +5,7 @@ local l = {
 	intro_completed = false,
 
 	-- Difficulty/pacing stuff
-	level_speed = 100,
+	level_speed = 200,
 	spawnChance = 5, -- out of 100; chance on a spawn tick that enemy will spawn
 	spawnDelay = 2, -- spawn tick. on tick enemies will have a chance to spawn
 
