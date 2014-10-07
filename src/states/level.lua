@@ -50,6 +50,8 @@ function level:enter(state)
 
 	-- -- Test for intro, set to true if into has finished not used otherwise.
 	-- intro_completed = false
+	gameover = false
+	show_end = false
 
 	love.graphics.setDefaultFilter('nearest')
 	swishfont:setFilter("nearest", "nearest", 1)
@@ -107,13 +109,9 @@ function level:enter(state)
 	self.fade_params = { opacity = 255 }
 	self.bgm_params = { volume = 0.0 }
 	Timer.tween(0.5, self.bgm_params, { volume = 0.5 })
-
-
-
 end
 
 function level:reInit()
-
 	for k,v in pairs(package.loaded) do
 		if string.match(k,"level_") then
 			package.loaded[k] = purge(package.loaded[k])
@@ -121,12 +119,12 @@ function level:reInit()
 	end
 
 	levels = {
-	require 'states.levels.level_one',
-	require 'states.levels.level_two',
-	require 'states.levels.level_three',
-	require 'states.levels.level_four',
-	require 'states.levels.level_five'
-}
+		require 'states.levels.level_one',
+		require 'states.levels.level_two',
+		require 'states.levels.level_three',
+		require 'states.levels.level_four',
+		require 'states.levels.level_five'
+	}
 
 	--build initial background panels
 	for i,v in ipairs(levels) do
@@ -229,6 +227,8 @@ function level:update(dt)
 	--update player/enemys
 	if hero.lives == 0 then
 		gameover = true
+	else
+		gameover = false
 	end
 	if gameover then
 		level:gameover()
