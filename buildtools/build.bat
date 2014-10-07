@@ -14,9 +14,9 @@ mkdir release
 mkdir release\temp
 
 echo Copying files
-xcopy /i buildtools\lib release\temp > NUL
 xcopy /i /e src release\temp > NUL
 copy buildtools\exe\love.exe release\love.exe > NUL
+xcopy /i buildtools\lib release\ > NUL
 @popd
 
 :: -- zipping

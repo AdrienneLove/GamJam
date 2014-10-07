@@ -6,3 +6,7 @@ echo Cleaning files
 del /s /q /f release > NUL
 rmdir /s /q release
 @popd
+
+echo Done.
+
+pause
