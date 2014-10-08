@@ -3,7 +3,7 @@ local intro = {}
 local Timer = require "lib.hump.timer"
 
 local intro_scroll = {
-	image = nil, 
+	image = love.graphics.newImage("assets/images/intro.png"), 
 	x = 0,
 	speed = 180, 
 	scrolling = false,
@@ -15,24 +15,29 @@ local intro_music = nil
 local input_locked = true
 
 local show_tutorial = false
-local tute_sheep = "sheep.png" 
-local tute_guard =  "jaguar.png"
+local tute_sheep = love.graphics.newImage("assets/images/sheep.png")
+local tute_guard = love.graphics.newImage("assets/images/jaguar.png")
 local tute_buttons = {
-	x = "colourBlue.png",
-	y = "colourYellow.png",
-	a = "colourGreen.png",
-	b = "colourRed.png"
+	x = love.graphics.newImage("assets/images/colourBlue.png"),
+	y = love.graphics.newImage("assets/images/colourYellow.png"),
+	a = love.graphics.newImage("assets/images/colourGreen.png"),
+	b = love.graphics.newImage("assets/images/colourRed.png")
 }
 
 local tute_font = love.graphics.newFont( "assets/fonts/arcadeclassic.TTF", 28 )
 
 function intro:enter(state)
+	--these things need to be reset for when the game is finished completely and started over.
+	show_tutorial = false
+	intro_scroll.x = 0
+	intro_scroll.finished_scrolling = false
+
 	intro_music = love.audio.newSource( "assets/audio/heavens_trial.mp3", "stream" )
 	intro_music:setLooping( true )
 	intro_music:setVolume(0)
 	love.audio.play( intro_music )
 
-	intro_scroll.image = love.graphics.newImage("assets/images/intro.png")
+	--intro_scroll.image = love.graphics.newImage("assets/images/intro.png")
 	width_scale = 0.84
 	--height_scale = 1 - ((intro_scroll.image:getHeight() - love.graphics.getHeight() ) / love.graphics.getHeight() )
 	height_scale = 0.84
@@ -54,14 +59,7 @@ function intro:enter(state)
 		intro_scroll.scrolling = true
 	end)
 
-
 	-- tutorial assets
-	tute_sheep = love.graphics.newImage("assets/images/"..tute_sheep)
-	tute_guard = love.graphics.newImage("assets/images/"..tute_guard)
-	tute_buttons.x = love.graphics.newImage("assets/images/"..tute_buttons.x)
-	tute_buttons.y = love.graphics.newImage("assets/images/"..tute_buttons.y)
-	tute_buttons.a = love.graphics.newImage("assets/images/"..tute_buttons.a)
-	tute_buttons.b = love.graphics.newImage("assets/images/"..tute_buttons.b)
 	tute_sheep:setFilter('nearest', 'nearest')
 	tute_guard:setFilter('nearest', 'nearest')
 	tute_buttons.x:setFilter('nearest', 'nearest')

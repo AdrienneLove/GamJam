@@ -21,7 +21,7 @@ function purge(_table)
 		if type(v) == table then
 			purge(v)
 		else
-			_table[k] = nil
+			_table[k] = nillocal
 		end
 	end
 
