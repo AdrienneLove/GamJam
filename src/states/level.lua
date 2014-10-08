@@ -608,41 +608,53 @@ function level:keypressed(key, unicode)
 end
 
 function level:checkWave(wave)
-	-- NOTE: we still need to account for a guard not being waved at... this is also a failure but should be tracked elsewhere... (in guard maybe?)
-	if level:checkArea() then
-		if wave == focusedGuard.expectedWave then
-			--flip this guards wavedAt to true.
-			focusedGuard:successWave()
-			focusedGuard.isWavedAt = true
+	-- NOTE: we still need to account for a guard not being waved at...
+	-- this is also a failure but should be tracked elsewhere... (in guard maybe?)
+
+	local temp_guards = level:checkArea()
+	waveCorrect = false
+
+	-- Look for a successful wave, if we find one do stuff and break.
+	for _,guard in ipairs(temp_guards) do
+		if wave == guard.expectedWave and guard.isWavedAt == false then
+			guard:successWave()
+			guard.isWavedAt = true
+			particle:spawn("pass", guard.x + 6, guard.speed)
 			waveCorrect = true
-			particle:spawn("pass", focusedGuard.x + 6, focusedGuard.speed)
-		else
-			if focusedGuard.isWavedAt == false then
-				focusedGuard:failWave()
-				focusedGuard.isWavedAt = true
-				waveCorrect = false
-				particle:spawn("fail", focusedGuard.x + 6, focusedGuard.speed)
+			break
+		end
+	end
+
+	-- If no guard is correct, find the first guard that hasn't already
+	-- been waved at and make them the failed wave guard.
+	if waveCorrect == false then
+		for _,guard in ipairs(temp_guards) do
+			if guard.isWavedAt == false then
+				guard:failWave()
+				guard.isWavedAt = true
+				particle:spawn("fail", guard.x + 6, guard.speed)
 				hero:eatLife()
+				break
 			end
 		end
-	else
-		--no guard in area, NOM LYF
-		waveCorrect = false
-		--hero:eatLife()
 	end
+
 	indicator = true
 end
 
--- checks the detection area for a guard, returns true / false
+-- Search current_guards and return all guards that are inside wave area.
 function level:checkArea()
-	for i=1,table.getn(guards.current_guards) do
+	local temp_guards = {}
+
+	for i,guard in ipairs(guards.current_guards) do
 		if guards.current_guards[i]["x"] > 42 and guards.current_guards[i]["x"] < 95 then
-			focusedGuard = guards.current_guards[i]
-			return true
+			table.insert(temp_guards, guard)
 		end
 	end
-	return false
+
+	return temp_guards
 end
+
 
 function level:joystickreleased(joystick, button)
 	indicator = false
