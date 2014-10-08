@@ -49,11 +49,6 @@ local bgm_params
 
 function level:enter(state)
 
-	-- -- Test for intro, set to true if into has finished not used otherwise.
-	-- intro_completed = false
-	gameover = false
-	show_end = false
-
 	love.graphics.setDefaultFilter('nearest')
 	swishfont:setFilter("nearest", "nearest", 1)
 
@@ -87,17 +82,10 @@ function level:enter(state)
 		love.graphics.newImage('assets/images/level5.png')
 	}
 
-	end_screen = love.graphics.newImage('assets/images/end_screen.png'),
+	end_screen = love.graphics.newImage('assets/images/end_screen.png')
 
-	--panel iterates at half screen
-
+	cur_level = 1
 	level:reInit()
-
-	-- set timer to go from intro to play
-	-- Timer.add(1, function() status = "play" end)
-
-	--static props
-	--props:populate()
 
 	-- play music
 	game_music = love.audio.newSource( "assets/audio/cephelopod.mp3", "stream" )
@@ -164,8 +152,12 @@ function level:reInit()
 		v.exit_door.y = 0
 	end
 
-	cur_level = 1
+	gameover = false
+	show_end = false
+
 	hero:init()
+
+	-- Make sure we have a fresh set of guards.
 	purge(guards.current_guards)
 
 	particle:purge()
@@ -180,8 +172,6 @@ function level:reInit()
 
 	props:populate(cur_level)
 
-
-	gameover = false
 end
 
 -- function level:leave(dt)
