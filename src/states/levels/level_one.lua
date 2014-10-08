@@ -8,8 +8,8 @@ local l = {
 	guard_types = {1,2},
 
 	level_speed = 60,
-	spawnChance = 30, -- out of 100; chance on a spawn tick that enemy will spawn
-	spawnDelay = 1.5, -- spawn tick. on tick enemies will have a chance to spawn
+	spawnChance = 40, -- out of 100; chance on a spawn tick that enemy will spawn
+	spawnDelay = 0.70, -- spawn tick in seconds. on tick enemies will have a chance to spawn
 	enemySpeed = 1, -- modifier for enemy speeds
 
 	--background stuff

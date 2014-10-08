@@ -21,6 +21,7 @@ local guards = require "assets.chars.guard"
 local particle = require "assets.particles"
 local focusedGuard --this is being used by the wave checking
 local spawn = false -- when true, chance for a spawn is triggered.
+local spawn_dt = 0.0
 
 
 -- ui stuff
@@ -92,7 +93,6 @@ function level:enter(state)
 
 	-- set timer to go from intro to play
 	-- Timer.add(1, function() status = "play" end)
-	Timer.addPeriodic(levels[cur_level]["spawnDelay"], function() spawn = true end)
 
 	--static props
 	--props:populate()
@@ -237,7 +237,7 @@ function level:update(dt)
 
 	-- Don't spawn at end or during intro of level.
 	if levels[cur_level]["backgrounds_left"] > 0 and levels[cur_level]["status"] ~= "intro" then
-		level:spawner()
+		level:spawner(dt)
 	end
 
 	hero:update(dt)
@@ -720,26 +720,26 @@ function level:joystickpressed(joystick, button)
 	end
 end
 
-function level:spawner()
-	local roll = math.random(0,100)
-	if gameover then
-		spawn = false
+function level:spawner(dt)
+	spawn_dt = spawn_dt + dt
+	local spawn = false
+	local roll = math.random(1,100)
+
+	-- Use own dt to compare against level spawn frequency.
+	if spawn_dt > levels[cur_level]["spawnDelay"] and not gameover then
+		spawn_dt =  spawn_dt - levels[cur_level]["spawnDelay"]
+		spawn = true
 	end
 
-	if spawn and roll > 0 and roll < levels[cur_level]["spawnChance"] then
-		guard = math.random(1,table.getn(levels[cur_level]["guard_types"]))
+	if spawn and roll < levels[cur_level]["spawnChance"] then
+		guard = math.random(table.getn(levels[cur_level]["guard_types"]))
 		guards:newGuard(guard, levels[cur_level]["enemySpeed"])
-		spawn = false
-	elseif spawn then
-		-- if the spawn was true and no spawn happened, still flip spawn back to false.
-		--spawn = false
 	end
-	-- timer that has a x% chance to trigger spawn.
 end
 
 function level:gameover()
 	spawnChance = 0
-	spawner = false
+	spawn = false
 	particle:spawn("lose", hero.x + 6, 0)
 	particle:pause()
 	level:stopNearestGuard()
