@@ -268,7 +268,7 @@ function guard_manager:newGuard(num, speedModifier)
 		self.active_head_spritemap = self.guard_angry_image
 		--for triggering the particle effect for failing on a guard
 		self.state = "failed"
-		--print("set to failed")
+		self.isWavedAt = true
 	end
 
 	function g:successWave()
@@ -278,7 +278,7 @@ function guard_manager:newGuard(num, speedModifier)
 		love.audio.play( soundPass )
 		--for triggering the particle effect for success on a guard
 		self.state = "success"
-		--print("set to success")
+		self.isWavedAt = true
 	end
 
 	function g:stopGuard()

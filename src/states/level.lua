@@ -187,10 +187,9 @@ function level:update(dt)
 
 	if levels[cur_level]["pre_intro"] == false then
 
-		Timer.tween(0.50, self.fade_params, { opacity = 0 }, 'in-out-sine',
-		            function () levels[cur_level]["pre_intro"] = true
-		            	fading = false
-		             end)
+			Timer.tween(0.50, self.fade_params, { opacity = 0 }, 'in-out-sine',
+			            function () fading = false
+			             end)
 		levels[cur_level]["pre_intro"] = true
 
 	elseif hero.x == 20 and not levels[cur_level]["intro_completed"] then
@@ -435,7 +434,22 @@ function level:draw()
 	--static props
 	props:draw()
 
+	--draw particles
+	particle:draw()
 
+	--draw enemies
+	guards:draw()
+
+	--draw hero
+	hero:draw(dt)
+	--draw entry door on 
+	if levels[cur_level]["entry_door"]["alive"] then
+		love.graphics.draw(levels[cur_level]["entry_door"]["image"], levels[cur_level]["entry_door"]["x"], levels[cur_level]["entry_door"]["y"])
+	end
+
+	if levels[cur_level]["entry_door"]["alive"] then
+		love.graphics.draw(levels[cur_level]["entry_door"]["image"], levels[cur_level]["entry_door"]["x"], levels[cur_level]["entry_door"]["y"])
+	end
 
 	-- draw life count
 	for i=1,hero.lives do
@@ -489,26 +503,7 @@ function level:draw()
 		love.graphics.setColor(90, 90, 90, 255)
 	end
 	love.graphics.draw(red, 21, 110)
-	
-	--draw particles
-	particle:draw()
 
-	--draw enemies
-	guards:draw()
-
-	--draw hero
-	hero:draw(dt)
-
-	--draw entry door on 
-	if levels[cur_level]["entry_door"]["alive"] then
-		love.graphics.draw(levels[cur_level]["entry_door"]["image"], levels[cur_level]["entry_door"]["x"], levels[cur_level]["entry_door"]["y"])
-	end
-
-	if levels[cur_level]["entry_door"]["alive"] then
-		love.graphics.draw(levels[cur_level]["entry_door"]["image"], levels[cur_level]["entry_door"]["x"], levels[cur_level]["entry_door"]["y"])
-	end
-
-	
 
 	-- gameover text / fade
 	if gameover then
@@ -608,8 +603,6 @@ function level:keypressed(key, unicode)
 end
 
 function level:checkWave(wave)
-	-- NOTE: we still need to account for a guard not being waved at...
-	-- this is also a failure but should be tracked elsewhere... (in guard maybe?)
 
 	local temp_guards = level:checkArea()
 	waveCorrect = false
@@ -618,7 +611,6 @@ function level:checkWave(wave)
 	for _,guard in ipairs(temp_guards) do
 		if wave == guard.expectedWave and guard.isWavedAt == false then
 			guard:successWave()
-			guard.isWavedAt = true
 			particle:spawn("pass", guard.x + 6, guard.speed)
 			waveCorrect = true
 			break
@@ -631,7 +623,6 @@ function level:checkWave(wave)
 		for _,guard in ipairs(temp_guards) do
 			if guard.isWavedAt == false then
 				guard:failWave()
-				guard.isWavedAt = true
 				particle:spawn("fail", guard.x + 6, guard.speed)
 				hero:eatLife()
 				break
