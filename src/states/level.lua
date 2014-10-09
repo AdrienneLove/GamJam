@@ -423,10 +423,6 @@ function level:draw()
 		love.graphics.draw(value.image, value.x, 0)
 	end
 
-	--if levels[cur_level]["entry_door"]["alive"] then
-	--	love.graphics.draw(levels[cur_level]["entry_door"]["image"], levels[cur_level]["entry_door"]["x"], levels[cur_level]["entry_door"]["y"])
-	--end
-
 	if levels[cur_level]["exit_door"]["alive"] then
 		love.graphics.draw(levels[cur_level]["exit_door"]["image"], levels[cur_level]["exit_door"]["x"], levels[cur_level]["exit_door"]["y"])
 	end
@@ -442,6 +438,7 @@ function level:draw()
 
 	--draw hero
 	hero:draw(dt)
+
 	--draw entry door on 
 	if levels[cur_level]["entry_door"]["alive"] then
 		love.graphics.draw(levels[cur_level]["entry_door"]["image"], levels[cur_level]["entry_door"]["x"], levels[cur_level]["entry_door"]["y"])
@@ -453,7 +450,6 @@ function level:draw()
 
 	-- draw life count
 	for i=1,hero.lives do
-		--love.graphics.draw(cube, 40*i, 50)
 		love.graphics.draw(hero.life, 15*i, 10)
 	end
 

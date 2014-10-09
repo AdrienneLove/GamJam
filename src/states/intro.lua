@@ -31,6 +31,7 @@ function intro:enter(state)
 	show_tutorial = false
 	intro_scroll.x = 0
 	intro_scroll.finished_scrolling = false
+	intro_scroll.speed = 180
 
 	intro_music = love.audio.newSource( "assets/audio/heavens_trial.mp3", "stream" )
 	intro_music:setLooping( true )
@@ -133,15 +134,6 @@ function intro:keypressed(key, unicode)
 		if key == " " then
 			intro_scroll.speed = 400
 		end
-	end
-end
-
-
-function intro:keyreleased(key, unicode)
-	if input_locked == false then
-		if key == " " then
-			intro_scroll.speed = 180
-		end
 
 		if key == "return" then
 			if intro_scroll.scrolling  then 
@@ -173,6 +165,15 @@ function intro:keyreleased(key, unicode)
 	end
 end
 
+
+function intro:keyreleased(key, unicode)
+	if input_locked == false then
+		if key == " " then
+			intro_scroll.speed = 180
+		end
+	end
+end
+
 function intro:joystickhat(joystick, hat, direction)
 
 end
@@ -183,18 +184,8 @@ function intro:joystickpressed(joystick, button)
 		if joystick:isGamepadDown("a") then
 			intro_scroll.speed = 400
 		end
-	end
-end
 
-function intro:joystickreleased(joystick, button)
-
-	if input_locked == false then
-
-		if button == 1 then
-			intro_scroll.speed = 180
-		end
-
-		if button == 9 then
+		if button == 9 or joystick:isGamepadDown("start") then
 			if intro_scroll.scrolling  then 
 				intro_scroll.x = -1*intro_scroll.image:getWidth()*width_scale + love.graphics.getWidth()
 			else 	
@@ -221,7 +212,15 @@ function intro:joystickreleased(joystick, button)
 				end)
 			end
 		end
+	end
+end
 
+function intro:joystickreleased(joystick, button)
+
+	if input_locked == false then
+		if not joystick:isGamepadDown("a") then
+			intro_scroll.speed = 180
+		end
 	end
 end
 
