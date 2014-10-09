@@ -17,9 +17,9 @@ function credits:enter(state)
 		{ title = "Artists", info =  {"Rimon Bar", "Camila Duran Espinosa" } },
 		{ title = "Programmers", info =  {"Cameron Bland", "Adrian Love", "Racheal Smith", "Michael Whitman" } },
 		{ title = "Attributions", info =  { "Music licenced by Creative Commons 3.0 (non-commercial, share-alike, attribuation)\n\n"..
-			"Heavens Trial by WingoWinston (http://www.newgrounds.com/audio/listen/519155 accessed 5th Oct 2014) \n"..
-			"did i lose? by jambrother2 (http://www.newgrounds.com/audio/listen/580941 accessed 5th Oct 2014) \n"..
-			"Cephelopod by Kevin MacLeod (http://incompetech.com accessed 5th Oct 2014) \n"
+			"Heavens Trial by WingoWinston\n (http://www.newgrounds.com/audio/listen/519155 accessed 5th Oct 2014) \n"..
+			"did i lose? by jambrother2\n (http://www.newgrounds.com/audio/listen/580941 accessed 5th Oct 2014) \n"..
+			"Cephelopod by Kevin MacLeod\n (http://incompetech.com/music/royalty-free/index.html?isrc=USUAN1200081. accessed 5th Oct 2014) \n"
 			}
 		}
 	}
