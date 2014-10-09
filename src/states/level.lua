@@ -88,7 +88,7 @@ function level:enter(state)
 	level:reInit()
 
 	-- play music
-	game_music = love.audio.newSource( "assets/audio/cephelopod.mp3", "stream" )
+	game_music = love.audio.newSource( "assets/audio/cephelopod.ogg", "stream" )
 	game_music:setLooping( true )
 	game_music:setVolume(0.0)
 	love.audio.play( game_music )

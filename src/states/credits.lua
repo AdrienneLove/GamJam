@@ -19,14 +19,14 @@ function credits:enter(state)
 		{ title = "Attributions", info =  { "Music licenced by Creative Commons 3.0 (non-commercial, share-alike, attribuation)\n\n"..
 			"Heavens Trial by WingoWinston\n (http://www.newgrounds.com/audio/listen/519155 accessed 5th Oct 2014) \n"..
 			"did i lose? by jambrother2\n (http://www.newgrounds.com/audio/listen/580941 accessed 5th Oct 2014) \n"..
-			"Cephelopod by Kevin MacLeod\n (http://incompetech.com/music/royalty-free/index.html?isrc=USUAN1200081. accessed 5th Oct 2014) \n"
+			"Cephelopod by Kevin MacLeod\n (http://incompetech.com/music/royalty-free/index.html?isrc=USUAN1200081 accessed 5th Oct 2014) \n"
 			}
 		}
 	}
 
 	self.data = {} 
 
-	title_music = love.audio.newSource( "assets/audio/did_i_lose.mp3", "stream" )
+	title_music = love.audio.newSource( "assets/audio/did_i_lose.ogg", "stream" )
 	title_music:setLooping( true )
 	love.audio.play( title_music )
 end
@@ -54,7 +54,7 @@ function credits:draw()
 		--space between menu items
 
 		local spacing = 30
-		local positionToDrawCredits = { x = 50, y = 40}
+		local positionToDrawCredits = { x = 50, y = 35}
 		
 		-- default menu item style
 		love.graphics.setColor(255, 255, 255, 255)

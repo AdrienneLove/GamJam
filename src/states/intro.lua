@@ -33,7 +33,7 @@ function intro:enter(state)
 	intro_scroll.finished_scrolling = false
 	intro_scroll.speed = 180
 
-	intro_music = love.audio.newSource( "assets/audio/heavens_trial.mp3", "stream" )
+	intro_music = love.audio.newSource( "assets/audio/heavens_trial.ogg", "stream" )
 	intro_music:setLooping( true )
 	intro_music:setVolume(0)
 	love.audio.play( intro_music )

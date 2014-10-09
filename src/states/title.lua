@@ -16,7 +16,7 @@ function title:enter(state)
 
 	self.data = {} 
 
-	title_music = love.audio.newSource( "assets/audio/did_i_lose.mp3", "stream" )
+	title_music = love.audio.newSource( "assets/audio/did_i_lose.ogg", "stream" )
 	title_music:setLooping( true )
 	love.audio.play( title_music )
 end
