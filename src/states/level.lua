@@ -182,6 +182,7 @@ end
 function level:update(dt)
 	--update all timers
 	Timer.update(dt)
+	fever:update(Timer)
 	
 	game_music:setVolume(self.bgm_params.volume)
 
@@ -430,28 +431,14 @@ function level:draw()
 	--static props
 	props:draw()
 
+	if fever.enabled then
+		love.graphics.setColor(10, 10, 10, 150)
+		love.graphics.rectangle("fill", 0, 0, love.graphics.getWidth(), love.graphics.getHeight())
+		love.graphics.setColor(255,255,255,255)
+	end
+
 	--draw particles
 	particle:draw()
-
-	--draw enemies
-	guards:draw()
-
-	--draw hero
-	hero:draw(dt)
-
-	--draw entry door on 
-	if levels[cur_level]["entry_door"]["alive"] then
-		love.graphics.draw(levels[cur_level]["entry_door"]["image"], levels[cur_level]["entry_door"]["x"], levels[cur_level]["entry_door"]["y"])
-	end
-
-	if levels[cur_level]["entry_door"]["alive"] then
-		love.graphics.draw(levels[cur_level]["entry_door"]["image"], levels[cur_level]["entry_door"]["x"], levels[cur_level]["entry_door"]["y"])
-	end
-
-	-- draw life count
-	for i=1,hero.lives do
-		love.graphics.draw(hero.life, 15*i, 10)
-	end
 
 	-- wave detect / indicator for the zone that enemies can receive waves in
 	-- LEAVING THIS IN as it will kind of become the light effect
@@ -500,6 +487,25 @@ function level:draw()
 	end
 	love.graphics.draw(red, 21, 110)
 
+	--draw enemies
+	guards:draw()
+
+	--draw hero
+	hero:draw(dt)
+
+	--draw entry door on 
+	if levels[cur_level]["entry_door"]["alive"] then
+		love.graphics.draw(levels[cur_level]["entry_door"]["image"], levels[cur_level]["entry_door"]["x"], levels[cur_level]["entry_door"]["y"])
+	end
+
+	if levels[cur_level]["entry_door"]["alive"] then
+		love.graphics.draw(levels[cur_level]["entry_door"]["image"], levels[cur_level]["entry_door"]["x"], levels[cur_level]["entry_door"]["y"])
+	end
+
+	-- draw life count
+	for i=1,hero.lives do
+		love.graphics.draw(hero.life, 15*i, 10)
+	end
 
 	-- gameover text / fade
 	if gameover then
@@ -536,7 +542,14 @@ function level:draw()
 	love.graphics.setColor(255,255,255,255)
 	love.graphics.setFont(swishfont, 20)
 	love.graphics.printf("Level "..cur_level, 5, 5, love.graphics.getWidth()-20, "right" )
+
 	
+	if fever.enabled then
+		love.graphics.setColor(fever.current.r,fever.current.g,fever.current.b,fever.opacity)
+		love.graphics.rectangle("fill", 0, 0, love.graphics.getWidth(), love.graphics.getHeight())
+		love.graphics.setColor(255,255,255,255)
+	end
+
 	if show_loading then
 		love.graphics.draw(loading_screens[cur_level], 0, 0, 0, love.graphics.getWidth() / loading_screens[cur_level]:getWidth(), love.graphics.getHeight() / loading_screens[cur_level]:getHeight())
 	end

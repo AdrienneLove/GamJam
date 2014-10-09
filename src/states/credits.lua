@@ -1,7 +1,12 @@
 local credits = {}
 
+local timer = require "lib.hump.timer"
+
 local swishfont = love.graphics.newFont('assets/fonts/ARIAL ROUNDED MT.TTF', 18)
 local swishfont_bold = love.graphics.newFont('assets/fonts/arcadeclassic.TTF', 22)
+local swishfont_big = love.graphics.newFont('assets/fonts/arcadeclassic.TTF', 60)
+
+local eye_dot = love.graphics.newImage
 
 function credits:enter(state)
 	--hero:reset() --reset the player (SO FRESH)
@@ -36,7 +41,8 @@ function credits:leave()
 end
 
 function credits:update(dt)
-
+	timer.update(dt)
+	fever:update(timer)
 end
 
 function credits:draw()
@@ -70,6 +76,16 @@ function credits:draw()
 		end
 	end
 
+	
+	if fever.enabled then
+		love.graphics.setColor(fever.current.r,fever.current.g,fever.current.b,fever.opacity)
+		love.graphics.circle("fill",905,322,7,10)
+		love.graphics.setColor(255,255,255,255);
+		love.graphics.setFont(swishfont_big)
+		love.graphics.printf("SEIZURE  WARNING",800,150,0,"left")
+		love.graphics.setFont(swishfont)
+	end
+
 	--stupid flanders
 	love.graphics.setColor(255,255,255,255);
 
@@ -100,11 +116,16 @@ function credits:joystickhat(joystick, hat, direction)
 end
 
 function credits:joystickpressed(joystick, button)
-
 	if joystick:isGamepadDown("a") or joystick:isGamepadDown("start") then  -- A button or Start
 		Gamestate.switch(require("states.".."title"), self.save)
 	end
+end
 
+function credits:mousepressed(x,y,button)
+	if x > 880 and x < 925 and y > 300 and y < 330 then
+		fever.enabled = not fever.enabled
+	end
+	print(x..","..y)
 end
 
 return credits

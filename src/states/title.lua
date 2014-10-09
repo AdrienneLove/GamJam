@@ -3,6 +3,8 @@ hero = require "assets.chars.hero"
 local swishfont = love.graphics.newFont('assets/fonts/arcadeclassic.TTF', 60)
 local swishfont_big = love.graphics.newFont('assets/fonts/arcadeclassic.TTF', 60)
 
+local timer = require 'lib.hump.timer'
+
 
 function title:enter(state)
 	--hero:reset() --reset the player (SO FRESH)
@@ -26,7 +28,8 @@ function title:leave()
 end
 
 function title:update(dt)
-
+	timer.update(dt)
+	fever:update(timer)
 end
 
 function title:draw()
@@ -65,6 +68,14 @@ function title:draw()
 		
 		-- draw menu item name
 		love.graphics.printf(v.name, positionToDrawMenu.x+100, positionToDrawMenu.y +10+ (i*spacing), 100, 'left')
+	end
+
+	if fever.enabled then
+		love.graphics.setColor(fever.current.r,fever.current.g,fever.current.b,fever.opacity)
+		love.graphics.circle("fill",905,322,7,10)
+		love.graphics.setColor(255,255,255,255);
+		-- text, x, y, limit, align )
+		love.graphics.printf("SEIZURE  WARNING",800,150,0,"left")
 	end
 
 	--stupid flanders
