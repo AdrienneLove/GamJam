@@ -71,7 +71,7 @@ local propFactory = {
 	offset = 64
 }
 
--- To help reduce prop collision. Not currently used.
+-- To help reduce prop collision.
 for i,item in ipairs(propFactory.static_prop_types) do
 	item.width = item.image:getWidth()
 end

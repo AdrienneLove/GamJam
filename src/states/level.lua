@@ -174,10 +174,10 @@ function level:reInit()
 
 end
 
--- function level:leave(dt)
--- 	fading = true
-
--- end
+function level:leave(dt)
+	-- Switching out ungracefully hurts the ears.
+	game_music:setVolume(0.0)
+end
 
 function level:update(dt)
 	--update all timers
@@ -457,8 +457,22 @@ function level:draw()
 		love.graphics.ellipse("fill", 75, 103, 20, 4, math.rad(0), 30)
 	end
 
-	--draw indicators.
-	--if colourPressed ==
+	--draw enemies
+	guards:draw()
+
+	--draw hero
+	hero:draw(dt)
+
+	--draw entry door on 
+	if levels[cur_level]["entry_door"]["alive"] then
+		love.graphics.draw(levels[cur_level]["entry_door"]["image"], levels[cur_level]["entry_door"]["x"], levels[cur_level]["entry_door"]["y"])
+	end
+
+	if levels[cur_level]["entry_door"]["alive"] then
+		love.graphics.draw(levels[cur_level]["entry_door"]["image"], levels[cur_level]["entry_door"]["x"], levels[cur_level]["entry_door"]["y"])
+	end
+
+	-- Button indicators.
 	if colourPressed == "blue" then
 		love.graphics.setColor(255, 255, 255, 255)
 	else
@@ -487,20 +501,7 @@ function level:draw()
 	end
 	love.graphics.draw(red, 21, 110)
 
-	--draw enemies
-	guards:draw()
-
-	--draw hero
-	hero:draw(dt)
-
-	--draw entry door on 
-	if levels[cur_level]["entry_door"]["alive"] then
-		love.graphics.draw(levels[cur_level]["entry_door"]["image"], levels[cur_level]["entry_door"]["x"], levels[cur_level]["entry_door"]["y"])
-	end
-
-	if levels[cur_level]["entry_door"]["alive"] then
-		love.graphics.draw(levels[cur_level]["entry_door"]["image"], levels[cur_level]["entry_door"]["x"], levels[cur_level]["entry_door"]["y"])
-	end
+	love.graphics.setColor(255,255,255,255)
 
 	-- draw life count
 	for i=1,hero.lives do
@@ -570,10 +571,6 @@ end
 
 function level:keypressed(key, unicode)
 	local wave
-
-	if key == "`" then
-		Gamestate.switch(require("states.title"))
-	end
 
 	if not gameover then
 
