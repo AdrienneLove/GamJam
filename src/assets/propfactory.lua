@@ -68,10 +68,13 @@ local propFactory = {
 
 	static_props = {},
 	anim_props = {},
-	offset = 64,
-	level_width = 1444
+	offset = 64
 }
 
+-- To help reduce prop collision. Not currently used.
+for i,item in ipairs(propFactory.static_prop_types) do
+	item.width = item.image:getWidth()
+end
 
 function propFactory:addAnim(position)
 
@@ -105,7 +108,7 @@ function propFactory:addAnim(position)
 end
 
 function propFactory:addStatic(selected, placement)
-	temp = {}
+	local temp = {}
 	temp.image = self.static_prop_types[selected].image
 	temp.image:setFilter('nearest','nearest')
 	temp.x = placement
@@ -114,7 +117,7 @@ function propFactory:addStatic(selected, placement)
 
 	table.insert(self.static_props, temp)
 
-	self.offset = placement + temp.image:getWidth()
+	self.offset = placement + self.static_prop_types[selected].width
 
 	if (self.static_prop_types[selected].door == true) then
 		local templeft = placement - 14
@@ -124,22 +127,24 @@ function propFactory:addStatic(selected, placement)
 	end
 end
 
-function propFactory:populate(level)
+function propFactory:populate(total_panels)
 
-	local temp = self.level_width
+	-- 224 is panel_width, ideally would make this a var to be passed in
+	-- rather than hard coded
+	local level_width = 224 * total_panels
 
 	self:purge()
 
-	for i = 1,40 do
+	while self.offset < level_width + 100 do
 
 		local selected = math.random(table.getn(self.static_prop_types))
 		local placement = self.offset + math.random(24) + 12
 
 		propFactory:addStatic(selected, placement)
 
-		if (self.offset) > self.level_width then
-			break
-		end
+		-- if self.offset > level_width then
+		-- 	break
+		-- end
 	end
 
 	for i, v in ipairs(self.torchpoints) do
@@ -148,8 +153,7 @@ function propFactory:populate(level)
 			self:addAnim(v)
 		end
 	end
-
-	self.level_width = 1444 + 120 * level
+	-- self.level_width = 1444 + 120 * level -- wtf?
 end
 
 function propFactory:update(dt, level_speed)
@@ -198,23 +202,16 @@ end
 
 function propFactory:purge()
 
-	for i, v in ipairs(self.static_props) do
-		table.remove(self.static_props, i)
-	end
+	purge(self.static_props)
 	self.static_props = {}
 
-	for i, v in ipairs(self.anim_props) do
-		table.remove(self.anim_props, i)
-	end
+	purge(self.anim_props)
 	self.anim_props = {}
 
-	for i, v in ipairs(self.torchpoints) do
-		table.remove(self.torchpoints, i)
-	end
+	purge(self.torchpoints)
 	self.torchpoints = {}
 
 	self.offset = 64
-	
 end
 
 return propFactory

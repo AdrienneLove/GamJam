@@ -15,7 +15,7 @@ local l = {
 	--background stuff
 	backgrounds_left = 5, -- these two values the same
 	foregrounds_left = 5,
-	panels_left = 7,
+	panels_left = 7, -- used in prop factory, actual panel amount.
 	status = "intro", -- other states are play, dead and outro
 
 	-- hot swap between panel 1, 2 and 3

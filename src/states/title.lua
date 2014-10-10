@@ -74,7 +74,6 @@ function title:draw()
 		love.graphics.setColor(fever.current.r,fever.current.g,fever.current.b,fever.opacity)
 		love.graphics.circle("fill",905,322,7,10)
 		love.graphics.setColor(255,255,255,255);
-		-- text, x, y, limit, align )
 		love.graphics.printf("SEIZURE  WARNING",800,150,0,"left")
 	end
 

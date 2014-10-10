@@ -170,7 +170,7 @@ function level:reInit()
 	Timer.tween(0.25, self.fade_params, { opacity = 0, opacity_door = 255 }, 'in-out-sine')
 	Timer.tween(0.5, self.bgm_params, { volume = 0.5 })
 
-	props:populate(cur_level)
+	props:populate(levels[cur_level]["panels_left"])
 
 end
 
@@ -398,7 +398,7 @@ function level:newLevel()
 					show_loading = false
 					cur_level = cur_level + 1
 					hero:newLevel()
-					props:populate(cur_level)
+					props:populate(levels[cur_level]["panels_left"])
 					fading = false
 				end)
 				
@@ -570,6 +570,10 @@ end
 
 function level:keypressed(key, unicode)
 	local wave
+
+	if key == "`" then
+		Gamestate.switch(require("states.title"))
+	end
 
 	if not gameover then
 
