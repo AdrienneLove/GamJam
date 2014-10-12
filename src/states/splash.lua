@@ -107,6 +107,9 @@ function splash:draw()
 		love.graphics.draw(self.data.chaloopa, love.graphics.getWidth()/2-106, love.graphics.getHeight()/2+156)
 	end
 
+	if self.frame/60 > 12 then
+		Gamestate.switch(require("states.title"), self.save)
+	end
 
 	self.frame = self.frame + 1
 
