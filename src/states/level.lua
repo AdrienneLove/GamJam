@@ -30,7 +30,7 @@ local spawn_dt = 0.0
 
 
 -- ui stuff
-local buttonfont = love.graphics.newFont('assets/fonts/munro.ttf', 30)
+local buttonfont = love.graphics.newFont('assets/fonts/munro.ttf', 7)
 local hintfont = love.graphics.newFont('assets/fonts/arcadeclassic.TTF', 10)
 
 --for ending
@@ -50,7 +50,7 @@ local indicator = false
 local waveCorrect = false
 --local cube = love.graphics.newImage('assets/animations/splash_cube.png')
 local colourPressed = "none"
-local swishfont = love.graphics.newFont('assets/fonts/arcadeclassic.TTF', 40)
+local swishfont = love.graphics.newFont('assets/fonts/arcadeclassic.TTF', 30)
 
 local props = require "assets.propfactory"
 

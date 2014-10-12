@@ -3,14 +3,14 @@ local guard_manager = {
 	guard_types = {
 		-- ORDER OF THESE IS IMPORTANT for staggering which colours spawn on early levels.
 		{ -- 1 RED FOX
-			speed = 100,
+			speed = 90,
 			expectedWave = "B",
 			guard_body_anim_data = { --default body
 				_WIDTH = 32,				
 				_HEIGHT = 39,			
 				_FRAMES = 8,			
 				_FILENAME = "fox_body.png", 	
-				_ANIMATIONSPEED = 0.12	
+				_ANIMATIONSPEED = 0.12
 			},
 			guard_body_image = nil,
 			guard_body_animation = nil,
@@ -54,7 +54,7 @@ local guard_manager = {
 
 		},
 		{ -- 2 GREEN SNAKE SNAAAAKE SNAAAAAAAKKKE!? 
-			speed = 100,
+			speed = 90,
 			expectedWave = "A",
 			guard_body_anim_data = {
 				_WIDTH = 32,				
@@ -97,7 +97,7 @@ local guard_manager = {
 		},
 		{ -- 3 YELLOW JAG
 			
-			speed = 100,
+			speed = 90,
 			expectedWave = "Y",
 			guard_body_anim_data = { --default body
 				_WIDTH = 32,				
@@ -138,7 +138,7 @@ local guard_manager = {
 			guard_fail_image = "jaguar_fail.png"	
 		},
 		{ -- 4 BLUE EAGLE
-			speed = 100,
+			speed = 90,
 			expectedWave = "X",
 			guard_body_anim_data = { --default body
 				_WIDTH = 32,				
