@@ -3,7 +3,7 @@ local credits = {}
 local timer = require "lib.hump.timer"
 
 local swishfont = love.graphics.newFont('assets/fonts/ARIAL ROUNDED MT.TTF', 18)
-local swishfont_bold = love.graphics.newFont('assets/fonts/arcadeclassic.TTF', 22)
+local swishfont_bold = love.graphics.newFont('assets/fonts/munro.ttf', 22)
 local swishfont_big = love.graphics.newFont('assets/fonts/arcadeclassic.TTF', 60)
 
 local eye_dot = love.graphics.newImage
