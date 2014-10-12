@@ -399,7 +399,7 @@ function level:newLevel()
 		show_end = true
 		Timer.tween(0.25, self.bgm_params, { volume = 0.0 }, 'linear')
 		Timer.tween(0.5, self.fade_params, { opacity = 0 }, 'in-out-sine', function ()
-			Timer.add(10,function() Gamestate.switch(require "states.credits")
+			Timer.add(6,function() Gamestate.switch(require "states.credits")
 				end)
 		end)
 	else
