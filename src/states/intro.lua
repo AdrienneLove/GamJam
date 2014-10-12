@@ -24,7 +24,10 @@ local tute_buttons = {
 	b = love.graphics.newImage("assets/images/colourRed.png")
 }
 
-local tute_font = love.graphics.newFont( "assets/fonts/arcadeclassic.TTF", 28 )
+local tute_font = love.graphics.newFont( "assets/fonts/munro.ttf", 28 )
+local tute_button_font = love.graphics.newFont( "assets/fonts/munro.ttf", 34 )
+
+local ready_to_transition = false;
 
 function intro:enter(state)
 	--these things need to be reset for when the game is finished completely and started over.
@@ -50,9 +53,6 @@ function intro:enter(state)
 	self.timer:add(1/60, function()
 		self.timer:tween(0.5, self.bgm_params, { volume = 0.8 }, 'in-out-sine')
 		self.timer:tween(0.25, self.fade_params, { opacity = 0 }, 'in-out-sine')
-		self.timer:add(0.25, function()
-			self.fading = false
-		end)
 	end)
 
 	self.timer:add(2, function()
@@ -98,11 +98,33 @@ function intro:draw()
 	love.graphics.setColor(255, 255, 255, 255)
 	love.graphics.draw(intro_scroll.image, intro_scroll.x, 0, 0, width_scale, height_scale, 0, 0 )
 
+	--love.graphics.printf(intro_scroll.x, 0, 460, love.graphics.getWidth(), "center")
+	if intro_scroll.x < -200 and intro_scroll.x > -1200 then
+		love.graphics.setColor(0, 0, 0, 120)
+		love.graphics.printf("The sacrificial lamb...", 2, 462, love.graphics.getWidth(), "center")
+		love.graphics.setColor(255, 255, 255, 255)
+		love.graphics.printf("The sacrificial lamb...", 0, 460, love.graphics.getWidth(), "center")
+	end
+
+	if intro_scroll.x < -2100 and intro_scroll.x > -3000 then
+		love.graphics.setColor(0, 0, 0, 120)
+		love.graphics.printf("...a dash for freedom", 2, 462, love.graphics.getWidth(), "center")
+		love.graphics.setColor(255, 255, 255, 255)
+		love.graphics.printf("...a dash for freedom", 0, 460, love.graphics.getWidth(), "center")
+	end
+
+	if intro_scroll.x < -3300 and intro_scroll.x > -3850 then
+		love.graphics.setColor(0, 0, 0, 120)
+		love.graphics.printf("...a convenient disguise.", 2, 462, love.graphics.getWidth(), "center")	
+		love.graphics.setColor(255, 255, 255, 255)
+		love.graphics.printf("...a convenient disguise.", 0, 460, love.graphics.getWidth(), "center")
+	end
+
 	--pop graphics stack
 	love.graphics.pop()
 
 	if intro_scroll.finished_scrolling and not show_tutorial then
-		love.graphics.printf("PRESS   START   BUTTON   TO   CONTINUE", 0, 460, love.graphics.getWidth(), "center")
+		love.graphics.printf("Press   START   button   to   continue", 0, 460, love.graphics.getWidth(), "center")
 	end
 
 
@@ -113,25 +135,39 @@ function intro:draw()
 		love.graphics.draw(tute_sheep, love.graphics.getWidth()/2 -300, 150, 0, 6, 6)
 		love.graphics.draw(tute_guard, love.graphics.getWidth()/2 +100, 150, 0, 6, 6)
 
-		--80 px width dif
-		love.graphics.draw(tute_buttons.x, love.graphics.getWidth()/2-160, 400, 0, 6, 6)
-		love.graphics.draw(tute_buttons.y, love.graphics.getWidth()/2-80, 400, 0, 6, 6)
-		love.graphics.draw(tute_buttons.a, love.graphics.getWidth()/2, 400, 0, 6, 6)
-		love.graphics.draw(tute_buttons.b, love.graphics.getWidth()/2+80, 400, 0, 6, 6)
+		love.graphics.setFont(tute_button_font)
+		love.graphics.draw(tute_buttons.x, love.graphics.getWidth()/2-50-130, 425, 0, 5, 5)
+		love.graphics.print("A", love.graphics.getWidth()/2-54-113, 426)
+		love.graphics.draw(tute_buttons.y, love.graphics.getWidth()/2-50-80, 385, 0, 5, 5)
+		love.graphics.print("W", love.graphics.getWidth()/2-50-68, 385)
+		love.graphics.draw(tute_buttons.a, love.graphics.getWidth()/2-50-80, 425, 0, 5, 5)
+		love.graphics.print("S", love.graphics.getWidth()/2-50-65, 425)
+		love.graphics.draw(tute_buttons.b, love.graphics.getWidth()/2-50-30, 425, 0, 5, 5)
+		love.graphics.print("D", love.graphics.getWidth()/2-50-17, 425)
 
+		love.graphics.draw(tute_buttons.b, love.graphics.getWidth()/2+20+120, 405, 0, 5, 5)
+		love.graphics.print("B", love.graphics.getWidth()/2+28+124, 405)
+		love.graphics.draw(tute_buttons.y, love.graphics.getWidth()/2+20+80, 370, 0, 5, 5)
+		love.graphics.print("Y", love.graphics.getWidth()/2+28+84, 370)
+		love.graphics.draw(tute_buttons.a, love.graphics.getWidth()/2+20+80, 435, 0, 5, 5)
+		love.graphics.print("A", love.graphics.getWidth()/2+28+84, 435)
+		love.graphics.draw(tute_buttons.x, love.graphics.getWidth()/2+20+40, 405, 0, 5, 5)
+		love.graphics.print("X", love.graphics.getWidth()/2+28+44, 405)
+
+		love.graphics.setFont(tute_font)
+		love.graphics.printf("OR", love.graphics.getWidth()/2, 400, 20, "center")
 		love.graphics.printf("Fool the guards by waving correctly", love.graphics.getWidth()/2-300, 50, 600, "center")
 		love.graphics.printf("Match your wave to the guards colour", love.graphics.getWidth()/2-300, 500, 600, "center")
 	end
 
-	if self.fading then
-		love.graphics.setColor(33, 33, 33, self.fade_params.opacity)
-		love.graphics.rectangle("fill", 0, 0, love.graphics.getWidth(), love.graphics.getHeight())
-	end
+
+	love.graphics.setColor(33, 33, 33, self.fade_params.opacity)
+	love.graphics.rectangle("fill", 0, 0, love.graphics.getWidth(), love.graphics.getHeight())
 end
 
 function intro:keypressed(key, unicode)
 	if input_locked == false then
-		if key == " " then
+		if key == " " and not ready_to_transition then
 			intro_scroll.speed = 400
 		end
 
@@ -139,27 +175,31 @@ function intro:keypressed(key, unicode)
 			if intro_scroll.scrolling  then 
 				intro_scroll.x = -1*intro_scroll.image:getWidth()*width_scale + love.graphics.getWidth()
 			else 	
-				input_locked = true
-				self.fading = true
+				if not ready_to_transition then
+					input_locked = true
 
-				self.timer:add(1/60, function()
-					--fade music
-					self.timer:tween(0.5, self.bgm_params, { volume = 0.0 }, 'in-out-sine')
-
-					self.timer:tween(0.25, self.fade_params, { opacity = 255 }, 'in-out-sine', function ()
-						show_tutorial = true
-						self.timer:tween(0.25, self.fade_params, { opacity = 0 }, 'in-out-sine', function ()
-							self.timer:add(3, function()
-								self.timer:tween(0.25, self.fade_params, { opacity = 255 }, 'in-out-sine', function ()
-									self.timer:add(1, function()
-										Gamestate.switch(require("states.level"))
-									end)
-								end)
+					self.timer:add(1/60, function()
+						--fade music
+						self.timer:tween(0.5, self.bgm_params, { volume = 0.0 }, 'in-out-sine')
+						self.timer:tween(0.25, self.fade_params, { opacity = 255 }, 'in-out-sine', function ()
+							show_tutorial = true
+							self.timer:tween(0.25, self.fade_params, { opacity = 0 }, 'in-out-sine', function ()
+								ready_to_transition = true
+								input_locked = false
 							end)
 						end)
+						
 					end)
-					
-				end)
+				else 
+					if ready_to_transition then
+						input_locked = false
+						self.timer:tween(0.25, self.fade_params, { opacity = 255 }, 'in-out-sine', function ()
+							self.timer:add(1, function()
+								Gamestate.switch(require("states.level"))
+							end)
+						end)
+					end
+				end
 			end
 		end
 	end
@@ -189,27 +229,31 @@ function intro:joystickpressed(joystick, button)
 			if intro_scroll.scrolling  then 
 				intro_scroll.x = -1*intro_scroll.image:getWidth()*width_scale + love.graphics.getWidth()
 			else 	
-				input_locked = true
-				self.fading = true
+				if not ready_to_transition then
+					input_locked = true
 
-				self.timer:add(1/60, function()
-					--fade music
-					self.timer:tween(0.5, self.bgm_params, { volume = 0.0 }, 'in-out-sine')
-
-					self.timer:tween(0.25, self.fade_params, { opacity = 255 }, 'in-out-sine', function ()
-						show_tutorial = true
-						self.timer:tween(0.25, self.fade_params, { opacity = 0 }, 'in-out-sine', function ()
-							self.timer:add(3, function()
-								self.timer:tween(0.25, self.fade_params, { opacity = 255 }, 'in-out-sine', function ()
-									self.timer:add(1, function()
-										Gamestate.switch(require("states.level"))
-									end)
-								end)
+					self.timer:add(1/60, function()
+						--fade music
+						self.timer:tween(0.5, self.bgm_params, { volume = 0.0 }, 'in-out-sine')
+						self.timer:tween(0.25, self.fade_params, { opacity = 255 }, 'in-out-sine', function ()
+							show_tutorial = true
+							self.timer:tween(0.25, self.fade_params, { opacity = 0 }, 'in-out-sine', function ()
+								ready_to_transition = true
+								input_locked = false
 							end)
 						end)
+						
 					end)
-					
-				end)
+				else 
+					if ready_to_transition then
+						input_locked = false
+						self.timer:tween(0.25, self.fade_params, { opacity = 255 }, 'in-out-sine', function ()
+							self.timer:add(1, function()
+								Gamestate.switch(require("states.level"))
+							end)
+						end)
+					end
+				end
 			end
 		end
 	end

@@ -44,7 +44,7 @@ local gameover_sound = love.audio.newSource("assets/audio/error_style_1_echo_001
 local indicator = false
 local waveCorrect = false
 --local cube = love.graphics.newImage('assets/animations/splash_cube.png')
-local colorPressed = "none"
+local colourPressed = "none"
 local swishfont = love.graphics.newFont('assets/fonts/arcadeclassic.TTF', 20)
 
 local props = require "assets.propfactory"
@@ -448,6 +448,7 @@ function level:draw()
 
 	-- wave detect / indicator for the zone that enemies can receive waves in
 	-- LEAVING THIS IN as it will kind of become the light effect
+
 	love.graphics.setColor(220, 220, 220, 140)
 	if colourPressed == "blue" then
 		love.graphics.setColor(55, 121, 205, 140)
@@ -458,8 +459,9 @@ function level:draw()
 	elseif colourPressed == "green" then
 		love.graphics.setColor(30, 165, 29, 140)
 	end
-
-	love.graphics.ellipse("fill", 75, 103, 20, 4, math.rad(0), 30)
+	if levels[cur_level]["status"] ~= "exit" and levels[cur_level]["status"] ~= "intro" then
+		love.graphics.ellipse("fill", 75, 103, 20, 4, math.rad(0), 30)
+	end
 
 	--draw enemies
 	guards:draw()
@@ -599,7 +601,6 @@ function level:draw()
 
 	if show_loading then
 		loadscreen:draw(cur_level)
-
 	end
 
 	if show_end then
