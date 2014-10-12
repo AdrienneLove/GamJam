@@ -457,20 +457,18 @@ function level:draw()
 
 	-- wave detect / indicator for the zone that enemies can receive waves in
 	-- LEAVING THIS IN as it will kind of become the light effect
-	if level:isGuardInRange() then
-		love.graphics.setColor(220, 220, 220, 140)
-		if colourPressed == "blue" then
-			love.graphics.setColor(55, 121, 205, 140)
-		elseif colourPressed == "yellow" then
-			love.graphics.setColor(226, 200, 52, 140)
-		elseif colourPressed == "red" then
-			love.graphics.setColor(220, 52, 52, 140)
-		elseif colourPressed == "green" then
-			love.graphics.setColor(30, 165, 29, 140)
-		end
-
-		love.graphics.ellipse("fill", 75, 103, 20, 4, math.rad(0), 30)
+	love.graphics.setColor(220, 220, 220, 140)
+	if colourPressed == "blue" then
+		love.graphics.setColor(55, 121, 205, 140)
+	elseif colourPressed == "yellow" then
+		love.graphics.setColor(226, 200, 52, 140)
+	elseif colourPressed == "red" then
+		love.graphics.setColor(220, 52, 52, 140)
+	elseif colourPressed == "green" then
+		love.graphics.setColor(30, 165, 29, 140)
 	end
+
+	love.graphics.ellipse("fill", 75, 103, 20, 4, math.rad(0), 30)
 
 	--draw enemies
 	guards:draw()
