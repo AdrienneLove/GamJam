@@ -228,7 +228,7 @@ function hero:draw()
 		active_legs_animation:draw(active_legs_spritemap, hero.x, 70)
 		active_body_animation:draw(active_body_spritemap, hero.x, 70)
 	else
-		love.graphics.draw(hero.hero_fail, self.x, y )
+		love.graphics.draw(hero.hero_fail, self.x, y+1 )
 	end
 end
 

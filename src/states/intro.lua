@@ -192,7 +192,7 @@ function intro:keypressed(key, unicode)
 					end)
 				else 
 					if ready_to_transition then
-						input_locked = false
+						input_locked = true
 						self.timer:tween(0.25, self.fade_params, { opacity = 255 }, 'in-out-sine', function ()
 							self.timer:add(1, function()
 								Gamestate.switch(require("states.level"))

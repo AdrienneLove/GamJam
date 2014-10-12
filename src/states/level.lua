@@ -255,9 +255,9 @@ function level:update(dt)
 			particle:spawn("fail", nearest.x + 6, nearest.speed)
 			hero:eatLife()
 		else
+			gameover = true
 			hero:eatLife()
 			nearest.x  = nearest.x + 50
-			gameover = true
 			level:gameover()
 		end
 	end
@@ -760,6 +760,10 @@ function level:checkWave(wave)
 				guard:failWave()
 				particle:spawn("fail", guard.x + 6, guard.speed)
 				hero:eatLife()
+				if hero.lives == 0 then 
+					gameover = true
+					level:gameover()
+				end
 				break
 			end
 		end
