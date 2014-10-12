@@ -1,7 +1,7 @@
 local title = {}
 hero = require "assets.chars.hero"
 local swishfont = love.graphics.newFont('assets/fonts/arcadeclassic.TTF', 60)
-local swishfont_big = love.graphics.newFont('assets/fonts/arcadeclassic.TTF', 60)
+local swishfont_big = love.graphics.newFont('assets/fonts/munro.ttf', 60)
 
 local timer = require 'lib.hump.timer'
 
@@ -40,15 +40,12 @@ function title:draw()
 	--set background & font
 	love.graphics.setBackgroundColor(33, 33, 33, 255)
 	love.graphics.draw(bg, 0, 0, 0, 1.08, 1.08, 0, 0 )
-		
-	love.graphics.setFont(swishfont)
-
 
 	-- draw title 
 	love.graphics.setFont(swishfont_big)
 	love.graphics.printf('On The Lamb!', 0, 75, love.graphics.getWidth(), "center" )
 
-
+	love.graphics.setFont(swishfont)
 
 	-- draw menu
 	for i,v in ipairs(self.actions) do
