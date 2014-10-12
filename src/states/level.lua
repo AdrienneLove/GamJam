@@ -30,8 +30,9 @@ local spawn_dt = 0.0
 
 
 -- ui stuff
-local buttonfont = love.graphics.newFont('assets/fonts/arcadeclassic.TTF', 7)
+local buttonfont = love.graphics.newFont('assets/fonts/munro.ttf', 30)
 local hintfont = love.graphics.newFont('assets/fonts/arcadeclassic.TTF', 10)
+
 --for ending
 local tute_font = love.graphics.newFont( "assets/fonts/munro.ttf", 14)
 
@@ -49,7 +50,7 @@ local indicator = false
 local waveCorrect = false
 --local cube = love.graphics.newImage('assets/animations/splash_cube.png')
 local colourPressed = "none"
-local swishfont = love.graphics.newFont('assets/fonts/arcadeclassic.TTF', 20)
+local swishfont = love.graphics.newFont('assets/fonts/arcadeclassic.TTF', 40)
 
 local props = require "assets.propfactory"
 
@@ -63,6 +64,8 @@ function level:enter(state)
 
 	love.graphics.setDefaultFilter('nearest')
 	swishfont:setFilter("nearest", "nearest", 1)
+	hintfont:setFilter("nearest", "nearest", 1)
+	buttonfont:setFilter("nearest", "nearest", 1)
 
 	--load in panel data for foreground and background
 	background_imagedata_start = love.image.newImageData('assets/images/start.gif')
@@ -80,6 +83,11 @@ function level:enter(state)
 	foreground_panel_images = {
 		love.graphics.newImage(foreground_imagedata_1)
 	}
+
+	--images for ellipse trigger area
+	ellipse_img = love.graphics.newImage('assets/images/ellipse.png')
+	ellipse_front = love.graphics.newImage('assets/images/ellipse_effect_front.png')
+	ellipse_back = love.graphics.newImage('assets/images/ellipse_effect_back.png')
 
 	--images needed for ui button display
 	green = love.graphics.newImage('assets/images/colourGreen.png')
@@ -224,14 +232,7 @@ function level:update(dt)
 
 	end
 
-	--update player/enemys
-	if hero.lives == 0 then
-		gameover = true
-	else
-		gameover = false
-	end
 	if gameover then
-		level:gameover()
 		return
 	end
 
@@ -254,6 +255,8 @@ function level:update(dt)
 		else
 			hero:eatLife()
 			nearest.x  = nearest.x + 50
+			gameover = true
+			level:gameover()
 		end
 	end
 
@@ -453,22 +456,82 @@ function level:draw()
 	-- wave detect / indicator for the zone that enemies can receive waves in
 	-- LEAVING THIS IN as it will kind of become the light effect
 
-	love.graphics.setColor(220, 220, 220, 140)
+	-- if levels[cur_level]["status"] ~= "exit" and levels[cur_level]["status"] ~= "intro" then
+	-- 	--love.graphics.ellipse("fill", 75, 103, 20, 4, math.rad(0), 30)
+	-- 	love.graphics.setColor(255, 255, 255, 120)
+	-- 	love.graphics.draw(ellipse_img, 75, 103)
+	-- end
+	local colour = {
+		r = 255,
+		g = 255,
+		b = 255
+	}
 	if colourPressed == "blue" then
-		love.graphics.setColor(55, 121, 205, 140)
+		colour.r = 135
+		colour.g = 199
+		colour.b = 255
+		love.graphics.setColor(colour.r, colour.g, colour.b, 155)
+		if guardsInArea > 0 then
+			love.graphics.draw(ellipse_back, 51, 94)
+		end
 	elseif colourPressed == "yellow" then
-		love.graphics.setColor(226, 200, 52, 140)
+		colour.r = 247
+		colour.g = 227
+		colour.b = 114
+		love.graphics.setColor(colour.r, colour.g, colour.b, 155)
+		if guardsInArea > 0 then
+			love.graphics.draw(ellipse_back, 51, 94)
+		end
 	elseif colourPressed == "red" then
-		love.graphics.setColor(220, 52, 52, 140)
+		colour.r = 250
+		colour.g = 156
+		colour.b = 137
+		love.graphics.setColor(colour.r, colour.g, colour.b, 155)
+		if guardsInArea > 0 then
+			love.graphics.draw(ellipse_back, 51, 94)
+		end
 	elseif colourPressed == "green" then
-		love.graphics.setColor(30, 165, 29, 140)
+		colour.r = 112
+		colour.g = 232
+		colour.b = 111
+		love.graphics.setColor(colour.r, colour.g, colour.b, 155)
+		if guardsInArea > 0 then
+			love.graphics.draw(ellipse_back, 51, 94)
+		end
 	end
+	guardsInArea = table.getn(level:checkArea())
 	if levels[cur_level]["status"] ~= "exit" and levels[cur_level]["status"] ~= "intro" then
-		love.graphics.ellipse("fill", 75, 103, 20, 4, math.rad(0), 30)
+		--love.graphics.ellipse("fill", 75, 103, 20, 4, math.rad(0), 30)
+		--love.graphics.setColor(255, 255, 255, 120)
+		love.graphics.setColor(colour.r, colour.g, colour.b, 140)
+		love.graphics.draw(ellipse_img, 51, 94)
 	end
 
 	--draw enemies
 	guards:draw()
+
+	if colourPressed == "blue" then
+		love.graphics.setColor(colour.r, colour.g, colour.b, 160)
+		if guardsInArea > 0 then
+			love.graphics.draw(ellipse_front, 51, 94)
+		end
+	elseif colourPressed == "yellow" then
+		love.graphics.setColor(colour.r, colour.g, colour.b, 160)
+		if guardsInArea > 0 then
+			love.graphics.draw(ellipse_front, 51, 94)
+		end
+	elseif colourPressed == "red" then
+		love.graphics.setColor(colour.r, colour.g, colour.b, 160)
+		if guardsInArea > 0 then
+			love.graphics.draw(ellipse_front, 51, 94)
+		end
+	elseif colourPressed == "green" then
+		love.graphics.setColor(colour.r, colour.g, colour.b, 160)
+		if guardsInArea > 0 then
+			love.graphics.draw(ellipse_front, 51, 94)
+		end
+	end
+	love.graphics.setColor(255, 255, 255, 255)
 
 	--draw hero
 	hero:draw(dt)
@@ -483,7 +546,7 @@ function level:draw()
 	end
 
 	-- UI buttons	
-	love.graphics.setFont(buttonfont);
+	love.graphics.setFont(buttonfont)
 	if not next(love.joystick.getJoysticks()) then
 		--keyboard layout
 		love.graphics.setColor(90, 90, 90, 255)
