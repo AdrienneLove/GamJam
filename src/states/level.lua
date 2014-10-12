@@ -679,8 +679,8 @@ function level:draw()
 		love.graphics.setFont(swishfont, 90)
 		love.graphics.printf('You escaped!', 550, 128, love.graphics.getWidth() / 4, "center", 0, 2)
 		love.graphics.setFont(tute_font, 14)
-		love.graphics.printf('Press BACK on the credits screen', 550, 234, love.graphics.getWidth() / 4, "center", 0, 2)
-		love.graphics.printf('to unlock a new mode!', 550, 256, love.graphics.getWidth() / 4, "center", 0, 2)
+		love.graphics.printf("Press BACK during the credits or click the", 550, 234, love.graphics.getWidth() / 4, "center", 0, 2)
+		love.graphics.printf("wolf's eye to unlock a new mode!", 550, 256, love.graphics.getWidth() / 4, "center", 0, 2)
 
 	end
 
