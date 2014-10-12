@@ -11,9 +11,9 @@ function title:enter(state)
 	self.current = 1; 	-- currently selected menu element
 	bg = love.graphics.newImage('assets/images/title_bg.png')
 	self.actions = {
-		{ name="Play",    screen="intro", rune = love.graphics.newImage('assets/images/title_top.png'), runeUp = love.graphics.newImage('assets/images/title_top_up.png') },
+		{ name="Play",    screen="intro", rune = love.graphics.newImage('assets/images/title_bottom.png'), runeUp = love.graphics.newImage('assets/images/title_bottom_up.png') },
 		{ name="Credits", screen="credits", rune = love.graphics.newImage('assets/images/title_middle.png'), runeUp = love.graphics.newImage('assets/images/title_middle_up.png') },
-		{ name="Exit",    screen="exit", rune = love.graphics.newImage('assets/images/title_bottom.png'), runeUp = love.graphics.newImage('assets/images/title_bottom_up.png') }
+		{ name="Exit",    screen="exit", rune = love.graphics.newImage('assets/images/title_top.png'), runeUp = love.graphics.newImage('assets/images/title_top_up.png') }
 	} 
 
 	self.data = {} 

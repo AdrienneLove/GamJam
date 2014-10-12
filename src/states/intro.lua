@@ -24,8 +24,8 @@ local tute_buttons = {
 	b = love.graphics.newImage("assets/images/colourRed.png")
 }
 
-local tute_font = love.graphics.newFont( "assets/fonts/arcadeclassic.TTF", 28 )
-local tute_button_font = love.graphics.newFont( "assets/fonts/arcadeclassic.TTF", 34 )
+local tute_font = love.graphics.newFont( "assets/fonts/munro.ttf", 28 )
+local tute_button_font = love.graphics.newFont( "assets/fonts/munro.ttf", 34 )
 
 local ready_to_transition = false;
 
@@ -98,12 +98,33 @@ function intro:draw()
 	love.graphics.setColor(255, 255, 255, 255)
 	love.graphics.draw(intro_scroll.image, intro_scroll.x, 0, 0, width_scale, height_scale, 0, 0 )
 
+	--love.graphics.printf(intro_scroll.x, 0, 460, love.graphics.getWidth(), "center")
+	if intro_scroll.x < -200 and intro_scroll.x > -1200 then
+		love.graphics.setColor(0, 0, 0, 120)
+		love.graphics.printf("The sacrificial lamb...", 2, 462, love.graphics.getWidth(), "center")
+		love.graphics.setColor(255, 255, 255, 255)
+		love.graphics.printf("The sacrificial lamb...", 0, 460, love.graphics.getWidth(), "center")
+	end
+
+	if intro_scroll.x < -2100 and intro_scroll.x > -3000 then
+		love.graphics.setColor(0, 0, 0, 120)
+		love.graphics.printf("...a dash for freedom", 2, 462, love.graphics.getWidth(), "center")
+		love.graphics.setColor(255, 255, 255, 255)
+		love.graphics.printf("...a dash for freedom", 0, 460, love.graphics.getWidth(), "center")
+	end
+
+	if intro_scroll.x < -3300 and intro_scroll.x > -3850 then
+		love.graphics.setColor(0, 0, 0, 120)
+		love.graphics.printf("...a convenient disguise.", 2, 462, love.graphics.getWidth(), "center")	
+		love.graphics.setColor(255, 255, 255, 255)
+		love.graphics.printf("...a convenient disguise.", 0, 460, love.graphics.getWidth(), "center")
+	end
+
 	--pop graphics stack
 	love.graphics.pop()
 
 	if intro_scroll.finished_scrolling and not show_tutorial then
-
-		love.graphics.printf("PRESS   START   BUTTON   TO   CONTINUE", 0, 460, love.graphics.getWidth(), "center")
+		love.graphics.printf("Press   START   button   to   continue", 0, 460, love.graphics.getWidth(), "center")
 	end
 
 
@@ -116,22 +137,22 @@ function intro:draw()
 
 		love.graphics.setFont(tute_button_font)
 		love.graphics.draw(tute_buttons.x, love.graphics.getWidth()/2-50-130, 425, 0, 5, 5)
-		love.graphics.print("A", love.graphics.getWidth()/2-50-119, 426)
+		love.graphics.print("A", love.graphics.getWidth()/2-54-113, 426)
 		love.graphics.draw(tute_buttons.y, love.graphics.getWidth()/2-50-80, 385, 0, 5, 5)
-		love.graphics.print("W", love.graphics.getWidth()/2-50-72, 385)
+		love.graphics.print("W", love.graphics.getWidth()/2-50-68, 385)
 		love.graphics.draw(tute_buttons.a, love.graphics.getWidth()/2-50-80, 425, 0, 5, 5)
-		love.graphics.print("S", love.graphics.getWidth()/2-50-71, 425)
+		love.graphics.print("S", love.graphics.getWidth()/2-50-65, 425)
 		love.graphics.draw(tute_buttons.b, love.graphics.getWidth()/2-50-30, 425, 0, 5, 5)
-		love.graphics.print("D", love.graphics.getWidth()/2-50-21, 425)
+		love.graphics.print("D", love.graphics.getWidth()/2-50-17, 425)
 
 		love.graphics.draw(tute_buttons.b, love.graphics.getWidth()/2+20+120, 405, 0, 5, 5)
-		love.graphics.print("B", love.graphics.getWidth()/2+28+120, 405)
+		love.graphics.print("B", love.graphics.getWidth()/2+28+124, 405)
 		love.graphics.draw(tute_buttons.y, love.graphics.getWidth()/2+20+80, 370, 0, 5, 5)
-		love.graphics.print("Y", love.graphics.getWidth()/2+28+80, 370)
+		love.graphics.print("Y", love.graphics.getWidth()/2+28+84, 370)
 		love.graphics.draw(tute_buttons.a, love.graphics.getWidth()/2+20+80, 435, 0, 5, 5)
-		love.graphics.print("A", love.graphics.getWidth()/2+28+80, 435)
+		love.graphics.print("A", love.graphics.getWidth()/2+28+84, 435)
 		love.graphics.draw(tute_buttons.x, love.graphics.getWidth()/2+20+40, 405, 0, 5, 5)
-		love.graphics.print("X", love.graphics.getWidth()/2+28+40, 405)
+		love.graphics.print("X", love.graphics.getWidth()/2+28+44, 405)
 
 		love.graphics.setFont(tute_font)
 		love.graphics.printf("OR", love.graphics.getWidth()/2, 400, 20, "center")
