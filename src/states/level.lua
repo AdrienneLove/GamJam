@@ -52,7 +52,7 @@ local indicator = false
 local waveCorrect = false
 --local cube = love.graphics.newImage('assets/animations/splash_cube.png')
 local colourPressed = "none"
-local swishfont = love.graphics.newFont('assets/fonts/arcadeclassic.TTF', 40)
+local swishfont = love.graphics.newFont('assets/fonts/arcadeclassic.TTF', 30)
 
 local props = require "assets.propfactory"
 
@@ -722,10 +722,6 @@ function level:keypressed(key, unicode)
 			wave = "A"
 			hero:saluteA()
 			colourPressed = "green"
-		end
-
-		if key == "p" then
-			particle:spawn("pass", 128, 80)
 		end
 
 		if wave then level:checkWave(wave) end

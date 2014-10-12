@@ -7,10 +7,10 @@ local l = {
 	-- Difficulty/pacing stuff
 	guard_types = {1,2,3,4},
 
-	level_speed = 110,
+	level_speed = 70,
 	spawnChance = 100, -- out of 100; chance on a spawn tick that enemy will spawn
-	spawnDelay = 0.7, -- spawn tick. on tick enemies will have a chance to spawn
-	enemySpeed = 1.9, -- modifier for enemy speeds
+	spawnDelay = 0.5, -- spawn tick. on tick enemies will have a chance to spawn
+	enemySpeed = 1.2, -- modifier for enemy speeds
 
 	--background stuff
 	backgrounds_left = 8, -- these two values the same
