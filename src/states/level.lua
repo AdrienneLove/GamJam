@@ -25,8 +25,10 @@ local spawn_dt = 0.0
 
 
 -- ui stuff
+local buttonfont = love.graphics.newFont('assets/fonts/arcadeclassic.TTF', 7)
 local hintfont = love.graphics.newFont('assets/fonts/arcadeclassic.TTF', 10)
 hintfont:setFilter("nearest", "nearest", 1)
+buttonfont:setFilter("nearest", "nearest", 1)
 
 
 local gameover = false
@@ -472,34 +474,76 @@ function level:draw()
 		love.graphics.draw(levels[cur_level]["entry_door"]["image"], levels[cur_level]["entry_door"]["x"], levels[cur_level]["entry_door"]["y"])
 	end
 
-	-- Button indicators.
-	if colourPressed == "blue" then
-		love.graphics.setColor(255, 255, 255, 255)
-	else
+	-- UI buttons	
+	love.graphics.setFont(buttonfont);
+	if not next(love.joystick.getJoysticks()) then
+		--keyboard layout
 		love.graphics.setColor(90, 90, 90, 255)
-	end
-	love.graphics.draw(blue, 9, 110)
+		if colourPressed == "blue" then
+			love.graphics.setColor(255, 255, 255, 255)
+		end
+		love.graphics.draw(blue, 8, 116)
+		love.graphics.setColor(255, 255, 255, 255)
+		love.graphics.print("A", 10, 116)
 
-	if colourPressed == "yellow" then
-		love.graphics.setColor(255, 255, 255, 255)
-	else
 		love.graphics.setColor(90, 90, 90, 255)
-	end
-	love.graphics.draw(yellow, 15, 104)
+		if colourPressed == "yellow" then
+			love.graphics.setColor(255, 255, 255, 255)
+		end
+		love.graphics.draw(yellow, 17, 107)
+		love.graphics.setColor(255, 255, 255, 255)
+		love.graphics.print("W", 19, 107)
 
-	if colourPressed == "green" then
-		love.graphics.setColor(255, 255, 255, 255)
-	else
 		love.graphics.setColor(90, 90, 90, 255)
-	end
-	love.graphics.draw(green, 15, 116)
+		if colourPressed == "green" then
+			love.graphics.setColor(255, 255, 255, 255)
+		end
+		love.graphics.draw(green, 17, 116)
+		love.graphics.setColor(255, 255, 255, 255)
+		love.graphics.print("S", 19, 116)
 
-	if colourPressed == "red" then
-		love.graphics.setColor(255, 255, 255, 255)
-	else
 		love.graphics.setColor(90, 90, 90, 255)
+		if colourPressed == "red" then
+			love.graphics.setColor(255, 255, 255, 255)
+		end
+		love.graphics.draw(red, 26, 116)
+		love.graphics.setColor(255, 255, 255, 255)
+		love.graphics.print("D", 28, 116)
+	else
+		-- gamepad layout
+		love.graphics.setColor(90, 90, 90, 255)
+		if colourPressed == "blue" then
+			love.graphics.setColor(255, 255, 255, 255)
+		end
+		love.graphics.draw(blue, 9, 110)
+		love.graphics.setColor(255, 255, 255, 255)
+		love.graphics.print("X", 11, 110)
+
+		love.graphics.setColor(90, 90, 90, 255)
+		if colourPressed == "yellow" then
+			love.graphics.setColor(255, 255, 255, 255)
+		end
+		love.graphics.draw(yellow, 15, 104)
+		love.graphics.setColor(255, 255, 255, 255)
+		love.graphics.print("Y", 17, 104)
+
+
+		love.graphics.setColor(90, 90, 90, 255)
+		if colourPressed == "green" then
+			love.graphics.setColor(255, 255, 255, 255)
+		end
+		love.graphics.draw(green, 15, 116)
+		love.graphics.setColor(255, 255, 255, 255)
+		love.graphics.print("A", 17, 116)
+
+		love.graphics.setColor(90, 90, 90, 255)
+		if colourPressed == "red" then
+			love.graphics.setColor(255, 255, 255, 255)
+		end
+		love.graphics.draw(red, 21, 110)
+		love.graphics.setColor(255, 255, 255, 255)
+		love.graphics.print("B", 23, 110)
 	end
-	love.graphics.draw(red, 21, 110)
 
 	love.graphics.setColor(255,255,255,255)
 
