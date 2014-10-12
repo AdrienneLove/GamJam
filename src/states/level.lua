@@ -11,7 +11,6 @@ local levels = {
 	require 'states.levels.level_two',
 	require 'states.levels.level_three',
 	require 'states.levels.level_four',
-	require 'states.levels.level_five'
 	require 'states.levels.level_five',
 	require 'states.levels.level_six',
 	require 'states.levels.level_seven',
@@ -45,7 +44,7 @@ local gameover_sound = love.audio.newSource("assets/audio/error_style_1_echo_001
 local indicator = false
 local waveCorrect = false
 --local cube = love.graphics.newImage('assets/animations/splash_cube.png')
-local colorPressed = "none"
+local colourPressed = "none"
 local swishfont = love.graphics.newFont('assets/fonts/arcadeclassic.TTF', 20)
 
 local props = require "assets.propfactory"
