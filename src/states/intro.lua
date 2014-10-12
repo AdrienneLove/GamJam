@@ -24,7 +24,7 @@ local tute_buttons = {
 	b = love.graphics.newImage("assets/images/colourRed.png")
 }
 
-local tute_font = love.graphics.newFont( "assets/fonts/arcadeclassic.TTF", 28 )
+local tute_font = love.graphics.newFont( "assets/fonts/munro.ttf", 28 )
 
 function intro:enter(state)
 	--these things need to be reset for when the game is finished completely and started over.
@@ -98,11 +98,33 @@ function intro:draw()
 	love.graphics.setColor(255, 255, 255, 255)
 	love.graphics.draw(intro_scroll.image, intro_scroll.x, 0, 0, width_scale, height_scale, 0, 0 )
 
+	--love.graphics.printf(intro_scroll.x, 0, 460, love.graphics.getWidth(), "center")
+	if intro_scroll.x < -200 and intro_scroll.x > -1200 then
+		love.graphics.setColor(0, 0, 0, 120)
+		love.graphics.printf("The sacrificial lamb...", 2, 462, love.graphics.getWidth(), "center")
+		love.graphics.setColor(255, 255, 255, 255)
+		love.graphics.printf("The sacrificial lamb...", 0, 460, love.graphics.getWidth(), "center")
+	end
+
+	if intro_scroll.x < -2100 and intro_scroll.x > -3000 then
+		love.graphics.setColor(0, 0, 0, 120)
+		love.graphics.printf("...a dash for freedom", 2, 462, love.graphics.getWidth(), "center")
+		love.graphics.setColor(255, 255, 255, 255)
+		love.graphics.printf("...a dash for freedom", 0, 460, love.graphics.getWidth(), "center")
+	end
+
+	if intro_scroll.x < -3300 and intro_scroll.x > -3850 then
+		love.graphics.setColor(0, 0, 0, 120)
+		love.graphics.printf("...a convenient disguise.", 2, 462, love.graphics.getWidth(), "center")	
+		love.graphics.setColor(255, 255, 255, 255)
+		love.graphics.printf("...a convenient disguise.", 0, 460, love.graphics.getWidth(), "center")
+	end
+
 	--pop graphics stack
 	love.graphics.pop()
 
 	if intro_scroll.finished_scrolling and not show_tutorial then
-		love.graphics.printf("PRESS   START   BUTTON   TO   CONTINUE", 0, 460, love.graphics.getWidth(), "center")
+		love.graphics.printf("Press   START   button   to   continue", 0, 460, love.graphics.getWidth(), "center")
 	end
 
 
