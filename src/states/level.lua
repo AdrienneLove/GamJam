@@ -722,10 +722,6 @@ function level:keypressed(key, unicode)
 			colourPressed = "green"
 		end
 
-		if key == "p" then
-			particle:spawn("pass", 128, 80)
-		end
-
 		if wave then level:checkWave(wave) end
 
 	else
