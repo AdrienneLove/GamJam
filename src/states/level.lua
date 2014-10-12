@@ -35,12 +35,14 @@ local hintfont = love.graphics.newFont('assets/fonts/arcadeclassic.TTF', 10)
 
 --for ending
 local gameover_font = love.graphics.newFont('assets/fonts/arcadeclassic.TTF', 20)
+local escaped_font = love.graphics.newFont('assets/fonts/munro.ttf', 32)
 local tute_font = love.graphics.newFont( "assets/fonts/munro.ttf", 14)
 
 hintfont:setFilter("nearest", "nearest", 1)
 buttonfont:setFilter("nearest", "nearest", 1)
 tute_font:setFilter("nearest", "nearest", 1)
 gameover_font:setFilter("nearest", "nearest", 1)
+escaped_font:setFilter("nearest", "nearest", 1)
 
 local loadscreen = require "states.loadscreen"
 
@@ -676,9 +678,9 @@ function level:draw()
 
 	if show_end then
 		love.graphics.draw(end_screen, 0, 0, 0, love.graphics.getWidth() / end_screen:getWidth(), love.graphics.getHeight() / end_screen:getHeight())
-		love.graphics.setFont(swishfont, 90)
-		love.graphics.printf('You escaped!', 550, 128, love.graphics.getWidth() / 4, "center", 0, 2)
-		love.graphics.setFont(tute_font, 14)
+		love.graphics.setFont(escaped_font)
+		love.graphics.printf('YOU ESCAPED!', 550, 128, love.graphics.getWidth() / 4, "center", 0, 2)
+		love.graphics.setFont(tute_font)
 		love.graphics.printf("Press BACK during the credits or click the", 550, 234, love.graphics.getWidth() / 4, "center", 0, 2)
 		love.graphics.printf("wolf's eye to unlock a new mode!", 550, 256, love.graphics.getWidth() / 4, "center", 0, 2)
 
