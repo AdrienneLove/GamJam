@@ -30,10 +30,8 @@ local spawn_dt = 0.0
 
 
 -- ui stuff
-local buttonfont = love.graphics.newFont('assets/fonts/arcadeclassic.TTF', 7)
+local buttonfont = love.graphics.newFont('assets/fonts/munro.ttf', 30)
 local hintfont = love.graphics.newFont('assets/fonts/arcadeclassic.TTF', 10)
-hintfont:setFilter("nearest", "nearest", 1)
-buttonfont:setFilter("nearest", "nearest", 1)
 
 local loadscreen = require "states.loadscreen"
 
@@ -45,7 +43,7 @@ local indicator = false
 local waveCorrect = false
 --local cube = love.graphics.newImage('assets/animations/splash_cube.png')
 local colourPressed = "none"
-local swishfont = love.graphics.newFont('assets/fonts/arcadeclassic.TTF', 20)
+local swishfont = love.graphics.newFont('assets/fonts/arcadeclassic.TTF', 40)
 
 local props = require "assets.propfactory"
 
@@ -59,6 +57,8 @@ function level:enter(state)
 
 	love.graphics.setDefaultFilter('nearest')
 	swishfont:setFilter("nearest", "nearest", 1)
+	hintfont:setFilter("nearest", "nearest", 1)
+	buttonfont:setFilter("nearest", "nearest", 1)
 
 	--load in panel data for foreground and background
 	background_imagedata_start = love.image.newImageData('assets/images/start.gif')
@@ -90,7 +90,7 @@ function level:enter(state)
 
 	end_screen = love.graphics.newImage('assets/images/end_screen.png')
 
-	cur_level = 3
+	cur_level = 1
 	level:reInit()
 
 	-- play music
@@ -544,7 +544,7 @@ function level:draw()
 	end
 
 	-- UI buttons	
-	love.graphics.setFont(buttonfont);
+	love.graphics.setFont(buttonfont)
 	if not next(love.joystick.getJoysticks()) then
 		--keyboard layout
 		love.graphics.setColor(90, 90, 90, 255)
