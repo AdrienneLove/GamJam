@@ -49,6 +49,11 @@ local propFactory = {
 			image = love.graphics.newImage('assets/images/painting.png'),
 			y = 26,
 			door = false
+		},
+		{
+			image = love.graphics.newImage('assets/images/window1.png'),
+			y = 0,
+			door = false
 		}
 	},
 	anim_prop_types = {

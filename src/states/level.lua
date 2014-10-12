@@ -32,8 +32,12 @@ local spawn_dt = 0.0
 -- ui stuff
 local buttonfont = love.graphics.newFont('assets/fonts/arcadeclassic.TTF', 7)
 local hintfont = love.graphics.newFont('assets/fonts/arcadeclassic.TTF', 10)
+--for ending
+local tute_font = love.graphics.newFont( "assets/fonts/munro.ttf", 14)
+
 hintfont:setFilter("nearest", "nearest", 1)
 buttonfont:setFilter("nearest", "nearest", 1)
+tute_font:setFilter("nearest", "nearest", 1)
 
 local loadscreen = require "states.loadscreen"
 
@@ -62,7 +66,7 @@ function level:enter(state)
 
 	--load in panel data for foreground and background
 	background_imagedata_start = love.image.newImageData('assets/images/start.gif')
-	background_imagedata_1 = love.image.newImageData('assets/images/wall1.png')
+	background_imagedata_1 = love.image.newImageData('assets/images/wall2.png')
 	background_imagedata_2 = love.image.newImageData('assets/images/wall2.png')
 	foreground_imagedata_1 = love.image.newImageData('assets/images/floor1sketch.png')
 	background_imagedata_end = love.image.newImageData('assets/images/end.gif')
@@ -605,6 +609,12 @@ function level:draw()
 
 	if show_end then
 		love.graphics.draw(end_screen, 0, 0, 0, love.graphics.getWidth() / end_screen:getWidth(), love.graphics.getHeight() / end_screen:getHeight())
+		love.graphics.setFont(swishfont, 90)
+		love.graphics.printf('You escaped!', 550, 128, love.graphics.getWidth() / 4, "center", 0, 2)
+		love.graphics.setFont(tute_font, 14)
+		love.graphics.printf('Press BACK on the credits screen', 550, 234, love.graphics.getWidth() / 4, "center", 0, 2)
+		love.graphics.printf('to unlock a new mode!', 550, 256, love.graphics.getWidth() / 4, "center", 0, 2)
+
 	end
 
 	if fading then

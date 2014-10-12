@@ -22,13 +22,13 @@ local offset = {
 	{x = 800, y = 400}
 }
 
-local bounceoffset = {x = -50}
-local bouncey = tween.new(1, bounceoffset, {x = -10}, "outCirc")
+local bounceoffset = {x = -100}
+local bouncey = tween.new(1, bounceoffset, {x = -15}, "outCirc")
 
 function loadscreen:draw(cur_level)
 	love.graphics.draw(loading_screens, 0, 0, 0, love.graphics.getWidth() / loading_screens:getWidth(), love.graphics.getHeight() / loading_screens:getHeight())
 
-	local complete = bouncey:update(0.01)
+	local complete = bouncey:update(0.02)
 	if complete == true then
 		bouncey:reset()
 	end
