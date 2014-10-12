@@ -5,7 +5,7 @@ Programmers: 					Cameron Bland, Adrian Love, Racheal Smith, Michael Whitman
 
 Attributions:
 
-Music licenced by Creative Commons 3.0 (non-commercial, share-alike, attribuation)
+Music licenced by Creative Commons 3.0 (non-commercial, share-alike, attribution)
 Heavens Trial by WingoWinston (http://www.newgrounds.com/audio/listen/519155 accessed 5th Oct 2014)
 did i lose? by jambrother2 (http://www.newgrounds.com/audio/listen/580941 accessed 5th Oct 2014) 
 Cephelopod by Kevin MacLeod (http://incompetech.com accessed 5th Oct 2014) 

@@ -21,7 +21,7 @@ function credits:enter(state)
 		{ title = "On The Lamb by Oopa Chaloopa!", info = {"48hr Game Making Challenge 2014"}},
 		{ title = "Artists", info =  {"Rimon Bar", "Camila Duran Espinosa" } },
 		{ title = "Programmers", info =  {"Cameron Bland", "Adrian Love", "Racheal Smith", "Michael Whitman" } },
-		{ title = "Attributions", info =  { "Music licenced by Creative Commons 3.0 (non-commercial, share-alike, attribuation)\n\n"..
+		{ title = "Attribution", info =  { "Music licenced by Creative Commons 3.0 (non-commercial, share-alike, attribution)\n\n"..
 			"Heavens Trial by WingoWinston\n (http://www.newgrounds.com/audio/listen/519155 accessed 5th Oct 2014) \n"..
 			"did i lose? by jambrother2\n (http://www.newgrounds.com/audio/listen/580941 accessed 5th Oct 2014) \n"..
 			"Cephelopod by Kevin MacLeod\n (http://incompetech.com/music/royalty-free/index.html?isrc=USUAN1200081 accessed 5th Oct 2014) \n"
@@ -119,13 +119,17 @@ function credits:joystickpressed(joystick, button)
 	if joystick:isGamepadDown("a") or joystick:isGamepadDown("start") then  -- A button or Start
 		Gamestate.switch(require("states.".."title"), self.save)
 	end
+
+	if joystick:isGamepadDown("back") then 
+		fever.enabled = not fever.enabled
+	end
 end
 
 function credits:mousepressed(x,y,button)
 	if x > 880 and x < 925 and y > 300 and y < 330 then
 		fever.enabled = not fever.enabled
 	end
-	print(x..","..y)
+	--print(x..","..y)
 end
 
 return credits

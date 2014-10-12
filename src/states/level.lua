@@ -220,14 +220,7 @@ function level:update(dt)
 
 	end
 
-	--update player/enemys
-	if hero.lives == 0 then
-		gameover = true
-	else
-		gameover = false
-	end
 	if gameover then
-		level:gameover()
 		return
 	end
 
@@ -250,6 +243,8 @@ function level:update(dt)
 		else
 			hero:eatLife()
 			nearest.x  = nearest.x + 50
+			gameover = true
+			level:gameover()
 		end
 	end
 

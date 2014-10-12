@@ -184,11 +184,11 @@ soundX:setVolume(0.6)
 soundY:setVolume(0.6)
 soundA:setVolume(0.6)
 soundB:setVolume(0.6)
-soundEatLife:setVolume(0.6)
+soundEatLife:setVolume(0.4)
 
 function hero:saluteX()
 	if hero.state ~= "exit" then
-		love.audio.play( soundX )
+		--love.audio.play( soundX )
 		active_body_animation = hero.hero_body_wave_x_animation
 		active_body_spritemap = hero.hero_body_wave_x_spritemap
 		active_body_animation:resume()
@@ -196,7 +196,7 @@ function hero:saluteX()
 end
 function hero:saluteY()
 	if hero.state ~= "exit" then	
-		love.audio.play( soundY )
+		--love.audio.play( soundY )
 		active_body_animation = hero.hero_body_wave_y_animation
 		active_body_spritemap = hero.hero_body_wave_y_spritemap
 		active_body_animation:resume()
@@ -204,7 +204,7 @@ function hero:saluteY()
 end
 function hero:saluteA()
 	if hero.state ~= "exit" then
-		love.audio.play( soundA )
+		--love.audio.play( soundA )
 		active_body_animation = hero.hero_body_wave_a_animation
 		active_body_spritemap = hero.hero_body_wave_a_spritemap
 		active_body_animation:resume()
@@ -212,7 +212,7 @@ function hero:saluteA()
 end
 function hero:saluteB()
 	if hero.state ~= "exit" then
-		love.audio.play( soundB )
+		--love.audio.play( soundB )
 		active_body_animation = hero.hero_body_wave_b_animation
 		active_body_spritemap = hero.hero_body_wave_b_spritemap
 		active_body_animation:resume()
@@ -233,10 +233,8 @@ function hero:draw()
 end
 
 function hero:eatLife()
-	if gameover then
-		love.audio.play( soundEatLife )
-	end
 	if hero.lives > 0 then
+		love.audio.play( soundEatLife )
 		hero.lives = hero.lives - 1
 	end
 end
