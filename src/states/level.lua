@@ -11,7 +11,6 @@ local levels = {
 	require 'states.levels.level_two',
 	require 'states.levels.level_three',
 	require 'states.levels.level_four',
-	require 'states.levels.level_five'
 	require 'states.levels.level_five',
 	require 'states.levels.level_six',
 	require 'states.levels.level_seven',
