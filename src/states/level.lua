@@ -27,7 +27,7 @@ local spawn_dt = 0.0
 -- ui stuff
 local hintfont = love.graphics.newFont('assets/fonts/arcadeclassic.TTF', 10)
 hintfont:setFilter("nearest", "nearest", 1)
-
+local loadscreen = require "states.loadscreen"
 
 local gameover = false
 local gameoverY = 40 --inital position of gameover text
@@ -74,13 +74,6 @@ function level:enter(state)
 	blue = love.graphics.newImage('assets/images/colourBlue.png')
 	yellow = love.graphics.newImage('assets/images/colourYellow.png')
 	red = love.graphics.newImage('assets/images/colourRed.png')
-
-	loading_screens = {
-		love.graphics.newImage('assets/images/level2.png'),
-		love.graphics.newImage('assets/images/level3.png'),
-		love.graphics.newImage('assets/images/level4.png'),
-		love.graphics.newImage('assets/images/level5.png')
-	}
 
 	end_screen = love.graphics.newImage('assets/images/end_screen.png')
 
@@ -552,7 +545,8 @@ function level:draw()
 	end
 
 	if show_loading then
-		love.graphics.draw(loading_screens[cur_level], 0, 0, 0, love.graphics.getWidth() / loading_screens[cur_level]:getWidth(), love.graphics.getHeight() / loading_screens[cur_level]:getHeight())
+		loadscreen:draw(cur_level)
+
 	end
 
 	if show_end then
