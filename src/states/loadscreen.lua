@@ -2,10 +2,15 @@ local tween = require "lib.tween"
 
 local loadscreen = {}
 
-local loading_screens = {
+loading_screens = {
 		love.graphics.newImage('assets/images/level2.png'),
 		love.graphics.newImage('assets/images/level3.png'),
 		love.graphics.newImage('assets/images/level4.png'),
+		love.graphics.newImage('assets/images/level5.png'),
+		love.graphics.newImage('assets/images/level5.png'),
+		love.graphics.newImage('assets/images/level5.png'),
+		love.graphics.newImage('assets/images/level5.png'),
+		love.graphics.newImage('assets/images/level5.png'),
 		love.graphics.newImage('assets/images/level5.png')
 	}
 

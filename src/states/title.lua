@@ -38,8 +38,9 @@ function title:draw()
 	love.graphics.push()
 
 	--set background & font
-	love.graphics.setBackgroundColor(255, 255, 255, 255)
+	love.graphics.setBackgroundColor(33, 33, 33, 255)
 	love.graphics.draw(bg, 0, 0, 0, 1.08, 1.08, 0, 0 )
+	
 	love.graphics.setFont(swishfont)
 
 

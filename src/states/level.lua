@@ -11,7 +11,12 @@ local levels = {
 	require 'states.levels.level_two',
 	require 'states.levels.level_three',
 	require 'states.levels.level_four',
-	require 'states.levels.level_five'
+	require 'states.levels.level_five',
+	require 'states.levels.level_six',
+	require 'states.levels.level_seven',
+	require 'states.levels.level_eight',
+	require 'states.levels.level_nine',
+	require 'states.levels.level_ten'
 }
 
 local cur_level -- set in level:reInit()
@@ -104,7 +109,12 @@ function level:reInit()
 		require 'states.levels.level_two',
 		require 'states.levels.level_three',
 		require 'states.levels.level_four',
-		require 'states.levels.level_five'
+		require 'states.levels.level_five',
+		require 'states.levels.level_six',
+		require 'states.levels.level_seven',
+		require 'states.levels.level_eight',
+		require 'states.levels.level_nine',
+		require 'states.levels.level_ten'
 	}
 
 	--build initial background panels
@@ -372,7 +382,7 @@ end
 function level:newLevel()
 
 	fading = true
-	if cur_level == 5 then
+	if cur_level == 10 then
 		hero.state = "exit"
 		show_end = true
 		Timer.tween(0.25, self.bgm_params, { volume = 0.0 }, 'linear')
