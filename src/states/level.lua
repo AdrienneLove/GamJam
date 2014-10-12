@@ -30,7 +30,7 @@ local spawn_dt = 0.0
 
 
 -- ui stuff
-local buttonfont = love.graphics.newFont('assets/fonts/munro.ttf', 7)
+local buttonfont = love.graphics.newFont('assets/fonts/munro.ttf', 32)
 local hintfont = love.graphics.newFont('assets/fonts/arcadeclassic.TTF', 10)
 
 --for ending
@@ -556,24 +556,18 @@ function level:draw()
 			love.graphics.setColor(255, 255, 255, 255)
 		end
 		love.graphics.draw(blue, 8, 116)
-		love.graphics.setColor(255, 255, 255, 255)
-		love.graphics.print("A", 10, 116)
 
 		love.graphics.setColor(90, 90, 90, 255)
 		if colourPressed == "yellow" then
 			love.graphics.setColor(255, 255, 255, 255)
 		end
 		love.graphics.draw(yellow, 17, 107)
-		love.graphics.setColor(255, 255, 255, 255)
-		love.graphics.print("W", 19, 107)
 
 		love.graphics.setColor(90, 90, 90, 255)
 		if colourPressed == "green" then
 			love.graphics.setColor(255, 255, 255, 255)
 		end
 		love.graphics.draw(green, 17, 116)
-		love.graphics.setColor(255, 255, 255, 255)
-		love.graphics.print("S", 19, 116)
 
 		love.graphics.setColor(90, 90, 90, 255)
 		if colourPressed == "red" then
@@ -581,7 +575,15 @@ function level:draw()
 		end
 		love.graphics.draw(red, 26, 116)
 		love.graphics.setColor(255, 255, 255, 255)
-		love.graphics.print("D", 28, 116)
+
+		love.graphics.scale(0.2)
+		love.graphics.printf("A",  	8*SCALE, 	116*SCALE,	8*SCALE, "center")
+		love.graphics.printf("W",	17*SCALE, 	107*SCALE,	8*SCALE, "center")
+		love.graphics.printf("S", 	17*SCALE, 	116*SCALE,	8*SCALE, "center")
+		love.graphics.printf("D", 	26*SCALE, 	116*SCALE,	8*SCALE,"center")
+		love.graphics.scale(SCALE)
+
+
 	else
 		-- gamepad layout
 		love.graphics.setColor(90, 90, 90, 255)
@@ -589,16 +591,12 @@ function level:draw()
 			love.graphics.setColor(255, 255, 255, 255)
 		end
 		love.graphics.draw(blue, 9, 110)
-		love.graphics.setColor(255, 255, 255, 255)
-		love.graphics.print("X", 11, 110)
 
 		love.graphics.setColor(90, 90, 90, 255)
 		if colourPressed == "yellow" then
 			love.graphics.setColor(255, 255, 255, 255)
 		end
 		love.graphics.draw(yellow, 15, 104)
-		love.graphics.setColor(255, 255, 255, 255)
-		love.graphics.print("Y", 17, 104)
 
 
 		love.graphics.setColor(90, 90, 90, 255)
@@ -606,8 +604,6 @@ function level:draw()
 			love.graphics.setColor(255, 255, 255, 255)
 		end
 		love.graphics.draw(green, 15, 116)
-		love.graphics.setColor(255, 255, 255, 255)
-		love.graphics.print("A", 17, 116)
 
 		love.graphics.setColor(90, 90, 90, 255)
 		if colourPressed == "red" then
@@ -615,7 +611,13 @@ function level:draw()
 		end
 		love.graphics.draw(red, 21, 110)
 		love.graphics.setColor(255, 255, 255, 255)
-		love.graphics.print("B", 23, 110)
+
+		love.graphics.scale(0.2)
+		love.graphics.printf("X",  	9*SCALE, 	110*SCALE,	8*SCALE, "center")
+		love.graphics.printf("Y",	15*SCALE, 	104*SCALE,	8*SCALE, "center")
+		love.graphics.printf("A", 	15*SCALE, 	116*SCALE,	8*SCALE, "center")
+		love.graphics.printf("B", 	21*SCALE, 	110*SCALE,	8*SCALE,"center")
+		love.graphics.scale(SCALE)
 	end
 
 	love.graphics.setColor(255,255,255,255)
