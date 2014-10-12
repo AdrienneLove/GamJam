@@ -30,15 +30,17 @@ local spawn_dt = 0.0
 
 
 -- ui stuff
-local buttonfont = love.graphics.newFont('assets/fonts/munro.ttf', 30)
+local buttonfont = love.graphics.newFont('assets/fonts/munro.ttf', 7)
 local hintfont = love.graphics.newFont('assets/fonts/arcadeclassic.TTF', 10)
 
 --for ending
+local gameover_font = love.graphics.newFont('assets/fonts/arcadeclassic.TTF', 20)
 local tute_font = love.graphics.newFont( "assets/fonts/munro.ttf", 14)
 
 hintfont:setFilter("nearest", "nearest", 1)
 buttonfont:setFilter("nearest", "nearest", 1)
 tute_font:setFilter("nearest", "nearest", 1)
+gameover_font:setFilter("nearest", "nearest", 1)
 
 local loadscreen = require "states.loadscreen"
 
@@ -629,7 +631,7 @@ function level:draw()
 		love.graphics.rectangle("fill", 0, 0, love.graphics.getWidth(), love.graphics.getHeight())
 		--draw text
 		love.graphics.setColor(0, 0, 0, 150)
-		love.graphics.setFont(swishfont)
+		love.graphics.setFont(gameover_font)
 		if gameoverY > 30 then		
 			love.graphics.printf("Game over", 62, gameoverY+2, 100, 'center')
 			love.graphics.setColor(255, 255, 255, 255)
