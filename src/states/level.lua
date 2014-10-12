@@ -12,6 +12,12 @@ local levels = {
 	require 'states.levels.level_three',
 	require 'states.levels.level_four',
 	require 'states.levels.level_five'
+	require 'states.levels.level_five',
+	require 'states.levels.level_six',
+	require 'states.levels.level_seven',
+	require 'states.levels.level_eight',
+	require 'states.levels.level_nine',
+	require 'states.levels.level_ten'
 }
 
 local cur_level -- set in level:reInit()
@@ -30,6 +36,7 @@ local hintfont = love.graphics.newFont('assets/fonts/arcadeclassic.TTF', 10)
 hintfont:setFilter("nearest", "nearest", 1)
 buttonfont:setFilter("nearest", "nearest", 1)
 
+local loadscreen = require "states.loadscreen"
 
 local gameover = false
 local gameoverY = 40 --inital position of gameover text
@@ -77,13 +84,6 @@ function level:enter(state)
 	yellow = love.graphics.newImage('assets/images/colourYellow.png')
 	red = love.graphics.newImage('assets/images/colourRed.png')
 
-	loading_screens = {
-		love.graphics.newImage('assets/images/level2.png'),
-		love.graphics.newImage('assets/images/level3.png'),
-		love.graphics.newImage('assets/images/level4.png'),
-		love.graphics.newImage('assets/images/level5.png')
-	}
-
 	end_screen = love.graphics.newImage('assets/images/end_screen.png')
 
 	cur_level = 1
@@ -113,7 +113,12 @@ function level:reInit()
 		require 'states.levels.level_two',
 		require 'states.levels.level_three',
 		require 'states.levels.level_four',
-		require 'states.levels.level_five'
+		require 'states.levels.level_five',
+		require 'states.levels.level_six',
+		require 'states.levels.level_seven',
+		require 'states.levels.level_eight',
+		require 'states.levels.level_nine',
+		require 'states.levels.level_ten'
 	}
 
 	--build initial background panels
@@ -381,7 +386,7 @@ end
 function level:newLevel()
 
 	fading = true
-	if cur_level == 5 then
+	if cur_level == 10 then
 		hero.state = "exit"
 		show_end = true
 		Timer.tween(0.25, self.bgm_params, { volume = 0.0 }, 'linear')
@@ -444,20 +449,18 @@ function level:draw()
 
 	-- wave detect / indicator for the zone that enemies can receive waves in
 	-- LEAVING THIS IN as it will kind of become the light effect
-	if level:isGuardInRange() then
-		love.graphics.setColor(220, 220, 220, 140)
-		if colourPressed == "blue" then
-			love.graphics.setColor(55, 121, 205, 140)
-		elseif colourPressed == "yellow" then
-			love.graphics.setColor(226, 200, 52, 140)
-		elseif colourPressed == "red" then
-			love.graphics.setColor(220, 52, 52, 140)
-		elseif colourPressed == "green" then
-			love.graphics.setColor(30, 165, 29, 140)
-		end
-
-		love.graphics.ellipse("fill", 75, 103, 20, 4, math.rad(0), 30)
+	love.graphics.setColor(220, 220, 220, 140)
+	if colourPressed == "blue" then
+		love.graphics.setColor(55, 121, 205, 140)
+	elseif colourPressed == "yellow" then
+		love.graphics.setColor(226, 200, 52, 140)
+	elseif colourPressed == "red" then
+		love.graphics.setColor(220, 52, 52, 140)
+	elseif colourPressed == "green" then
+		love.graphics.setColor(30, 165, 29, 140)
 	end
+
+	love.graphics.ellipse("fill", 75, 103, 20, 4, math.rad(0), 30)
 
 	--draw enemies
 	guards:draw()
@@ -596,7 +599,8 @@ function level:draw()
 	end
 
 	if show_loading then
-		love.graphics.draw(loading_screens[cur_level], 0, 0, 0, love.graphics.getWidth() / loading_screens[cur_level]:getWidth(), love.graphics.getHeight() / loading_screens[cur_level]:getHeight())
+		loadscreen:draw(cur_level)
+
 	end
 
 	if show_end then
