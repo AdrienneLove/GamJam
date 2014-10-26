@@ -236,6 +236,7 @@ function level:update(dt)
 
 	end
 
+	-- exits is a gameover was last frame
 	if gameover then
 		return
 	end
@@ -250,6 +251,13 @@ function level:update(dt)
 	particle:update(dt)
 
 	local missed = guards:leavecheck(dt)
+
+	-- exits if a gameover is found from input 
+	if gameover then
+		return
+	end
+
+	--checks if a gameove should be prompted by missing a guard
 	if missed == true then
 		nearest = guards.current_guards[1]
 		nearest:failWave()
@@ -755,12 +763,15 @@ function level:checkWave(wave)
 	if waveCorrect == false then
 		for _,guard in ipairs(temp_guards) do
 			if guard.isWavedAt == false then
-				guard:failWave()
-				particle:spawn("fail", guard.x + 6, guard.speed)
 				hero:eatLife()
+				guard:failWave()
 				if hero.lives == 0 then 
+					particle:purge()
 					gameover = true
 					level:gameover()
+				else
+					particle:spawn("fail", guard.x + 6, guard.speed)
+					
 				end
 				break
 			end
