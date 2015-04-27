@@ -250,25 +250,26 @@ function level:update(dt)
 	guards:update(dt)
 	particle:update(dt)
 
-	local missed = guards:leavecheck(dt)
-
 	-- exits if a gameover is found from input 
 	if gameover then
 		return
 	end
-
+	
 	--checks if a gameove should be prompted by missing a guard
-	if missed == true then
-		nearest = guards.current_guards[1]
-		nearest:failWave()
-		if hero.lives > 1 then
-			particle:spawn("fail", nearest.x + 6, nearest.speed)
-			hero:eatLife()
-		else
-			gameover = true
-			hero:eatLife()
-			nearest.x  = nearest.x + 50
-			level:gameover()
+	if guards:leavecheck(dt) == true then
+		for i,guard in ipairs(guards.current_guards) do
+			if guard.x <= 51 then
+				guard:failWave()
+				if hero.lives > 1 then
+					particle:spawn("fail", guard.x + 6, guard.speed)
+					hero:eatLife()
+				else
+					gameover = true
+					hero:eatLife()
+					guard.x  = hero.x + 38;
+					level:gameover()
+				end
+			end
 		end
 	end
 
@@ -439,6 +440,7 @@ function level:draw()
 
 	love.graphics.scale( SCALE )
 
+
 	--draw background panels 1, 2 and 3
 	for key, value in pairs(levels[cur_level]["background_panels"]) do 
 		love.graphics.draw(value.image, value.x, 0)
@@ -455,7 +457,7 @@ function level:draw()
 
 	--static props
 	props:draw()
-
+	
 	if fever.enabled then
 		love.graphics.setColor(10, 10, 10, 150)
 		love.graphics.rectangle("fill", 0, 0, love.graphics.getWidth(), love.graphics.getHeight())
@@ -704,6 +706,118 @@ function level:draw()
 
 end
 
+function level:checkWave(wave)
+
+	indicator = true
+
+	-- Look for a successful wave, if we find one do stuff and break.
+
+	for _,guard in ipairs(guards.current_guards) do
+		--ignore guard
+		if guard.x > 45 and guard.x < 95 and guard.isWavedAt == false and guard.isTooSlow == false then
+			--success or fail
+			if wave == guard.expectedWave then
+				guard:successWave()
+				particle:spawn("pass", guard.x + 6, guard.speed)
+				return false
+			else 
+				hero:eatLife()
+				guard:failWave()
+				if hero.lives == 0 then 
+					particle:purge()
+					gameover = true
+					level:gameover()
+				else
+					particle:spawn("fail", guard.x + 6, guard.speed)
+				end
+
+				--only allow for one success or failure per press
+				return false;
+			end
+		end
+	end
+
+	
+end
+
+-- Search current_guards and return all guards that are inside wave area.
+function level:checkArea()
+	local temp_guards = {}
+
+	for i,guard in ipairs(guards.current_guards) do
+		if guards.current_guards[i]["x"] > 45 and guards.current_guards[i]["x"] < 95 then
+			table.insert(temp_guards, guard)
+		end
+	end
+
+	return temp_guards
+end
+
+
+function level:joystickreleased(joystick, button)
+	indicator = false
+	colourPressed = none
+end
+
+function level:keyreleased(key)
+	indicator = false
+	colourPressed = none
+end
+
+
+function level:joystickpressed(joystick, button)
+	local wave
+
+	if not gameover then
+
+		if button == 1 then
+			wave = "A"
+			hero:saluteA()
+			colourPressed = "green"
+		elseif button == 2 then
+			wave = "B"
+			hero:saluteB()
+			colourPressed = "red"
+		elseif button == 3 then
+			wave = "X"
+			hero:saluteX()
+			colourPressed = "blue"
+		elseif button == 4 then
+			wave = "Y"
+			hero:saluteY()
+			colourPressed = "yellow"
+		end
+		
+		if joystick:isGamepadDown("y") then
+			wave = "Y"
+			hero:saluteY()
+			colourPressed = "yellow"
+		end
+		if joystick:isGamepadDown("x") then
+			wave = "X"
+			hero:saluteX()
+			colourPressed = "blue"
+		end
+		if joystick:isGamepadDown("b") then
+			wave = "B"
+			hero:saluteB()
+			colourPressed = "red"
+		end
+		if joystick:isGamepadDown("a") then
+			wave = "A"
+			hero:saluteA()
+			colourPressed = "green"
+		end
+
+		if wave then level:checkWave(wave) end
+
+	else
+		if not gameover_locked then
+			level:reInit()
+		end
+	end
+end
+
 function level:keypressed(key, unicode)
 	local wave
 
@@ -743,124 +857,6 @@ function level:keypressed(key, unicode)
 	end
 end
 
-function level:checkWave(wave)
-
-	local temp_guards = level:checkArea()
-	waveCorrect = false
-
-	-- Look for a successful wave, if we find one do stuff and break.
-	for _,guard in ipairs(temp_guards) do
-		if wave == guard.expectedWave and guard.isWavedAt == false then
-			guard:successWave()
-			particle:spawn("pass", guard.x + 6, guard.speed)
-			waveCorrect = true
-			break
-		end
-	end
-
-	-- If no guard is correct, find the first guard that hasn't already
-	-- been waved at and make them the failed wave guard.
-	if waveCorrect == false then
-		for _,guard in ipairs(temp_guards) do
-			if guard.isWavedAt == false then
-				hero:eatLife()
-				guard:failWave()
-				if hero.lives == 0 then 
-					particle:purge()
-					gameover = true
-					level:gameover()
-				else
-					particle:spawn("fail", guard.x + 6, guard.speed)
-					
-				end
-				break
-			end
-		end
-	end
-
-	indicator = true
-end
-
--- Search current_guards and return all guards that are inside wave area.
-function level:checkArea()
-	local temp_guards = {}
-
-	for i,guard in ipairs(guards.current_guards) do
-		if guards.current_guards[i]["x"] > 42 and guards.current_guards[i]["x"] < 95 then
-			table.insert(temp_guards, guard)
-		end
-	end
-
-	return temp_guards
-end
-
-
-function level:joystickreleased(joystick, button)
-	indicator = false
-	colourPressed = none
-end
-
-function level:keyreleased(key)
-	indicator = false
-	colourPressed = none
-end
-
-
-function level:joystickpressed(joystick, button)
-	local wave
-
-	if not gameover then
-
-		if button == 1 then
-			wave = "A"
-			colourPressed = "green"
-		elseif button == 2 then
-			wave = "B"
-			colourPressed = "red"
-		elseif button == 3 then
-			wave = "X"
-			colourPressed = "blue"
-		elseif button == 4 then
-			wave = "Y"
-			colourPressed = "yellow"
-		end
-		
-		if joystick:isGamepadDown("y") then
-			wave = "Y"
-			colourPressed = "yellow"
-		end
-		if joystick:isGamepadDown("x") then
-			wave = "X"
-			colourPressed = "blue"
-		end
-		if joystick:isGamepadDown("b") then
-			wave = "B"
-			colourPressed = "red"
-		end
-		if joystick:isGamepadDown("a") then
-			wave = "A"
-			colourPressed = "green"
-		end
-
-		if wave == "Y" then
-			hero:saluteY()
-		elseif wave == "X" then
-			hero:saluteX()
-		elseif wave == "B" then
-			hero:saluteB()
-		elseif wave == "A" then
-			hero:saluteA()
-		end
-
-		if wave then level:checkWave(wave) end
-
-	else
-		if not gameover_locked then
-			level:reInit()
-		end
-	end
-end
-
 function level:spawner(dt)
 	spawn_dt = spawn_dt + dt
 	local spawn = false
@@ -887,22 +883,18 @@ function level:gameover()
 	levels[cur_level]["level_speed"] = 0
 
 	love.audio.play(gameover_sound)
-	guards.current_guards[1].x = 58
 end
 
 function level:stopNearestGuard()
-	if #guards.current_guards > 0 then
-		local lowest = guards.current_guards[1].x
-		local nearest = guards.current_guards[1]
-		for i,v in ipairs(guards.current_guards) do
-			if v.x > 90 and v.x < lowest then
-				nearest = guards.current_guards[i]
-			end
-		end
-		if nearest.x < 100 then
-			nearest.speed = 0
+	-- if #guards.current_guards > 0 then
+	-- 	local lowest = guards.current_guards[1].x
+	-- 	local nearest = guards.current_guards[1]
+	for i,guard in ipairs(guards.current_guards) do
+		if guard.x > 51 and guard.x < 95 then
+			guard.speed = 0
 			hero:stopHero()
-			nearest:stopGuard()
+			guard:stopGuard()
+			return
 		end
 	end
 	--printTable(nearest)

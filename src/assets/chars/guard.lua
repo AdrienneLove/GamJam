@@ -256,7 +256,7 @@ function guard_manager:newGuard(num, speedModifier)
 			self.active_body_animation:draw(self.guard_body_image, self.x, 65)
 			self.active_head_animation:draw(self.active_head_spritemap, self.x, 65)
 		else
-			love.graphics.draw(self.guard_fail_image, self.x, 64 )
+			love.graphics.draw(self.guard_fail_image, self.x, 65 )
 		end
 	end
 
@@ -269,6 +269,7 @@ function guard_manager:newGuard(num, speedModifier)
 		--for triggering the particle effect for failing on a guard
 		self.state = "failed"
 		self.isWavedAt = true
+		self.isTooSlow = true
 	end
 
 	function g:successWave()
@@ -279,6 +280,7 @@ function guard_manager:newGuard(num, speedModifier)
 		--for triggering the particle effect for success on a guard
 		self.state = "success"
 		self.isWavedAt = true
+		self.isTooSlow = true
 	end
 
 	function g:stopGuard()
@@ -320,7 +322,7 @@ end
 
 function guard_manager:leavecheck()
 	for _,guard in ipairs(self.current_guards) do
-		if (guard.x) < 42 and guard.isWavedAt == false and guard.isTooSlow == false then
+		if (guard.x) < 45 and guard.isWavedAt == false and guard.isTooSlow == false then
 			guard.isTooSlow = true
 			return true
 		end
