@@ -250,27 +250,29 @@ function level:update(dt)
 	guards:update(dt)
 	particle:update(dt)
 
-	-- exits if a gameover is found from input 
-	if gameover then
-		return
-	end
-	
-	--checks if a gameove should be prompted by missing a guard
+	--checks if a gameover should be prompted by missing a guard
 	if guards:leavecheck(dt) == true then
 		for i,guard in ipairs(guards.current_guards) do
-			if guard.x <= 51 then
+			if guard.x <= 51 and guard.isWavedAt == false then
 				guard:failWave()
 				if hero.lives > 1 then
+					guard:failWave()
 					particle:spawn("fail", guard.x + 6, guard.speed)
 					hero:eatLife()
 				else
 					gameover = true
 					hero:eatLife()
-					guard.x  = hero.x + 38;
+					guard:stopGuard()
 					level:gameover()
 				end
+				break
 			end
 		end
+	end
+
+	-- exits if a gameover is found from input 
+	if gameover then
+		return
 	end
 
 	if levels[cur_level]["status"] == "play" or levels[cur_level]["status"] == "outro" then

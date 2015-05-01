@@ -297,10 +297,12 @@ function guard_manager:despawn()
 	local _current_guards = self.current_guards
 	local c = 0
 	for i=1,table.getn(self.current_guards) do
-		if self.current_guards[i-c]["x"] < -20 then
-			purge(_current_guards[i-c])
+		if self.current_guards[i - c]["x"] < -20 then
+			purge(_current_guards[i - c])
 			table.remove(_current_guards, i - c)
 			c = c + 1
+		else
+			break
 		end
 	end
 end
@@ -323,7 +325,6 @@ end
 function guard_manager:leavecheck()
 	for _,guard in ipairs(self.current_guards) do
 		if (guard.x) < 45 and guard.isWavedAt == false and guard.isTooSlow == false then
-			guard.isTooSlow = true
 			return true
 		end
 	end
