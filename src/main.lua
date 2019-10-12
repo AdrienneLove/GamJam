@@ -25,7 +25,7 @@ function purge(_table)
 		end
 	end
 
-	for i,v in pairs(_table) do
+	for i,v in ipairs(_table) do
 		if type(v) == table then
 			purge(v)
 		else
